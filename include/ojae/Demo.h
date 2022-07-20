@@ -21,6 +21,9 @@ private:
     Uint32 frame_start; // Resembles the time stamp of the beginning of each frame
     int frame_time; // Measures the amount of time each frame took to execute
 
+    int screen_width;
+    int screen_height;
+
 
 public:
 

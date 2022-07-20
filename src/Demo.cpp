@@ -1,5 +1,5 @@
 #include "Demo.h"
-#include "Debug.h"
+#include "TextRenderer.h"
 
 SDL_Window* Demo::window = nullptr;
 SDL_Renderer* Demo::renderer = nullptr;
@@ -8,9 +8,10 @@ SDL_Event Demo::event;
 bool Demo::running = false;
 
 InputHandler* Demo::input_handler = nullptr;
+TextRenderer* text_renderer = nullptr;
 
 SDL_Texture* red_box = nullptr;
-SDL_Rect src, dest;
+SDL_Rect red_box_src, red_box_dest;
 
 Demo::Demo() {}
 
@@ -19,6 +20,9 @@ Demo::~Demo() {}
 void Demo::init(const char* title, int x, int y, int width, int height,
     bool fullscreen)
 {
+
+    screen_width = width;
+    screen_height = height;
 
     int flags = 0;
 
@@ -31,22 +35,24 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     {
         window = SDL_CreateWindow(title, x, y, width, height, flags);
         renderer = SDL_CreateRenderer(window, -1, 0);
-        SDL_SetRenderDrawColor(renderer, 100, 100, 165, 255);
+        SDL_SetRenderDrawColor(renderer, 33, 31, 51, 255);
     }
 
     input_handler = new InputHandler();
 
+    text_renderer = new TextRenderer(screen_width, screen_height);
+
     red_box = TextureHandler::load_texture("assets/red_box.png");
 
-    src.x = 0;
-    src.y = 0;
-    src.w = 16;
-    src.h = 16;
+    red_box_src.x = 0;
+    red_box_src.y = 0;
+    red_box_src.w = 16;
+    red_box_src.h = 16;
 
-    dest.x = 50;
-    dest.y = 50;
-    dest.w = 32;
-    dest.h = 32;
+    red_box_dest.x = 50;
+    red_box_dest.y = 50;
+    red_box_dest.w = 32;
+    red_box_dest.h = 32;
 
 }
 
@@ -80,7 +86,14 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
-
+    text_renderer->clear();
+    text_renderer->add("ABCDEFGH");
+    text_renderer->add_new_line();
+    text_renderer->add("IJKLMNOP");
+    text_renderer->add_new_line();
+    text_renderer->add("QRSTUVWX");
+    text_renderer->add_new_line();
+    text_renderer->add("YZ");
 }
 
 void Demo::handle_events()
@@ -168,19 +181,19 @@ void Demo::handle_keys()
         switch(c)
         {
             case 'w':
-                dest.y -= 3;
+                red_box_dest.y -= 3;
                 break;
 
             case 's':
-                dest.y += 3;
+                red_box_dest.y += 3;
                 break;
 
             case 'd':
-                dest.x += 3;
+                red_box_dest.x += 3;
                 break;
 
             case 'a':
-                dest.x -= 3;
+                red_box_dest.x -= 3;
                 break;
 
             default:
@@ -193,7 +206,8 @@ void Demo::draw_all()
 {
     SDL_RenderClear(renderer);
 
-    TextureHandler::draw(red_box, src, dest);
+    text_renderer->draw_all();
+    TextureHandler::draw(red_box, red_box_src, red_box_dest);
 
     SDL_RenderPresent(renderer);
 }
