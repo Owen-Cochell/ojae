@@ -144,8 +144,8 @@ void TextRenderer::draw_all()
                 return;
             }
 
-            src.x = ((c - 65) % 8) * font; // Character ascii value - 65 which would make 'A' be 0
-            src.y = ((c - 65) / 8) * font; // Divide this by 8 so that if the ascii value exceeds 
+            src.x = ((c - 33) % 8) * font; // Character ascii value - 65 which would make '!' be 0
+            src.y = ((c - 33) / 8) * font; // Divide this by 8 so that if the ascii value exceeds 
                 // a division of 8 it increments y by 1, to correspond with the png image.
             src.w = font;
             src.h = font;

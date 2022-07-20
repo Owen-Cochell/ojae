@@ -35,7 +35,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     {
         window = SDL_CreateWindow(title, x, y, width, height, flags);
         renderer = SDL_CreateRenderer(window, -1, 0);
-        SDL_SetRenderDrawColor(renderer, 33, 31, 51, 255);
+        SDL_SetRenderDrawColor(renderer, 27, 27, 65, 255);
     }
 
     input_handler = new InputHandler();
@@ -53,6 +53,11 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     red_box_dest.y = 50;
     red_box_dest.w = 32;
     red_box_dest.h = 32;
+
+    text_renderer->clear();
+    text_renderer->add("This is sample text");
+    text_renderer->add_new_line();
+    text_renderer->add("This is sample text after a new line");
 
 }
 
@@ -86,14 +91,6 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
-    text_renderer->clear();
-    text_renderer->add("ABCDEFGH");
-    text_renderer->add_new_line();
-    text_renderer->add("IJKLMNOP");
-    text_renderer->add_new_line();
-    text_renderer->add("QRSTUVWX");
-    text_renderer->add_new_line();
-    text_renderer->add("YZ");
 }
 
 void Demo::handle_events()
