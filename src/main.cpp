@@ -1,14 +1,24 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include "Demo.h"
+#include "FileHandler.h"
+
 int main(int argc, char* argv[])
 {
-    const int TARG_FPS = 60; // How many frames per second we want 
-    const int FRAME_DELAY = 1000 / TARG_FPS; // Miliseconds delay between each frame to 
-        // aquire target fps
+    FileHandler file_handler;
+
+    nlohmann::json j_loader = file_handler.get("data/Screen_Properties.json");
+
+    int width = j_loader["Width"];
+    int height = j_loader["Height"];
+    bool fullscreen = j_loader["Fullscreen"];
+
+    Demo demo;
     
-    Uint32 frame_start; // Resembles the time stamp of the beginning of each frame
-    int frame_time; // Measures the amount of time each frame took to execute
+    demo.init("Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+        width, height, fullscreen);
+    demo.start();
 
     return 0;
 }
