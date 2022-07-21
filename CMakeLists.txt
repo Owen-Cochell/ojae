@@ -8,6 +8,8 @@ add_library(ojae
     src/FileHandler.cpp
     src/InputHandler.cpp
     src/TextureHandler.cpp
+    src/TextRenderer.cpp
+    src/BaseWindow.cpp
 )
 
 target_include_directories(ojae
