@@ -40,7 +40,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     input_handler = new InputHandler();
 
-    text_renderer = new TextRenderer(screen_width, screen_height);
+    text_renderer = new TextRenderer(0, screen_width, 0, screen_height);
 
     red_box = TextureHandler::load_texture("assets/red_box.png");
 
@@ -58,7 +58,9 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     text_renderer->add("This is sample text");
     text_renderer->add_new_line();
     text_renderer->add("This is sample text after a new line");
-
+    text_renderer->add_new_line();
+    text_renderer->add("This is sample text that will exceed the size of the"
+        " screen and will therefore be wrapped around to the next line accordingly.");
 }
 
 void Demo::start()

@@ -1,5 +1,5 @@
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <map>
 #include <vector>
 #include <string>
@@ -25,13 +25,15 @@ private:
     std::vector<int> available_fonts; // List of available fonts 
     std::vector<std::string> contents; // List of the content to render
 
-    int screen_width;
-    int screen_height;
+    int start_x;
+    int end_x;
+    int start_y;
+    int end_y;
 
 public:
 
     TextRenderer();
-    TextRenderer(int screen_width, int screen_height);
+    TextRenderer(int start_x, int end_x, int start_y, int end_y);
     ~TextRenderer();
 
     void add(std::string new_content);

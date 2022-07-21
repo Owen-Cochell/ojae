@@ -4,17 +4,19 @@
 
 TextRenderer::TextRenderer() {}
 
-TextRenderer::TextRenderer(int screen_width, int screen_height) 
+TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y) 
 {
     available_fonts.push_back(16);
 
     font = 16;
     path = "assets/characters_font16.png";
     texture = TextureHandler::load_texture(path.c_str());
-    cursor_pos = {0, 0};
+    cursor_pos = {start_x, start_y};
 
-    this->screen_width = screen_width;
-    this->screen_height = screen_height;
+    this->start_x = start_x;
+    this->end_x = end_x;
+    this->start_y = start_y;
+    this->end_y = end_y;
 }
 
 TextRenderer::~TextRenderer() {}
@@ -108,7 +110,7 @@ void TextRenderer::draw_all()
     Loops through contents and displays the text to the screen
     */
 
-    cursor_pos = {0, 0};
+    cursor_pos = {start_x, start_y};
 
     for(std::string element : contents)
     {
@@ -129,8 +131,8 @@ void TextRenderer::draw_all()
 
             // If the new character would exceed screen width dimensions, check if placing
             // a new character 1.5 font size down doesn't exceed screen height dimensions
-            if(cursor_pos.first + font > screen_width
-                && cursor_pos.second + int(font * 1.5) <= screen_height)
+            if(cursor_pos.first + font > end_x
+                && cursor_pos.second + int(font * 1.5) <= end_y)
             {
                 cursor_pos.first = 0;
                 cursor_pos.second += int(font * 1.5);
@@ -138,8 +140,8 @@ void TextRenderer::draw_all()
 
             // If the new character would exceed screen width and height dimensions
             // don't render it
-            else if(cursor_pos.first + font > screen_width
-                && cursor_pos.second + font > screen_height)
+            else if(cursor_pos.first + font > end_x
+                && cursor_pos.second + font > end_y)
             {
                 return;
             }
