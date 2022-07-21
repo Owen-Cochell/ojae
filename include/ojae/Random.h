@@ -3,6 +3,7 @@
 #include <time.h>   
 #include <algorithm>
 #include <iostream>
+#include <vector>
 
 static void seed_random(int seed = -1){
 

@@ -1,5 +1,5 @@
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL.h>
 
 #include "Demo.h"
 #include "FileHandler.h"
@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     bool fullscreen = j_loader["Fullscreen"];
 
     Demo demo;
-    
+
     demo.init("Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
         width, height, fullscreen);
     demo.start();

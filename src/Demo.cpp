@@ -160,7 +160,6 @@ void Demo::handle_events()
 
                     input_handler->remove_key('s');
                     break;
-                    
 
                 default:
                     break;
