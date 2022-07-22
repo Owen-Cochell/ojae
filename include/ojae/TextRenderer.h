@@ -1,3 +1,5 @@
+#pragma once
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <map>
@@ -23,7 +25,7 @@ private:
     std::pair<int, int> cursor_pos; // Position of the cursor in the window
 
     std::vector<int> available_fonts; // List of available fonts 
-    std::vector<std::string> contents; // List of the content to render
+    std::map<std::string, std::pair<int, int>> contents; // List of the content to render
 
     int start_x;
     int end_x;
@@ -36,9 +38,7 @@ public:
     TextRenderer(int start_x, int end_x, int start_y, int end_y);
     ~TextRenderer();
 
-    void add(std::string new_content);
-    void add(std::string new_content, int amount);
-    void add_new_line(int amount = 1);
+    void add(std::string new_content, int x, int y);
     void clear();
     void set_font(int font_size);
     void draw_all();

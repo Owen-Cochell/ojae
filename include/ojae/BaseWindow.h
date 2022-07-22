@@ -1,9 +1,12 @@
+#pragma once
+
 #include <string>
 #include <vector>
+#include <map>
 
 #include "TextRenderer.h"
 #include "InputHandler.h"
-#include "Sprite.h"
+#include "Component.h"
 
 class BaseWindow
 {
@@ -20,15 +23,12 @@ private:
     int start_y; // Y Coordinate where the window begins
     int end_y; // Y Coordinate where the window begins 
 
-    int cursor_index; // Start index of where we start renderering text
-
     bool taking_input; // Whether this info should handle keys from the input handler
 
-    std::vector<Sprite*> sprites; // List of sprites the window contains
-
-    TextRenderer* text_renderer; // Instance of our TextRenderer
+    std::vector<Component*> components; // List of components the window contains
+ 
     InputHandler* input_handler; // Instance of our InputHandler
-    
+    TextRenderer* text_renderer; // Instance of our TextRenderer
 
 public:
 
@@ -36,9 +36,12 @@ public:
     BaseWindow(int start_x, int end_x, int start_y, int end_y, InputHandler* input_handler);
     ~BaseWindow();
 
-    void add_text(std::string text);
-    void clear_all_text();
-    void clear_all_sprites();
-    void resize_window(int start_x, int end_x, int start_y, int end_y);
+    void update();
     void display();
+    void draw_text();
+    void add_component(Component* component);
+    void add_text(std::string text, int x, int y);
+    void clear_all_text();
+    void clear_all_components();
+    void resize_window(int start_x, int end_x, int start_y, int end_y);
 };

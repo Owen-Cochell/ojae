@@ -1,5 +1,7 @@
 #include "Demo.h"
 #include "TextRenderer.h"
+#include "Component.h"
+#include "BaseWindow.h"
 
 SDL_Window* Demo::window = nullptr;
 SDL_Renderer* Demo::renderer = nullptr;
@@ -10,8 +12,9 @@ bool Demo::running = false;
 InputHandler* Demo::input_handler = nullptr;
 TextRenderer* text_renderer = nullptr;
 
-SDL_Texture* red_box = nullptr;
-SDL_Rect red_box_src, red_box_dest;
+Component* red_box;
+
+BaseWindow* main_window;
 
 Demo::Demo() {}
 
@@ -40,27 +43,13 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     input_handler = new InputHandler();
 
-    text_renderer = new TextRenderer(0, screen_width, 0, screen_height);
+    main_window = new BaseWindow(0, width, 0, height, input_handler);
 
-    red_box = TextureHandler::load_texture("assets/red_box.png");
+    red_box = new Component("Red Box", "assets/red_box.png", 0, 0, 16, 16, 
+        200, 200, 16, 16);
 
-    red_box_src.x = 0;
-    red_box_src.y = 0;
-    red_box_src.w = 16;
-    red_box_src.h = 16;
-
-    red_box_dest.x = 50;
-    red_box_dest.y = 50;
-    red_box_dest.w = 32;
-    red_box_dest.h = 32;
-
-    text_renderer->clear();
-    text_renderer->add("This is sample text");
-    text_renderer->add_new_line();
-    text_renderer->add("This is sample text after a new line");
-    text_renderer->add_new_line();
-    text_renderer->add("This is sample text that will exceed the size of the"
-        " screen and will therefore be wrapped around to the next line accordingly.");
+    main_window->add_component(red_box);
+    main_window->add_text("Text", 0, 100);
 }
 
 void Demo::start()
@@ -93,6 +82,7 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
+    main_window->update();
 }
 
 void Demo::handle_events()
@@ -111,6 +101,7 @@ void Demo::handle_events()
             {
                 case SDLK_ESCAPE:
                     running = false;
+                    break;
 
                 case SDLK_d:
 
@@ -179,19 +170,19 @@ void Demo::handle_keys()
         switch(c)
         {
             case 'w':
-                red_box_dest.y -= 3;
+                red_box->increment_y(-3);
                 break;
 
             case 's':
-                red_box_dest.y += 3;
+                red_box->increment_y(3);
                 break;
 
             case 'd':
-                red_box_dest.x += 3;
+                red_box->increment_x(3);
                 break;
 
             case 'a':
-                red_box_dest.x -= 3;
+                red_box->increment_x(-3);
                 break;
 
             default:
@@ -204,8 +195,7 @@ void Demo::draw_all()
 {
     SDL_RenderClear(renderer);
 
-    text_renderer->draw_all();
-    TextureHandler::draw(red_box, red_box_src, red_box_dest);
+    main_window->display();
 
     SDL_RenderPresent(renderer);
 }

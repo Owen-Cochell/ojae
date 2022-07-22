@@ -5,6 +5,10 @@
 
 class Sprite
 {
+    /*
+    Stores data for each object when it is rendered to the screen, for instance
+    storing a texture, SDL Rects for renderering and position
+    */
 
 private:
 
@@ -26,8 +30,8 @@ public:
         dest.h = 0;
     }
 
-    Sprite(int src_x, int src_y, int src_w, int src_h, int dest_x, int dest_y,
-        int dest_w, int dest_h, const char* path)
+    Sprite(const char* path, int src_x, int src_y, int src_w, int src_h, int dest_x, int dest_y,
+        int dest_w, int dest_h)
     {
         texture = TextureHandler::load_texture(path);
 
@@ -49,12 +53,23 @@ public:
 
     void set_position(int x, int y)
     {
+        /*
+        Sets the new position of the sprite
+
+        :PARAM x: X Coordinate to render the sprite at 
+        :PARAM y: Y Coordinate to render the sprite
+        */
+
         dest.x = x;
         dest.y = y; 
     }
 
     void draw()
     {
+        /*
+        Draws the texture to the screen
+        */
+
         TextureHandler::draw(texture, src, dest);
     }
 };

@@ -12,40 +12,87 @@ BaseWindow::BaseWindow(int start_x, int end_x, int start_y, int end_y,
 {
     resize_window(start_x, end_x, start_y, end_y);
     this->input_handler = input_handler;
-    text_renderer = new TextRenderer(start_x, end_x, start_y, end_y);
+    this->text_renderer = new TextRenderer(start_x, end_x, start_y, end_y);
 }
 
 BaseWindow::~BaseWindow() {}
 
-void BaseWindow::add_text(std::string text)
+void BaseWindow::update()
 {
     /*
-    Adds text to our TextRenderer
-
-    :PARAM text: Text to add
+    Updates all components
     */
 
-    text_renderer->add(text);
+    for(Component* component : components)
+    {
+        component->update();
+    }
+}
+
+void BaseWindow::display()
+{
+    /*
+    Draws all components and text to the screen
+    */
+
+    for(Component* component : components)
+    {
+        component->draw();
+    }
+
+    draw_text();
+}
+
+void BaseWindow::draw_text()
+{
+    /*
+    Draws all text to the screen
+    */
+
+    text_renderer->draw_all();
+
+}
+
+void BaseWindow::add_component(Component* component)
+{
+    /*
+    Adds a component to the list of the BaseWindows components
+    */
+
+    components.push_back(component);
+}
+
+void BaseWindow::add_text(std::string text_to_add, int x, int y)
+{
+    /*
+    Adds text to our TextRenderer at the specified coordinates
+
+    :PARAM text: Text to add
+    :PARAM x: X coordinate to place the text
+    :PARAM y: Y coordinate to place the text
+    */
+
+    text_renderer->add(text_to_add, x, y);
 }
 
 void BaseWindow::clear_all_text()
 {
     /*
-    Erases all text from our TextRenderer
+    Erases all text from our text renderer
     */
 
     text_renderer->clear();
 }
 
-void BaseWindow::clear_all_sprites()
+void BaseWindow::clear_all_components()
 {
     /*
-    Erases and deconstructs all sprites from our vector of sprites
+    Erases and deconstructs all components from our vector of componens
     */
 
-    for(int i = 0; i < sprites.size(); i++)
+    for(int i = 0; i < components.size(); i++)
     {
-        delete sprites.at(0);
+        delete components.at(0);
     }
 }
 
@@ -55,10 +102,9 @@ void BaseWindow::resize_window(int start_x, int end_x, int start_y, int end_y)
     Sets the size of the BaseWindows rendering constraints to the passed values
     
     :PARAM start_x: X Coordinate where the screen will start
-    :PARAM end_x: X Coordinate where the
-    :PARAM start_y:
-    :PARAM end_y: 
-    
+    :PARAM end_x: X Coordinate where the screen ends
+    :PARAM start_y: Y Coordinate where the screen starts
+    :PARAM end_y: Y Coordinate where the screen ends
     */
 
     this->start_x = start_x;
@@ -67,12 +113,3 @@ void BaseWindow::resize_window(int start_x, int end_x, int start_y, int end_y)
     this->end_y = end_y;
 }
 
-void BaseWindow::display()
-{
-    
-
-    for(Sprite* sprite : sprites)
-    {
-        sprite->draw();
-    }
-}

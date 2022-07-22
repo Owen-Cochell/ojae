@@ -21,59 +21,19 @@ TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y)
 
 TextRenderer::~TextRenderer() {}
 
-void TextRenderer::add(std::string new_content)
+void TextRenderer::add(std::string new_content, int x, int y)
 {
     /*
-    Adds a string to the contents 
+    Adds a string to the contents with a specified coordinate 
 
     :PARAM new_content: Content to add
+    :PARAM x: X coordinate to draw the text
+    :PARAM y: Y coordinate to draw the text
     */
 
-    // If this content does not have a new line on the end, add a space 
-    // character to it
-    if(new_content.at(new_content.size() - 1) != '\n')
-    {
-        new_content += '\32';
-    }
-
-    contents.push_back(new_content);
+    contents.emplace(new_content, std::pair<int, int> {x, y});
 }
 
-void TextRenderer::add(std::string new_content, int amount)
-{
-    /*
-    Adds a string to the contents n number of times
-
-    :PARAM new_content: Content to add
-    :PARAM amount: Number of times to add
-    */
-
-    for(int i = 0; i < amount; i++)
-    {
-        // If this content does not have a new line on the end, add a space 
-        // character to it
-        if(new_content.at(new_content.size() - 1) != '\n')
-        {
-            new_content += '\32';
-        }
-
-        contents.push_back(new_content);
-    }
-}
-
-void TextRenderer::add_new_line(int amount)
-{
-    /*
-    Adds n amount of new line characters to the contents
-
-    :PARAM amount: Number of new lines to add
-    */
-
-    for(int i = 0; i < amount; i++)
-    {
-        contents.push_back("\n");
-    }
-}
 
 void TextRenderer::clear()
 {
@@ -110,38 +70,25 @@ void TextRenderer::draw_all()
     Loops through contents and displays the text to the screen
     */
 
-    cursor_pos = {start_x, start_y};
-
-    for(std::string element : contents)
+    for(std::pair<std::string, std::pair<int, int>> element : contents)
     {
-        for(char c : element)
-        {
-            if(c == '\n')
-            {
-                cursor_pos.first = 0;
-                cursor_pos.second += int(font * 1.5);
-                continue;
-            }
+        cursor_pos = element.second;
 
-            else if(c == '\32')
+        for(char c : element.first)
+        {
+
+            if(c == '\32')
             {
                 cursor_pos.first += font; // Put an empty space between words
                 continue;
             }
 
             // If the new character would exceed screen width dimensions, check if placing
-            // a new character 1.5 font size down doesn't exceed screen height dimensions
-            if(cursor_pos.first + font > end_x
-                && cursor_pos.second + int(font * 1.5) <= end_y)
-            {
-                cursor_pos.first = 0;
-                cursor_pos.second += int(font * 1.5);
-            }
 
-            // If the new character would exceed screen width and height dimensions
+            // If the new character would exceed screen width or height dimensions
             // don't render it
             else if(cursor_pos.first + font > end_x
-                && cursor_pos.second + font > end_y)
+                || cursor_pos.second + font > end_y)
             {
                 return;
             }
