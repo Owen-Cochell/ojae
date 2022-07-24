@@ -60,6 +60,10 @@ void Demo::start()
 
 void Demo::execution_loop()
 {
+    /*
+    Runs our main simulation, at 60 frames per second
+    */
+
     while(running)
     {
         frame_start = SDL_GetTicks();
@@ -82,6 +86,7 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
+    input_handler->update();
     main_window->update();
 }
 
@@ -170,24 +175,26 @@ void Demo::handle_keys()
         switch(c)
         {
             case 'w':
-                red_box->increment_y(-3);
+                red_box->increment_y(-10);
                 break;
 
             case 's':
-                red_box->increment_y(3);
+                red_box->increment_y(10);
                 break;
 
             case 'd':
-                red_box->increment_x(3);
+                red_box->increment_x(10);
                 break;
 
             case 'a':
-                red_box->increment_x(-3);
+                red_box->increment_x(-10);
                 break;
 
             default:
                 break;
         }
+   
+        input_handler->set_delay(c, 20);
     }
 }
 
