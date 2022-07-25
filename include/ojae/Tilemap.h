@@ -29,13 +29,17 @@ private:
 
 public:
 
+    bool keep_tiles; // If the tilemap keeps the tiles in heap memory when deleted
+    bool keep_entities;// If the tilemap keeps the entities in heap memory when deleted
+    bool keep_items;// If the tilemap keeps the items in heap memory when deleted
+
     Tilemap();
     Tilemap(int width, int height);
     ~Tilemap();
 
     std::map<std::pair<int, int>, char> get_display();
 
-    void fill_tilemap(Tile* tile, bool duplicate = true);
+    void fill_tilemap(Tile* tile);
     void assemble_tilemap();
     void add(Tile* tile, int x, int y);
     void add(Entity* entity, int x, int y);

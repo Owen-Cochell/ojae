@@ -1,28 +1,34 @@
+#include <algorithm>
+#include <iostream>
+
 #include "Tilemap.h"
 
 Tilemap::Tilemap() 
 {
     width = 0;
     height = 0;
-    fill_tilemap(new Tile("Floor", '.', true));
+    keep_tiles = false;
+    keep_entities = false;
+    keep_items = false;
 }
 
 Tilemap::Tilemap(int width, int height)
 {
     this->width = width;
     this->height = height;
+    keep_items = false;
+    keep_entities = false;
+    keep_items = false;
 }
 
 Tilemap::~Tilemap() {}
 
 std::map<std::pair<int, int>, char> Tilemap::get_display() { return display; }
 
-void Tilemap::fill_tilemap(Tile* tile, bool duplicate)
+void Tilemap::fill_tilemap(Tile* tile)
 {
     /*
-    Fills the tilemap with a tile, creating new copies of each tile if duplicate
-    is true, or just using the tile passed as a parameter as a single tile to fill 
-    the entire tilemap with
+    Fills the tilemap with a tile, creating new copies of each tile
 
     :PARAM tile: Tile to fill the tilemap with
     */
@@ -30,40 +36,39 @@ void Tilemap::fill_tilemap(Tile* tile, bool duplicate)
     int x = 0;
     int y = 0;
 
-    // Create new copies of each tile as we add them
-    if(duplicate)
+    // if(width > 0 && height > 0)
+    // {
+    //     // Place the tile that was passed as a parameter as the first tile 
+    //     // in the map, so that the new tile that had to be created to be 
+    //     // passed into the function does not sit useless in heap memory
+        
+    //     std::cout << "0, 0\n";
+    //     tiles[{0,0}].push_back(tile);
+    //     tile->set_position(0, 0);
+    //     x++;
+    //     y++;
+        
+    // }
+
+    while(y < height)
     {
-        if(width > 0 && height > 0)
+        x = 0;
+
+        while(x < width)
         {
-            // Place the tile that was passed as a parameter as the first tile 
-            // in the map, so that the new tile that had to be created to be 
-            // passed into the function does not sit useless in heap memory
-            tiles[{0,0}].push_back(tile);
+
+            Tile* new_tile = new Tile(*tile);
+            tiles[{x,y}].push_back(new_tile);
+
+            new_tile->set_position(x, y); 
             x++;
-            y++;
-            
         }
 
-        for(y; y < height; y++)
-        {
-            for(x; x < width; x++)
-            {
-                tiles[{x,y}].push_back(new Tile(*tile));      
-            }
-        }
-
-        return;
+        y++;
     }
 
-    // Fill the tilemap with the same tile 
+    return;
 
-    for(y; y < height; y++)
-    {
-        for(x; x < width; x++)
-        {
-            tiles[{x,y}].push_back(tile);
-        }
-    }
 }
 
 void Tilemap::assemble_tilemap()
@@ -73,7 +78,7 @@ void Tilemap::assemble_tilemap()
     the three vector types, being tiles, entities and items. This is used to 
     render them to the screen. 
     */
-
+    
     // Clear all data in the display map
     display.clear();
 
@@ -81,8 +86,7 @@ void Tilemap::assemble_tilemap()
     for(std::map<std::pair<int,int>, std::vector<Tile*>>::iterator
         it = tiles.begin(); it != tiles.end(); it++)
     {
-
-        // There is at least one tile inside    the vector at this coordinate point
+        // There is at least one tile inside the vector at this coordinate point
         if(it->second.size() > 0)
         {
             // Set the display key at these coordinates to the highest priority 
@@ -119,7 +123,7 @@ void Tilemap::add(Item* item, int x, int y)
     items[{x,y}].push_back(item);
 }
 
-std::pair<int, int> remove(Tile* tile, bool deconstruct)
+void Tilemap::remove(Tile* tile, bool deconstruct)
 {
     /*
     Removes the tile from the tilemap, and if deconstruct is true, deletes 
@@ -128,9 +132,18 @@ std::pair<int, int> remove(Tile* tile, bool deconstruct)
     :PARAM tile: Tile to remove
     :PARAM deconstruct: If it should delete the tile
     */
+
+    tiles[{tile->get_x(), tile->get_y()}].erase(
+        std::find(tiles[{tile->get_x(), tile->get_y()}].begin(), 
+        tiles[{tile->get_x(), tile->get_y()}].end(), tile));
+
+    if(deconstruct)
+    {
+        delete tile;
+    }
 }
 
-std::pair<int, int> remove(Entity* entity, bool deconstruct)
+void Tilemap::remove(Entity* entity, bool deconstruct)
 {
     /*
     Removes the entity from the tilemap, and if deconstruct is true, deletes 
@@ -139,9 +152,18 @@ std::pair<int, int> remove(Entity* entity, bool deconstruct)
     :PARAM entity: Entity to remove
     :PARAM deconstruct: If it should delete the entity
     */
+
+    entities[{entity->get_x(), entity->get_y()}].erase(
+        std::find(entities[{entity->get_x(), entity->get_y()}].begin(), 
+        entities[{entity->get_x(), entity->get_y()}].end(), entity));
+
+    if(deconstruct)
+    {
+        delete entity;
+    }
 }
 
-std::pair<int, int> remove(Item* item, bool deconstruct)
+void Tilemap::remove(Item* item, bool deconstruct)
 {
     /*
     Removes the item from the tilemap, and if deconstruct is true, deletes 
@@ -150,5 +172,14 @@ std::pair<int, int> remove(Item* item, bool deconstruct)
     :PARAM item: Item to remove
     :PARAM deconstruct: If it should delete the item
     */
+
+    items[{item->get_x(), item->get_y()}].erase(
+        std::find(items[{item->get_x(), item->get_y()}].begin(), 
+        items[{item->get_x(), item->get_y()}].end(), item));
+
+    if(deconstruct)
+    {
+        delete item;
+    }
 }
 

@@ -10,7 +10,9 @@ add_library(ojae
     src/TextureHandler.cpp
     src/TextRenderer.cpp
     src/BaseWindow.cpp
+    src/DisplayWindow.cpp
     src/Tilemap.cpp
+    src/TilemapWindow.cpp
 )
 
 target_include_directories(ojae

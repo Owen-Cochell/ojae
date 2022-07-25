@@ -38,7 +38,7 @@ public:
         held = false;
     }
 
-    ~Item();
+    ~Item() {}
 
     std::string get_name() { return name; }
 

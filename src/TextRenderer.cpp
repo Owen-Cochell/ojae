@@ -23,6 +23,18 @@ TextRenderer::~TextRenderer() {}
 
 int TextRenderer::get_font() { return font; }
 
+bool TextRenderer::check_font(int font_size)
+{
+    /*
+    Checks if a given font is available to use
+
+    :PARAM font_size: Font to check
+    */
+
+    return std::find(available_fonts.begin(), available_fonts.end(),
+        font_size) != available_fonts.end();
+}
+
 void TextRenderer::add(std::string new_content, int x, int y)
 {
     /*
@@ -53,10 +65,7 @@ void TextRenderer::set_font(int new_font)
     :PARAM new_font: New font to be set
     */
 
-
-    // If this int is in the list of supported fonts
-    if(std::find(available_fonts.begin(), available_fonts.end(), new_font)
-        != available_fonts.end())
+    if(check_font(new_font))
     {
         font = new_font;
         path = "assets/characters_font" + std::to_string(font) + ".png";

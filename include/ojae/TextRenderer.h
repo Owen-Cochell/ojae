@@ -40,6 +40,8 @@ public:
 
     int get_font();
 
+    bool check_font(int font_size);
+
     void add(std::string new_content, int x, int y);
     void clear();
     void set_font(int font_size);

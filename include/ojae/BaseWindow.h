@@ -4,10 +4,6 @@
 #include <vector>
 #include <map>
 
-#include "TextRenderer.h"
-#include "InputHandler.h"
-#include "Component.h"
-
 class BaseWindow
 {
     /*
@@ -16,7 +12,7 @@ class BaseWindow
     multiple windows, see Masterwindow and Slavewindows
     */
 
-private:
+protected:
 
     int start_x; // X Coordinate where the window begins
     int end_x; // X Coordinate where the window begins
@@ -25,25 +21,14 @@ private:
 
     bool taking_input; // Whether this info should handle keys from the input handler
 
-    std::vector<Component*> components; // List of components the window contains
- 
-    InputHandler* input_handler; // Instance of our InputHandler
-    TextRenderer* text_renderer; // Instance of our TextRenderer
 
 public:
 
     BaseWindow();
-    BaseWindow(int start_x, int end_x, int start_y, int end_y, InputHandler* input_handler);
+    BaseWindow(int start_x, int end_x, int start_y, int end_y, bool taking_input);
     ~BaseWindow();
 
-    int get_font();
-
-    void update();
-    void display();
-    void draw_text();
-    void add_component(Component* component);
-    void add_text(std::string text, int x, int y);
-    void clear_all_text();
-    void clear_all_components();
+    virtual void update();
+    virtual void display();
     void resize_window(int start_x, int end_x, int start_y, int end_y);
 };

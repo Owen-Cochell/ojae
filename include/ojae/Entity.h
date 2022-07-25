@@ -19,8 +19,8 @@ private:
 
 public:
 
-    Entity();
-    ~Entity();
+    Entity() {}
+    ~Entity() {}
 
     std::string get_name() { return name; }
 
