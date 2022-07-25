@@ -17,6 +17,8 @@ BaseWindow::BaseWindow(int start_x, int end_x, int start_y, int end_y,
 
 BaseWindow::~BaseWindow() {}
 
+int BaseWindow::get_font() { return text_renderer->get_font(); }
+
 void BaseWindow::update()
 {
     /*

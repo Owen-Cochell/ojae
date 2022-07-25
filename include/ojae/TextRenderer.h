@@ -25,7 +25,7 @@ private:
     std::pair<int, int> cursor_pos; // Position of the cursor in the window
 
     std::vector<int> available_fonts; // List of available fonts 
-    std::map<std::string, std::pair<int, int>> contents; // List of the content to render
+    std::vector<std::pair<std::string, std::pair<int, int>>> contents; // List of the content to render
 
     int start_x;
     int end_x;
@@ -37,6 +37,8 @@ public:
     TextRenderer();
     TextRenderer(int start_x, int end_x, int start_y, int end_y);
     ~TextRenderer();
+
+    int get_font();
 
     void add(std::string new_content, int x, int y);
     void clear();

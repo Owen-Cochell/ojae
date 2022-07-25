@@ -27,6 +27,9 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     screen_width = width;
     screen_height = height;
 
+    _player_speed = 2;
+    _player_delay = 8;
+
     int flags = 0;
 
     if(fullscreen)
@@ -49,7 +52,6 @@ void Demo::init(const char* title, int x, int y, int width, int height,
         200, 200, 16, 16);
 
     main_window->add_component(red_box);
-    main_window->add_text("Text", 0, 100);
 }
 
 void Demo::start()
@@ -86,6 +88,11 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
+    main_window->clear_all_text();
+    main_window->add_text("Speed: ", 0, 0);
+    main_window->add_text(std::to_string(_player_speed), 110, 0);
+    main_window->add_text("Delay: ", 0, 20);
+    main_window->add_text(std::to_string(_player_delay), 110, 20);
     input_handler->update();
     main_window->update();
 }
@@ -128,6 +135,22 @@ void Demo::handle_events()
                     input_handler->add_key('s');
                     break;
 
+                case SDLK_EQUALS:
+                    input_handler->add_key('=');
+                    break;
+                
+                case SDLK_MINUS:
+                    input_handler->add_key('-');
+                    break;
+
+                case SDLK_LEFTBRACKET:
+                    input_handler->add_key('[');
+                    break;
+                
+                case SDLK_RIGHTBRACKET:
+                    input_handler->add_key(']');
+                    break;
+
                 default:
                     break;
             }
@@ -159,6 +182,22 @@ void Demo::handle_events()
                     input_handler->remove_key('s');
                     break;
 
+                case SDLK_EQUALS:
+                    input_handler->remove_key('=');
+                    break;
+                
+                case SDLK_MINUS:
+                    input_handler->remove_key('-');
+                    break;
+
+                case SDLK_LEFTBRACKET:
+                    input_handler->remove_key('[');
+                    break;
+                
+                case SDLK_RIGHTBRACKET:
+                    input_handler->remove_key(']');
+                    break;
+
                 default:
                     break;
             }
@@ -175,26 +214,56 @@ void Demo::handle_keys()
         switch(c)
         {
             case 'w':
-                red_box->increment_y(-10);
+                red_box->increment_y(-_player_speed);
+                input_handler->set_delay(c, _player_delay);
                 break;
 
             case 's':
-                red_box->increment_y(10);
+                red_box->increment_y(_player_speed);
+                input_handler->set_delay(c, _player_delay);
                 break;
 
             case 'd':
-                red_box->increment_x(10);
+                red_box->increment_x(_player_speed);
+                input_handler->set_delay(c, _player_delay);
                 break;
 
             case 'a':
-                red_box->increment_x(-10);
+                red_box->increment_x(-_player_speed);
+                input_handler->set_delay(c, _player_delay);
+                break;
+
+            case '=':
+                _player_speed++;
+                input_handler->set_delay(c, 12);
+                break;
+            
+            case '-':
+                _player_speed--;
+                if(_player_speed < 0)
+                {
+                    _player_speed = 0;
+                }   
+                input_handler->set_delay(c, 12);
+                break;
+
+            case ']':
+                _player_delay++;
+                input_handler->set_delay(c, 12);
+                break;
+            
+            case '[':
+                _player_delay--;
+                if(_player_delay < 0)
+                {
+                    _player_delay = 0;
+                }
+                input_handler->set_delay(c, 12);
                 break;
 
             default:
                 break;
         }
-   
-        input_handler->set_delay(c, 20);
     }
 }
 

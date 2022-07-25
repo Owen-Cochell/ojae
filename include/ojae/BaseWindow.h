@@ -36,6 +36,8 @@ public:
     BaseWindow(int start_x, int end_x, int start_y, int end_y, InputHandler* input_handler);
     ~BaseWindow();
 
+    int get_font();
+
     void update();
     void display();
     void draw_text();

@@ -21,6 +21,8 @@ TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y)
 
 TextRenderer::~TextRenderer() {}
 
+int TextRenderer::get_font() { return font; }
+
 void TextRenderer::add(std::string new_content, int x, int y)
 {
     /*
@@ -31,9 +33,8 @@ void TextRenderer::add(std::string new_content, int x, int y)
     :PARAM y: Y coordinate to draw the text
     */
 
-    contents.emplace(new_content, std::pair<int, int> {x, y});
+    contents.push_back({new_content, std::pair<int, int> {x, y}});
 }
-
 
 void TextRenderer::clear()
 {
