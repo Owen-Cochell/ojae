@@ -102,7 +102,6 @@ std::vector<char> InputHandler::get_active_keys()
 
     return active_keys; 
 };
-std::vector<char> InputHandler::get_active_keys() { return keys; };
 
 void CallbackCollection::handle_event(SDL_Event& event) {
     // Sends the given event though the handlers associated with it:
