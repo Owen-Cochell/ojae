@@ -18,7 +18,7 @@ TextRenderer* text_renderer = nullptr;
 Component* red_box;
 
 DisplayWindow* main_window;
-//TilemapWindow* tilemap_window;
+TilemapWindow* tilemap_window;
 
 Tile* player;
 
@@ -33,7 +33,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     screen_height = height;
 
     _player_speed = 16;
-    _player_delay = 13;
+    _player_delay = 0;
 
     int flags = 0;
 
@@ -57,18 +57,18 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     red_box = new Component("Red Box", "assets/red_box.png", 0, 0, 16, 16, 
         0, 0, 16, 16);
 
-    main_window->add_component(red_box, 0, 100);
+    main_window->add_component(red_box, 0, 64);
 
 
     //TilemapWindow
-    // Tilemap* tilemap = new Tilemap(10, 10);
-    // tilemap->fill_tilemap(new Tile("Floor", '.'));
+    Tilemap* tilemap = new Tilemap(10, 10);
+    tilemap->fill_tilemap(new Tile("Floor", '.'));
 
-    // tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
-    //     input_handler, true);
+    tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
+        input_handler, true);
 
-    // player = new Tile("Player", 'P');
-    // tilemap->add(player, 3, 3);
+    player = new Tile("Player", 'P');
+    tilemap->add(player, 3, 3);
 }
 
 void Demo::start()
@@ -107,15 +107,12 @@ void Demo::update()
 {
     main_window->clear_all_text();
     main_window->add_text("Speed: ", 0, 0);
-    main_window->add_text(std::to_string(_player_speed), 144, 0);
+    main_window->add_text(std::to_string(_player_speed), 112, 0);
     main_window->add_text("Delay: ", 0, 20);
-    main_window->add_text(std::to_string(_player_delay), 144, 20);
+    main_window->add_text(std::to_string(_player_delay), 112, 20);
 
     main_window->update();
-
-    std::cout << "Before I-`Handler\n";
     input_handler->update();
-    std::cout << "After I-Handler\n";
 }
 
 void Demo::handle_events()
@@ -236,25 +233,29 @@ void Demo::handle_keys()
         {
             case 'w':
 
-                red_box->increment_y(-_player_speed);
+                main_window->move(red_box, red_box->get_x(), 
+                    red_box->get_y() - _player_speed);
                 input_handler->set_delay(c, _player_delay);
                 break;
 
             case 's':
                 
-                red_box->increment_y(_player_speed);
+                main_window->move(red_box, red_box->get_x(), 
+                    red_box->get_y() + _player_speed);
                 input_handler->set_delay(c, _player_delay);
                 break;
 
             case 'd':
 
-                red_box->increment_x(_player_speed);
+                main_window->move(red_box, 
+                    red_box->get_x() + _player_speed, red_box->get_y());
                 input_handler->set_delay(c, _player_delay);
                 break;
 
             case 'a':
 
-                red_box->increment_x(-_player_speed);
+                main_window->move(red_box, 
+                    red_box->get_x() - _player_speed, red_box->get_y());
                 input_handler->set_delay(c, _player_delay);
                 break;
 
@@ -281,7 +282,7 @@ void Demo::draw_all()
     SDL_RenderClear(renderer);
 
     main_window->display();
-    // tilemap_window->display();
+    tilemap_window->display();
 
     SDL_RenderPresent(renderer);
 }

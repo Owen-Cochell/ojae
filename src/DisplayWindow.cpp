@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "DisplayWindow.h"
 
 DisplayWindow::DisplayWindow() : BaseWindow()
@@ -35,6 +37,8 @@ void DisplayWindow::display()
     /*
     Draws all components and text to the screen
     */
+
+    draw_border();
 
     for(Component* component : components)
     {
@@ -79,6 +83,51 @@ void DisplayWindow::add_text(std::string text_to_add, int x, int y)
     */
 
     text_renderer->add(text_to_add, start_x + x, start_y + y);
+}
+
+void DisplayWindow::move(Component* component, int x, int y)
+{
+    /*
+    Moves a component to a spot within the DisplayWindow. If the target spot
+    is outside window dimensions, the component will be moved as close to the 
+    border as possible
+
+    :PARAM component: Component to move
+    :PARAM x: X Coordinate
+    :PARAM y: Y Coordinate
+    */
+
+    if(x < start_x)
+    {
+        x = start_x;
+    }
+
+    else if(x > end_x - component->get_width())
+    {
+        x = end_x - component->get_width();
+    }
+
+    if(y < start_y)
+    {
+        y = start_y;
+    }
+
+    else if(y > end_y - component->get_height())
+    {
+        y = end_y - component->get_height();
+    }
+
+    component->set_position(x, y);
+
+    // if(
+    //     x > start_x && 
+    //     x < end_x - component->get_width() && 
+    //     y > start_y &&
+    //     y < end_y - component->get_height()
+    // )
+    // {
+    //     component->set_position(x, y);
+    // }
 }
 
 void DisplayWindow::clear_all_text()

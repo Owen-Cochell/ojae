@@ -51,6 +51,10 @@ public:
         SDL_DestroyTexture(texture);
     }
 
+    int get_width() { return dest.w; }
+
+    int get_height() { return dest.h; }
+
     void set_position(int x, int y)
     {
         /*

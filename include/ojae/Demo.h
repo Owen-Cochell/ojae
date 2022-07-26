@@ -16,7 +16,7 @@ private:
 
     const int TARG_FPS = 60; // How many frames per second we want 
     const int FRAME_DELAY = 1000 / TARG_FPS; // Miliseconds delay between each frame to 
-        // aquire target fps
+        // acquire target fps
     
     Uint32 frame_start; // Resembles the time stamp of the beginning of each frame
     int frame_time; // Measures the amount of time each frame took to execute

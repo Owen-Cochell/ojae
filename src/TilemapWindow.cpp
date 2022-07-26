@@ -28,6 +28,8 @@ void TilemapWindow::display()
     Called once per frame. Renders the tilemap to the window
     */
 
+    draw_border();
+
     text_renderer->clear();
     tilemap->assemble_tilemap();
 
@@ -36,7 +38,6 @@ void TilemapWindow::display()
     for(std::map<std::pair<int,int>,char>::iterator it = 
         tilemap_display.begin(); it != tilemap_display.end(); it++)
     {
-        
         text_renderer->add(std::string(1, it->second), 
         it->first.first * text_renderer->get_font(), it->first.second * 
         text_renderer->get_font());

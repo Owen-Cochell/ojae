@@ -38,6 +38,14 @@ public:
         sprite->~Sprite();
     }
 
+    int get_x() { return x_pos; }
+
+    int get_y() { return y_pos; }
+
+    int get_width() { return sprite->get_width(); }
+
+    int get_height() { return sprite->get_height(); }
+
     void draw()
     {
         sprite->draw();
@@ -66,27 +74,4 @@ public:
         x_pos = x;
         y_pos = y;
     }
-
-    void increment_x(int amount)
-    {
-        /*
-        Increments the X position by n amount
-
-        :PARAM amount: Amount to increment by
-        */
-
-        x_pos += amount;
-    }
-
-    void increment_y(int amount)
-    {
-        /*
-        Increments the Y position by n amount
-
-        :PARAM amount: Amount to increment by
-        */
-
-        y_pos += amount;
-    }
-
 };
