@@ -27,7 +27,7 @@ public:
     void update() override;
     void display() override;
     void draw_text();
-    void add_component(Component* component);
+    void add_component(Component* component, int x, int y);
     void add_text(std::string text, int x, int y);
     void clear_all_text();
     void clear_all_components();

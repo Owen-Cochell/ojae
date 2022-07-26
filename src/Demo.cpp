@@ -49,17 +49,20 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     input_handler = new InputHandler();
 
-    main_window = new DisplayWindow(width / 2, width, height / 2, height, input_handler, true);
+    //DisplayWindow
+    main_window = new DisplayWindow(width / 2, width, 0, height, input_handler, true);
 
     red_box = new Component("Red Box", "assets/red_box.png", 0, 0, 16, 16, 
-        (width / 2) + 100, (height / 2) + 100, 16, 16);
+        0, 0, 16, 16);
 
-    main_window->add_component(red_box);
+    main_window->add_component(red_box, 0, 100);
 
+
+    //TilemapWindow
     Tilemap* tilemap = new Tilemap(10, 10);
     tilemap->fill_tilemap(new Tile("Floor", '.'));
 
-    tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height / 2,
+    tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
         input_handler, true);
 
     player = new Tile("Player", 'P');
@@ -101,10 +104,10 @@ void Demo::execution_loop()
 void Demo::update()
 {
     main_window->clear_all_text();
-    main_window->add_text("Speed: ", screen_width / 2, 0);
-    main_window->add_text(std::to_string(_player_speed), (screen_width / 2) + 144, 0);
-    main_window->add_text("Delay: ", screen_width / 2, 20);
-    main_window->add_text(std::to_string(_player_delay), (screen_width / 2) + 144, 20);
+    main_window->add_text("Speed: ", 0, 0);
+    main_window->add_text(std::to_string(_player_speed), 144, 0);
+    main_window->add_text("Delay: ", 0, 20);
+    main_window->add_text(std::to_string(_player_delay), 144, 20);
 
     main_window->update();
     input_handler->update();

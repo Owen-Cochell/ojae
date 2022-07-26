@@ -54,13 +54,18 @@ void DisplayWindow::draw_text()
 
 }
 
-void DisplayWindow::add_component(Component* component)
+void DisplayWindow::add_component(Component* component, int x, int y)
 {
     /*
     Adds a component to the list of the DisplayWindows components
+
+    :PARAM component: Component to add
+    :PARAM x: X coordinate to place the component in relation to the windows starting position
+    :PARAM y: Y coordinate to place the component in relation to the windows starting position
     */
 
     components.push_back(component);
+    component->set_position(start_x + x, start_y + y);
 }
 
 void DisplayWindow::add_text(std::string text_to_add, int x, int y)
@@ -69,11 +74,11 @@ void DisplayWindow::add_text(std::string text_to_add, int x, int y)
     Adds text to our TextRenderer at the specified coordinates
 
     :PARAM text: Text to add
-    :PARAM x: X coordinate to place the text
-    :PARAM y: Y coordinate to place the text
+    :PARAM x: X coordinate to place the text in relation to the windows starting position
+    :PARAM y: Y coordinate to place the text in relation to the windows starting position
     */
 
-    text_renderer->add(text_to_add, x, y);
+    text_renderer->add(text_to_add, start_x + x, start_y + y);
 }
 
 void DisplayWindow::clear_all_text()

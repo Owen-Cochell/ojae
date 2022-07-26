@@ -54,6 +54,19 @@ public:
         sprite->set_position(x_pos, y_pos);
     }
 
+    void set_position(int x, int y)
+    {
+        /*
+        Sets new x and y coordinates for the component
+
+        :PARAM x: X Coordinate
+        :PARAM y: Y Coordinate
+        */
+
+        x_pos = x;
+        y_pos = y;
+    }
+
     void increment_x(int amount)
     {
         /*
