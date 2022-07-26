@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <stdexcept>
+#include <iostream>
 
 #include "InputHandler.h"
 
@@ -100,3 +102,59 @@ std::vector<char> InputHandler::get_active_keys()
 
     return active_keys; 
 };
+std::vector<char> InputHandler::get_active_keys() { return keys; };
+
+void CallbackCollection::handle_event(SDL_Event& event) {
+    // Sends the given event though the handlers associated with it:
+
+    // Get the key for the event:
+
+    int key = this->extract_key(event);
+
+    // Get the vector at the key:
+ 
+    Callbacks calls = this->callbacks.at(key);
+
+    // Iterate over each function and call it:
+
+    for (long unsigned int i = 0; i < calls.size(); i++) {
+
+        // Call the function:
+
+        //(calls.at(i))(event);
+
+        std::cout << "Blah3" << std::endl;
+
+    };
+}
+
+void CallbackCollection::add_callback(int type, std::function<void(SDL_Event&)> func) {
+
+    // Test to see if a pair exists already:
+
+    try{
+
+        //Callbacks thing = this->callbacks.at(type);
+
+        //thing.push_back(func);
+
+        std::cout << "Blah" << std::endl;
+    }
+    catch (const std::out_of_range& oor) {
+
+        // Create a new pair and add it:
+
+        //this->callbacks[type] = Callbacks {func};
+
+        std::cout << "Blah 2" << std::endl;
+
+    }
+
+}
+
+int InputTemp::extract_key(SDL_Event& event) {
+
+    // Top level CallbackCollection, return event type:
+
+    return event.type;
+}
