@@ -29,6 +29,7 @@ public:
 
 };
 
+
 typedef std::vector<std::function<void(SDL_Event&)>> Callbacks;
 
 class CallbackCollection

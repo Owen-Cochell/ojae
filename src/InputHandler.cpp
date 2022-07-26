@@ -17,6 +17,8 @@ void InputHandler::update()
     removes them from the delay map if they are equal to or less than 0
     */
 
+    std::vector<char> keys_to_delete;
+
     for(std::map<char, int>::iterator it = keys_delay.begin();
         it != keys_delay.end(); it++)
     {
@@ -27,8 +29,13 @@ void InputHandler::update()
         // remove it from the character delay map
         if(it->second <= 0)
         {
-            keys_delay.erase(it->first);
+            keys_to_delete.push_back(it->first);
         }
+    }
+
+    for(char c : keys_to_delete)
+    {
+        keys_delay.erase(c);
     }
 }
 

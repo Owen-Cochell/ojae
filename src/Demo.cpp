@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Demo.h"
 #include "TextRenderer.h"
 #include "Component.h"
@@ -16,7 +18,7 @@ TextRenderer* text_renderer = nullptr;
 Component* red_box;
 
 DisplayWindow* main_window;
-TilemapWindow* tilemap_window;
+//TilemapWindow* tilemap_window;
 
 Tile* player;
 
@@ -59,14 +61,14 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
 
     //TilemapWindow
-    Tilemap* tilemap = new Tilemap(10, 10);
-    tilemap->fill_tilemap(new Tile("Floor", '.'));
+    // Tilemap* tilemap = new Tilemap(10, 10);
+    // tilemap->fill_tilemap(new Tile("Floor", '.'));
 
-    tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
-        input_handler, true);
+    // tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
+    //     input_handler, true);
 
-    player = new Tile("Player", 'P');
-    tilemap->add(player, 3, 3);
+    // player = new Tile("Player", 'P');
+    // tilemap->add(player, 3, 3);
 }
 
 void Demo::start()
@@ -110,7 +112,10 @@ void Demo::update()
     main_window->add_text(std::to_string(_player_delay), 144, 20);
 
     main_window->update();
+
+    std::cout << "Before I-`Handler\n";
     input_handler->update();
+    std::cout << "After I-Handler\n";
 }
 
 void Demo::handle_events()
@@ -276,7 +281,7 @@ void Demo::draw_all()
     SDL_RenderClear(renderer);
 
     main_window->display();
-    tilemap_window->display();
+    // tilemap_window->display();
 
     SDL_RenderPresent(renderer);
 }
