@@ -37,14 +37,14 @@ class CallbackCollection
     CallbackCollection - Maps arbitrary int keys to callbacks to run.
     */
 
-    private:
+    protected:
 
         std::map<int, Callbacks> callbacks;  // Maps of events to functions
 
     public:
 
         void handle_event(SDL_Event& event); // Sends an event through the handlers
-        virtual int extract_key(SDL_Event& event); // Extracts a valid key from the event
+        virtual int extract_key(SDL_Event& event) {return 0;}; // Extracts a valid key from the event
         void add_callback(int type, std::function<void(SDL_Event&)> func);  // Ties a callback to an event
 
 };
@@ -74,8 +74,7 @@ class InputTemp: public CallbackCollection
 
     private:
 
-        std::map<int, Callbacks> callbacks;  // Maps of events to functions
-        std::vector<SDL_Event&> events;  // List of references to events that have been fired
+        std::vector<SDL_Event> events;  // List of references to events that have been fired
 
     public:
 
@@ -83,6 +82,5 @@ class InputTemp: public CallbackCollection
         ~InputTemp();
 
         void get_event();  // Gets events from SDL and handles them
-        int extract_key(SDL_Event& event);  // Implement the virtual method
-
+        int extract_key(SDL_Event& event) override;  // Implement the virtual method
 };

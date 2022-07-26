@@ -120,7 +120,7 @@ void CallbackCollection::handle_event(SDL_Event& event) {
 
         // Call the function:
 
-        //(calls.at(i))(event);
+        (calls.at(i))(event);
 
         std::cout << "Blah3" << std::endl;
 
@@ -133,19 +133,15 @@ void CallbackCollection::add_callback(int type, std::function<void(SDL_Event&)> 
 
     try{
 
-        //Callbacks thing = this->callbacks.at(type);
+        Callbacks thing = this->callbacks.at(type);
 
-        //thing.push_back(func);
-
-        std::cout << "Blah" << std::endl;
+        thing.push_back(func);
     }
     catch (const std::out_of_range& oor) {
 
         // Create a new pair and add it:
 
-        //this->callbacks[type] = Callbacks {func};
-
-        std::cout << "Blah 2" << std::endl;
+        this->callbacks[type] = Callbacks {func};
 
     }
 
