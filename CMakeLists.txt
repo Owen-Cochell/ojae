@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23.2)
+cmake_minimum_required(VERSION 3.22)
 project(ojae VERSION 1.0.0 DESCRIPTION "A modular ASCII engine" HOMEPAGE_URL "https://github.com/Owen-Cochell/ojae" LANGUAGES CXX)
 
 # Define our target and set properties:

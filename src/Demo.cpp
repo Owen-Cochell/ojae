@@ -13,9 +13,9 @@ bool Demo::running = false;
 InputHandler* Demo::input_handler = nullptr;
 TextRenderer* text_renderer = nullptr;
 
-// Component* red_box;
+Component* red_box;
 
-// DisplayWindow* main_window;
+DisplayWindow* main_window;
 TilemapWindow* tilemap_window;
 
 Tile* player;
@@ -27,7 +27,6 @@ Demo::~Demo() {}
 void Demo::init(const char* title, int x, int y, int width, int height,
     bool fullscreen)
 {
-
     screen_width = width;
     screen_height = height;
 
@@ -50,17 +49,17 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     input_handler = new InputHandler();
 
-    //main_window = new DisplayWindow(0, width, 0, height, input_handler, true);
+    main_window = new DisplayWindow(width / 2, width, height / 2, height, input_handler, true);
 
-    //red_box = new Component("Red Box", "assets/red_box.png", 0, 0, 16, 16, 
-        //200, 200, 16, 16);
+    red_box = new Component("Red Box", "assets/red_box.png", 0, 0, 16, 16, 
+        (width / 2) + 100, (height / 2) + 100, 16, 16);
 
-    //main_window->add_component(red_box);
+    main_window->add_component(red_box);
 
     Tilemap* tilemap = new Tilemap(10, 10);
     tilemap->fill_tilemap(new Tile("Floor", '.'));
 
-    tilemap_window = new TilemapWindow(tilemap, 0, width, 0, height,
+    tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height / 2,
         input_handler, true);
 
     player = new Tile("Player", 'P');
@@ -101,12 +100,13 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
-    // main_window->clear_all_text();
-    // main_window->add_text("Speed: ", 0, 0);
-    // main_window->add_text(std::to_string(_player_speed), 110, 0);
-    // main_window->add_text("Delay: ", 0, 20);
-    // main_window->add_text(std::to_string(_player_delay), 110, 20);
-    //main_window->update();
+    main_window->clear_all_text();
+    main_window->add_text("Speed: ", screen_width / 2, 0);
+    main_window->add_text(std::to_string(_player_speed), (screen_width / 2) + 144, 0);
+    main_window->add_text("Delay: ", screen_width / 2, 20);
+    main_window->add_text(std::to_string(_player_delay), (screen_width / 2) + 144, 20);
+
+    main_window->update();
     input_handler->update();
 }
 
@@ -227,15 +227,27 @@ void Demo::handle_keys()
         switch(c)
         {
             case 'w':
+
+                red_box->increment_y(-_player_speed);
+                input_handler->set_delay(c, _player_delay);
                 break;
 
             case 's':
+                
+                red_box->increment_y(_player_speed);
+                input_handler->set_delay(c, _player_delay);
                 break;
 
             case 'd':
+
+                red_box->increment_x(_player_speed);
+                input_handler->set_delay(c, _player_delay);
                 break;
 
             case 'a':
+
+                red_box->increment_x(-_player_speed);
+                input_handler->set_delay(c, _player_delay);
                 break;
 
             case '=':
@@ -260,7 +272,7 @@ void Demo::draw_all()
 {
     SDL_RenderClear(renderer);
 
-    // main_window->display();
+    main_window->display();
     tilemap_window->display();
 
     SDL_RenderPresent(renderer);

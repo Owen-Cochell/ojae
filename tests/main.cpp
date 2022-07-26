@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL.h>
+#include <iostream>
 
 #include "Demo.h"
 #include "FileHandler.h"
@@ -15,7 +16,7 @@ int main(int argc, char* argv[])
     int width = j_loader["Width"];
     int height = j_loader["Height"];
     bool fullscreen = j_loader["Fullscreen"];
-
+    
     Demo demo;
 
     demo.init("Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
