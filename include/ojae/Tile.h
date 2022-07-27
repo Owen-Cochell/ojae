@@ -13,6 +13,7 @@ private:
     
     int x_pos; // X Coordinate
     int y_pos; // Y Coordinate
+    int priority; // Rendering priority of the Tile
 
     bool traversable; // If this tile is traversable by things that can move
 
@@ -23,19 +24,20 @@ public:
         character = ' ';
         x_pos = 0;
         y_pos = 0;
+        priority = 0;
         traversable = true;
     }
 
-    Tile(std::string name, char character)
+    Tile(std::string name, char character, bool traversable, int priority)
     {
         this->name = name;
         this->character = character;
         x_pos = 0;
         y_pos = 0;
+        this->priority = priority;
+        this->traversable = traversable;
     }
 
-    Tile(std::string name, char character, bool traversable);
-    
     ~Tile() {}
 
     std::string get_name() { return name; }
@@ -43,7 +45,10 @@ public:
     char get_character() { return character; }
 
     int get_x() { return x_pos; }
+
     int get_y() { return y_pos; }
+
+    int get_priority() { return priority; }
 
     bool is_traversable() { return traversable; }
 

@@ -13,7 +13,8 @@ DisplayWindow::DisplayWindow(int start_x, int end_x, int start_y, int end_y,
         BaseWindow(start_x, end_x, start_y, end_y, taking_input)
 {
     this->input_handler = input_handler;
-    this->text_renderer = new TextRenderer(start_x, end_x, start_y, end_y);
+    this->text_renderer = new TextRenderer(this->start_x, this->end_x, 
+        this->start_y, this->end_y);
 }
 
 DisplayWindow::~DisplayWindow() {}
@@ -82,7 +83,7 @@ void DisplayWindow::add_text(std::string text_to_add, int x, int y)
     :PARAM y: Y coordinate to place the text in relation to the windows starting position
     */
 
-    text_renderer->add(text_to_add, start_x + x, start_y + y);
+    text_renderer->add(text_to_add, x, y);
 }
 
 void DisplayWindow::move(Component* component, int x, int y)

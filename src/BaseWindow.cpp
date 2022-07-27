@@ -5,14 +5,16 @@ BaseWindow::BaseWindow()
 {
     resize_window(0, 0, 0, 0);
     taking_input = false;
-    border = TextureHandler::load_texture("assets/Border.png");
+    border = TextureHandler::load_texture("assets/border.png");
+    border_selected = TextureHandler::load_texture("assets/border_selected.png");
 }
 
 BaseWindow::BaseWindow(int start_x, int end_x, int start_y, int end_y, bool taking_input)
 {
     resize_window(start_x, end_x, start_y, end_y);
     this->taking_input = taking_input;
-    border = TextureHandler::load_texture("assets/Border.png");
+    border = TextureHandler::load_texture("assets/border.png");
+    border_selected = TextureHandler::load_texture("assets/border_selected.png");
 }
 
 BaseWindow::~BaseWindow() {}
@@ -23,11 +25,19 @@ void BaseWindow::display() {}
 
 void BaseWindow::draw_border()
 {
+
+    SDL_Texture* targ_text = border;
+
+    if(taking_input)
+    {
+        targ_text = border_selected;
+    }
+    
     //Draw Borders
-    TextureHandler::draw(border, border_src, top_border);
-    TextureHandler::draw(border, border_src, right_border);
-    TextureHandler::draw(border, border_src, bottom_border);
-    TextureHandler::draw(border, border_src, left_border);
+    TextureHandler::draw(targ_text, border_src, top_border);
+    TextureHandler::draw(targ_text, border_src, right_border);
+    TextureHandler::draw(targ_text, border_src, bottom_border);
+    TextureHandler::draw(targ_text, border_src, left_border);
 }
 
 void BaseWindow::resize_window(int start_x, int end_x, int start_y, int end_y)

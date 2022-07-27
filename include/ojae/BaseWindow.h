@@ -24,6 +24,7 @@ protected:
     SDL_Rect left_border;
 
     SDL_Texture* border;
+    SDL_Texture* border_selected;
 
     int border_size; // Size of the border of the windows
 

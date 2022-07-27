@@ -24,9 +24,6 @@ private:
     int screen_width; // Width of the screen
     int screen_height; // Height of the screen
 
-    int _player_speed;
-    int _player_delay;
-
 
 public:
 

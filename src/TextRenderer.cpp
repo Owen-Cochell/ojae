@@ -38,14 +38,17 @@ bool TextRenderer::check_font(int font_size)
 void TextRenderer::add(std::string new_content, int x, int y)
 {
     /*
-    Adds a string to the contents with a specified coordinate 
+    Adds a string to the contents with a specified coordinate in relation to
+    the start positions of the window
 
     :PARAM new_content: Content to add
     :PARAM x: X coordinate to draw the text
     :PARAM y: Y coordinate to draw the text
     */
 
-    contents.push_back({new_content, std::pair<int, int> {x, y}});
+    contents.push_back({new_content, std::pair<int, int> {
+        start_x + x, start_y + y
+    }});
 }
 
 void TextRenderer::clear()

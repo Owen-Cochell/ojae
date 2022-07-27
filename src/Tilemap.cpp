@@ -1,7 +1,21 @@
 #include <algorithm>
 #include <iostream>
+#include <iostream>
 
 #include "Tilemap.h"
+
+struct greater_priority
+{
+    inline bool operator()(Entity* a, Entity* b)
+    {
+        return a->get_priority() > b->get_priority();
+    }
+
+    inline bool operator()(Tile* a, Tile* b)
+    {
+        return a->get_priority() > b->get_priority();
+    }
+};
 
 Tilemap::Tilemap() 
 {
@@ -9,21 +23,30 @@ Tilemap::Tilemap()
     height = 0;
     keep_tiles = false;
     keep_entities = false;
-    keep_items = false;
 }
 
 Tilemap::Tilemap(int width, int height)
 {
     this->width = width;
     this->height = height;
-    keep_items = false;
+    keep_tiles = false;
     keep_entities = false;
-    keep_items = false;
 }
 
 Tilemap::~Tilemap() {}
 
 std::map<std::pair<int, int>, char> Tilemap::get_display() { return display; }
+
+bool Tilemap::bound_check(int x, int y)
+{
+    /*
+    Checks if the passed coordinate is inside the bounds of the tilemap
+    :PARAM x: X Coordinate
+    :PARAM y: Y Coordinate
+    */
+
+    return x >= 0 && x < width && y >= 0 && y < height;
+}
 
 void Tilemap::fill_tilemap(Tile* tile)
 {
@@ -94,6 +117,20 @@ void Tilemap::assemble_tilemap()
             display[it->first] = it->second.at(0)->get_character();
         }
     }
+
+    // Loop through the entities and check if its highest priority is higher 
+    // than the tile that exists there
+    for(std::map<std::pair<int,int>, std::vector<Entity*>>::iterator
+        it = entities.begin(); it != entities.end(); it++)
+    {
+        // There is at least one entity inside the vector at this coordinate point
+        if(it->second.size() > 0)
+        {
+            // Set the display key at these coordinates to the highest priority
+            // character in the vector of entities
+            display[it->first] = it->second.at(0)->get_character();
+        }
+    }
 }
 
 void Tilemap::add(Tile* tile, int x, int y)
@@ -103,6 +140,8 @@ void Tilemap::add(Tile* tile, int x, int y)
     */
 
     tiles[{x,y}].push_back(tile);
+    std::sort(tiles[{x,y}].begin(), tiles[{x,y}].end(), greater_priority());
+    tile->set_position(x, y);
 }
 
 void Tilemap::add(Entity* entity, int x, int y)
@@ -112,15 +151,8 @@ void Tilemap::add(Entity* entity, int x, int y)
     */
 
     entities[{x,y}].push_back(entity);
-}
-
-void Tilemap::add(Item* item, int x, int y)
-{
-    /*
-    Adds an item at the specified coordinate point
-    */
-
-    items[{x,y}].push_back(item);
+    std::sort(entities[{x,y}].begin(), entities[{x,y}].end(), greater_priority());
+    entity->set_position(x, y);
 }
 
 void Tilemap::remove(Tile* tile, bool deconstruct)
@@ -163,23 +195,30 @@ void Tilemap::remove(Entity* entity, bool deconstruct)
     }
 }
 
-void Tilemap::remove(Item* item, bool deconstruct)
+void Tilemap::move(Tile* tile, int x_amount, int y_amount) {}
+
+void Tilemap::move(Entity* entity, int x_amount, int y_amount)
 {
     /*
-    Removes the item from the tilemap, and if deconstruct is true, deletes 
-    the object from heap memory
+    Moves an entity in accordance to the passed paramteres. This function adds
+    the x_amount and y_amount to the entity's coordinates rather than moveing
+    this entity to a specified coordinate
 
-    :PARAM item: Item to remove
-    :PARAM deconstruct: If it should delete the item
+    :PARAM entity: Entity to move
+    :PARAM x_amount: X amount to add to coordinate
+    :PARAM y_amount: Y amount to add to coordinate
     */
 
-    items[{item->get_x(), item->get_y()}].erase(
-        std::find(items[{item->get_x(), item->get_y()}].begin(), 
-        items[{item->get_x(), item->get_y()}].end(), item));
+    // Calculate the spot the entity is trying to move to
+    int targ_x = entity->get_x() + x_amount;
+    int targ_y = entity->get_y() + y_amount;
 
-    if(deconstruct)
+    // If the new spot is out of bounds, we do not want to move this entity
+    if(!bound_check(targ_x, targ_y))
     {
-        delete item;
+        return;
     }
-}
 
+    remove(entity);
+    add(entity, targ_x, targ_y);
+}

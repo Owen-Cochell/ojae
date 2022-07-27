@@ -17,7 +17,8 @@ TilemapWindow::TilemapWindow(Tilemap* tilemap, int start_x, int end_x,
 {
     this->tilemap = tilemap;
     this->input_handler = input_handler;
-    text_renderer = new TextRenderer(start_x, end_x, start_y, end_y);
+    text_renderer = new TextRenderer(this->start_x, this->end_x, 
+        this->start_y, this->end_y);
 }
 
 int TilemapWindow::get_font() { return text_renderer->get_font(); }
