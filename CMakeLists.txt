@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.22)
 project(ojae VERSION 1.0.0 DESCRIPTION "A modular ASCII engine" HOMEPAGE_URL "https://github.com/Owen-Cochell/ojae" LANGUAGES CXX)
 
+# Place the binary in the root of the project:
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
+
 # Define our target and set properties:
 
 add_library(ojae
