@@ -23,6 +23,7 @@ TilemapWindow::TilemapWindow(Tilemap* tilemap, int start_x, int end_x,
 
 int TilemapWindow::get_font() { return text_renderer->get_font(); }
 
+
 void TilemapWindow::display()
 {
     /*
@@ -30,18 +31,11 @@ void TilemapWindow::display()
     */
 
     draw_border();
-
     text_renderer->clear();
-    tilemap->assemble_tilemap();
 
-    std::map<std::pair<int,int>,char> tilemap_display = tilemap->get_display();
-
-    for(std::map<std::pair<int,int>,char>::iterator it = 
-        tilemap_display.begin(); it != tilemap_display.end(); it++)
+    for(char c : tilemap->get_display())
     {
-        text_renderer->add(std::string(1, it->second), 
-        it->first.first * text_renderer->get_font(), it->first.second * 
-        text_renderer->get_font());
+        text_renderer->add(c);
     }
 
     text_renderer->draw_all();

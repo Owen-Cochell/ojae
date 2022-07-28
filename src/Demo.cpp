@@ -22,7 +22,13 @@ Tilemap* tilemap;
 
 Entity* player;
 
-Demo::Demo() {} 
+Demo::Demo() 
+{
+    screen_width = 0;
+    screen_height = 0;
+    frame_start = 0;
+    frame_time = 0;
+} 
 
 Demo::~Demo() {}
 
@@ -49,14 +55,14 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     input_handler = new InputHandler();
 
     //DisplayWindow
-    main_window = new DisplayWindow(width / 2, width, 0, height, input_handler, false);
+    main_window = new DisplayWindow(int(width / 2), width, 0, height, input_handler, false);
 
     //TilemapWindow
-    tilemap = new Tilemap(10, 10);
+    tilemap = new Tilemap(15, 15);
     tilemap->fill_tilemap(new Tile("Floor", '.', true, 0));
 
     tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
-        input_handler, true);
+         input_handler, true);
 
     player = new Entity("Player", 'P', 20);
     tilemap->add(player, 3, 3);
@@ -97,13 +103,12 @@ void Demo::execution_loop()
 void Demo::update()
 {
     main_window->clear_all_text();
-    main_window->add_text("Player Coordinates: (", 0, 0);
-    main_window->add_text(std::to_string(player->get_x()), 336, 0);
-    main_window->add_text(", ", 352, 0);
-    main_window->add_text(std::to_string(player->get_y()), 384, 0);
-    main_window->add_text(")", 400, 0);
-
-    main_window->update();
+    main_window->add_text("Player Coordinates: (");
+    main_window->add_text(std::to_string(player->get_x()));
+    main_window->add_text(", ");
+    main_window->add_text(std::to_string(player->get_y()));
+    main_window->add_text(")");
+    //main_window->update();    main_window->add_text("This is a test");
     input_handler->update();
 }
 

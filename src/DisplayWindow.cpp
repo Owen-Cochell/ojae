@@ -59,6 +59,11 @@ void DisplayWindow::draw_text()
 
 }
 
+void DisplayWindow::set_cursor_pos(int x, int y)
+{
+    text_renderer->set_cursor_pos(x, y);
+}
+
 void DisplayWindow::add_component(Component* component, int x, int y)
 {
     /*
@@ -73,7 +78,7 @@ void DisplayWindow::add_component(Component* component, int x, int y)
     component->set_position(start_x + x, start_y + y);
 }
 
-void DisplayWindow::add_text(std::string text_to_add, int x, int y)
+void DisplayWindow::add_text(std::string text)
 {
     /*
     Adds text to our TextRenderer at the specified coordinates
@@ -83,7 +88,12 @@ void DisplayWindow::add_text(std::string text_to_add, int x, int y)
     :PARAM y: Y coordinate to place the text in relation to the windows starting position
     */
 
-    text_renderer->add(text_to_add, x, y);
+    text_renderer->add(text);
+}
+
+void DisplayWindow::add_text(char text)
+{
+    text_renderer->add(text);
 }
 
 void DisplayWindow::move(Component* component, int x, int y)
@@ -134,7 +144,7 @@ void DisplayWindow::move(Component* component, int x, int y)
 void DisplayWindow::clear_all_text()
 {
     /*
-    Erases all text from our text renderer
+    Erases all text from the text renderer
     */
 
     text_renderer->clear();

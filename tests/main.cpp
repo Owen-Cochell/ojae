@@ -25,8 +25,8 @@
 
 int main(int argc, char* argv[])
 {
-    int native_height = 500;
-    int native_width = 500;
+    int native_height = 1000;
+    int native_width = 1800;
 
     //GetDesktopResolution(native_width, native_height);
 

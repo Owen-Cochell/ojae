@@ -35,7 +35,11 @@ Tilemap::Tilemap(int width, int height)
 
 Tilemap::~Tilemap() {}
 
-std::map<std::pair<int, int>, char> Tilemap::get_display() { return display; }
+std::vector<char> Tilemap::get_display() 
+{
+    assemble_tilemap();
+    return display;
+}
 
 bool Tilemap::bound_check(int x, int y)
 {
@@ -98,44 +102,47 @@ void Tilemap::assemble_tilemap()
 {
     /*
     Creates a visual representation of the highest priority characters of 
-    the three vector types, being tiles, entities and items. This is used to 
-    render them to the screen. 
+    the tiles and entities. This is used to render them to the screen. 
     */
-    
-    // Clear all data in the display map
+
     display.clear();
 
-    // Loop through tiles and add the first character in each vector to the display
-    for(std::map<std::pair<int,int>, std::vector<Tile*>>::iterator
-        it = tiles.begin(); it != tiles.end(); it++)
+    for(int y = 0; y < height; y++)
     {
-        // There is at least one tile inside the vector at this coordinate point
-        if(it->second.size() > 0)
+        for(int x = 0; x < width; x++)
         {
-            // Set the display key at these coordinates to the highest priority 
-            // character in the vector of tiles
-            display[it->first] = it->second.at(0)->get_character();
-        }
-    }
+            // If there is an entity in this coordinate
+            if(entities.count({x,y}) != 0)
+            {
 
-    // Loop through the entities and check if its highest priority is higher 
-    // than the tile that exists there
-    for(std::map<std::pair<int,int>, std::vector<Entity*>>::iterator
-        it = entities.begin(); it != entities.end(); it++)
-    {
-        // There is at least one entity inside the vector at this coordinate point
-        // and the tiles vector at this coordinate point has at least one tile 
-        // in it and this entity has a higher priority than the tile at this 
-        // coordinate point
-        if(it->second.size() > 0 &&  
-            tiles[it->first].size() > 0 &&
-            it->second.at(0)->get_priority() > 
-            tiles[it->first].at(0)->get_priority())
-        {
-            // Set the display key at these coordinates to the highest priority
-            // character in the vector of entities
-            display[it->first] = it->second.at(0)->get_character();
+                // If it is an empty vector
+                if(entities[{x,y}].size() == 0)
+                {
+                    // Remove it
+                    entities.erase({x,y});
+
+                    // Since there is no entity to worry about rendering, simply
+                    // render the top priority tile
+
+                    goto DISPLAY_HIGHEST_TILE;
+                }
+
+                // If the entity at this position has a higher rendering 
+                // priority than the tile under it
+                if(entities[{x,y}].at(0)->get_priority() >= 
+                    tiles[{x,y}].at(0)->get_priority())
+                {
+                    display.push_back(entities[{x,y}].at(0)->get_character());
+                    continue;
+                }
+            }
+
+            DISPLAY_HIGHEST_TILE:
+
+            display.push_back(tiles[{x,y}].at(0)->get_character());   
         }
+    
+        display.push_back('\n');
     }
 }
 

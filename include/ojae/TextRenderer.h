@@ -22,10 +22,11 @@ private:
     std::string path; // Path to the current character png
 
     int font; // Font size of the text being displayed
-    std::pair<int, int> cursor_pos; // Position of the cursor in the window
 
     std::vector<int> available_fonts; // List of available fonts 
-    std::vector<std::pair<std::string, std::pair<int, int>>> contents; // List of the content to render
+    std::vector<std::pair<char, std::pair<int, int>>> contents; // List of the content to render
+
+    std::pair<int, int> cursor_pos;
 
     int start_x;
     int end_x;
@@ -42,8 +43,10 @@ public:
 
     bool check_font(int font_size);
 
-    void add(std::string new_content, int x, int y);
+    void add(std::string new_content);
+    void add(char new_content);
     void clear();
     void set_font(int font_size);
+    void set_cursor_pos(int x, int y);
     void draw_all();
 };
