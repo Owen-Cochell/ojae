@@ -124,7 +124,13 @@ void Tilemap::assemble_tilemap()
         it = entities.begin(); it != entities.end(); it++)
     {
         // There is at least one entity inside the vector at this coordinate point
-        if(it->second.size() > 0)
+        // and the tiles vector at this coordinate point has at least one tile 
+        // in it and this entity has a higher priority than the tile at this 
+        // coordinate point
+        if(it->second.size() > 0 &&  
+            tiles[it->first].size() > 0 &&
+            it->second.at(0)->get_priority() > 
+            tiles[it->first].at(0)->get_priority())
         {
             // Set the display key at these coordinates to the highest priority
             // character in the vector of entities
