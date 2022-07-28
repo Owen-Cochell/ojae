@@ -12,7 +12,7 @@ class InputHandler
 private:
 
     static std::vector<char> keys; // Keys that are currently active
-    static std::map<char, int> keys_delay; // Frame delay before the keys will 
+    static std::map<char, Uint64> keys_delay; // Frame delay before the keys will 
     // be allowed to be used again
 
 public:

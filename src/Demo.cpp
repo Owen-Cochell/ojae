@@ -22,7 +22,7 @@ Tilemap* tilemap;
 
 Entity* player;
 
-Demo::Demo() {}
+Demo::Demo() {} 
 
 Demo::~Demo() {}
 
@@ -76,14 +76,14 @@ void Demo::execution_loop()
 
     while(running)
     {
-        frame_start = SDL_GetTicks();
+        frame_start = SDL_GetTicks64();
 
         update();
         handle_events();
         handle_keys();
         draw_all();
 
-        frame_time = SDL_GetTicks() - frame_start;
+        frame_time = SDL_GetTicks64() - frame_start;
 
         if(FRAME_DELAY > frame_time)
         {
@@ -226,25 +226,25 @@ void Demo::handle_keys()
             case 'w':
 
                 tilemap->move(player, 0, -1);   
-                input_handler->set_delay(c, 12);
+                input_handler->set_delay(c, 200);
                 break;
 
             case 's':
                 
                 tilemap->move(player, 0, 1); 
-                input_handler->set_delay(c, 12);
+                input_handler->set_delay(c, 200);
                 break;
 
             case 'd':
 
                 tilemap->move(player, 1, 0); 
-                input_handler->set_delay(c, 12);
+                input_handler->set_delay(c, 200);
                 break;
 
             case 'a':
 
                 tilemap->move(player, -1, 0); 
-                input_handler->set_delay(c, 12);
+                input_handler->set_delay(c, 200);
                 break;
 
             case '=':

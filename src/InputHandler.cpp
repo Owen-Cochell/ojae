@@ -5,7 +5,7 @@
 #include "InputHandler.h"
 
 std::vector<char> InputHandler::keys;
-std::map<char, int> InputHandler::keys_delay;
+std::map<char, Uint64> InputHandler::keys_delay;
 
 InputHandler::InputHandler() {}
 InputHandler::~InputHandler() {}
@@ -13,21 +13,18 @@ InputHandler::~InputHandler() {}
 void InputHandler::update()
 {
     /*
-    Called once per frame. Reduces frame delay for all characters by 1 and 
-    removes them from the delay map if they are equal to or less than 0
+    Called once per frame. Checks if any key equals or exceed its timestamp
+    for a delayed input. If so, it removes the key from the delayed map
     */
+
+    Uint64 current_time = SDL_GetTicks64();
 
     std::vector<char> keys_to_delete;
 
-    for(std::map<char, int>::iterator it = keys_delay.begin();
+    for(std::map<char,Uint64>::iterator it = keys_delay.begin();
         it != keys_delay.end(); it++)
     {
-        // Reduce the frame delay on this character by 1
-        it->second--;
-
-        // If the frame delay for this character is less than or equal to 0, 
-        // remove it from the character delay map
-        if(it->second <= 0)
+        if(it->second <= current_time)
         {
             keys_to_delete.push_back(it->first);
         }
@@ -39,16 +36,16 @@ void InputHandler::update()
     }
 }
 
-void InputHandler::set_delay(char c, int frames)
+void InputHandler::set_delay(char c, int miliseconds)
 {
     /*
-    Sets the frame delay for the specified character. 
+    Sets the timestamp for delayed input for the specified character
 
-    :PARAM c: Target character to add delay
-    :PARAM frames: Number of frames for delay
+    :PARAM c: Target Character
+    :PARAM miliseconds: Number of miliseconds 
     */
 
-    keys_delay[c] =  frames;
+    keys_delay[c] = SDL_GetTicks64() + miliseconds;
 }
 
 void InputHandler::add_key(char key)
