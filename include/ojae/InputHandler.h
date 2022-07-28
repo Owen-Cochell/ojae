@@ -36,6 +36,18 @@ class CallbackCollection
 {
     /*
     CallbackCollection - Maps arbitrary int keys to callbacks to run.
+
+    This class allows you to map an event to an arbitrary amount of callbacks, and vice versa.
+    You can utilize these callbacks to create 'reactive' code,
+    which is only ran when an event is encountered.
+
+    We keep a map of keys to values.
+    These keys can be any int, and should be extracted from the event by utilizing the 'extract_key()' method.
+    From there, we run each function that is tied to the key, along with the GLOBAL callbacks,
+    which are called on every event encountered.
+    If a key is not found, then we run all callbacks under the UNKOWN key.
+
+    Each callback will be given a reference to an event 
     */
 
     protected:
@@ -47,6 +59,8 @@ class CallbackCollection
         void handle_event(SDL_Event& event); // Sends an event through the handlers
         virtual int extract_key(SDL_Event& event) {return 0;}; // Extracts a valid key from the event
         void add_callback(int type, std::function<void(SDL_Event&)> func);  // Ties a callback to an event
+        template<class T, class C>
+        void add_callback_test(int type, T& thing, void (C::*)(SDL_Event&)); // Same as usual, but with class methods
 
 };
 
@@ -84,4 +98,28 @@ class InputTemp: public CallbackCollection
 
         void get_event();  // Gets events from SDL and handles them
         int extract_key(SDL_Event& event) override;  // Implement the virtual method
+};
+
+class KeyCallbacks: public CallbackCollection
+{
+    /*
+    KeyCallback - Ties callbacks to certain keys.
+
+    We are designed to work with KeyboardEvents.
+    Otherwise, we may run into issues.
+
+    The key we extract from the event is 'event.key.keysym.sym',
+    which should be an int that represents a certain key.
+    */
+
+   private:
+
+        std::map<int, Callbacks> callbacks;  // Maps of events to functions
+
+   public:
+
+        KeyCallbacks();
+        ~KeyCallbacks();
+
+        int extract_key(SDL_Event& event) override;
 };

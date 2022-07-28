@@ -107,6 +107,12 @@ std::vector<char> InputHandler::get_active_keys()
     return active_keys; 
 };
 
+InputTemp::InputTemp() {}
+InputTemp::~InputTemp() {}
+
+KeyCallbacks::KeyCallbacks() {}
+KeyCallbacks::~KeyCallbacks() {}
+
 void CallbackCollection::handle_event(SDL_Event& event) {
     // Sends the given event though the handlers associated with it:
 
@@ -116,7 +122,17 @@ void CallbackCollection::handle_event(SDL_Event& event) {
 
     // Get the vector at the key:
  
-    Callbacks calls = this->callbacks.at(key);
+    Callbacks calls;
+
+    try {
+
+        calls = this->callbacks.at(key);
+    }
+    catch (const std::out_of_range& oor) { 
+        // No valid events, return:
+
+        return;
+    }
 
     // Iterate over each function and call it:
 
@@ -125,8 +141,6 @@ void CallbackCollection::handle_event(SDL_Event& event) {
         // Call the function:
 
         (calls.at(i))(event);
-
-        std::cout << "Blah3" << std::endl;
 
     };
 }
@@ -137,7 +151,7 @@ void CallbackCollection::add_callback(int type, std::function<void(SDL_Event&)> 
 
     try{
 
-        Callbacks thing = this->callbacks.at(type);
+        Callbacks& thing = this->callbacks.at(type);
 
         thing.push_back(func);
     }
@@ -147,7 +161,20 @@ void CallbackCollection::add_callback(int type, std::function<void(SDL_Event&)> 
 
         this->callbacks[type] = Callbacks {func};
 
+        for (long unsigned int i = 0; i < this->callbacks.at(type).size(); i++) {
+            std::cout << &this->callbacks.at(type).at(i) << std::endl;
+        }
+
     }
+
+}
+
+template<class T, class C>
+void CallbackCollection::add_callback_test(int type, T& thing, void (C::*func)(SDL_Event&)) {
+
+    // Convert the function into something we can use:
+
+    this->add_callback(SDL_KEYDOWN, std::bind(&T::func, &thing, std::placeholders::_1));
 
 }
 
@@ -156,4 +183,12 @@ int InputTemp::extract_key(SDL_Event& event) {
     // Top level CallbackCollection, return event type:
 
     return event.type;
+}
+
+int KeyCallbacks::extract_key(SDL_Event& event) {
+    // Extracts the key of this event:
+
+    std::cout << "Extracted key: " << event.key.keysym.sym << std::endl;
+
+    return event.key.keysym.sym;
 }
