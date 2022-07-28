@@ -15,8 +15,6 @@ bool Demo::running = false;
 InputHandler* Demo::input_handler = nullptr;
 TextRenderer* text_renderer = nullptr;
 
-Component* red_box;
-
 DisplayWindow* main_window;
 TilemapWindow* tilemap_window;
 
@@ -52,11 +50,6 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     //DisplayWindow
     main_window = new DisplayWindow(width / 2, width, 0, height, input_handler, false);
-
-    red_box = new Component("Red Box", "assets/red_box.png", 0, 0, 16, 16, 
-        0, 0, 16, 16);
-
-    main_window->add_component(red_box, 0, 64);
 
     //TilemapWindow
     tilemap = new Tilemap(10, 10);
@@ -104,10 +97,11 @@ void Demo::execution_loop()
 void Demo::update()
 {
     main_window->clear_all_text();
-    main_window->add_text("Speed: ", 0, 0);
-    main_window->add_text(std::to_string(10), 112, 0);
-    main_window->add_text("Delay: ", 0, 20);
-    main_window->add_text(std::to_string(12), 112, 20);
+    main_window->add_text("Player Coordinates: (", 0, 0);
+    main_window->add_text(std::to_string(player->get_x()), 336, 0);
+    main_window->add_text(", ", 352, 0);
+    main_window->add_text(std::to_string(player->get_y()), 384, 0);
+    main_window->add_text(")", 400, 0);
 
     main_window->update();
     input_handler->update();
@@ -232,33 +226,24 @@ void Demo::handle_keys()
             case 'w':
 
                 tilemap->move(player, 0, -1);   
-                main_window->move(red_box, red_box->get_x(), 
-                    red_box->get_y() - 10);
-
                 input_handler->set_delay(c, 12);
                 break;
 
             case 's':
                 
                 tilemap->move(player, 0, 1); 
-                main_window->move(red_box, red_box->get_x(), 
-                    red_box->get_y() + 10);
                 input_handler->set_delay(c, 12);
                 break;
 
             case 'd':
 
                 tilemap->move(player, 1, 0); 
-                main_window->move(red_box, 
-                    red_box->get_x() + 10, red_box->get_y());
                 input_handler->set_delay(c, 12);
                 break;
 
             case 'a':
 
                 tilemap->move(player, -1, 0); 
-                main_window->move(red_box, 
-                    red_box->get_x() - 10, red_box->get_y());
                 input_handler->set_delay(c, 12);
                 break;
 
