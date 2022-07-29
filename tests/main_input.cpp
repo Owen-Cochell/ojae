@@ -2,27 +2,13 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
-//#include <wtypes.h>
 
 #include "Demo.h"
 #include "FileHandler.h"
 
 bool running = false;
 
-// Get the horizontal and vertical screen sizes in pixel
-// void GetDesktopResolution(int& horizontal, int& vertical)
-// {
-//    RECT desktop;
-//    // Get a handle to the desktop window
-//    const HWND hDesktop = GetDesktopWindow();
-//    // Get the size of screen to the variable desktop
-//    GetWindowRect(hDesktop, &desktop);
-//    // The top left corner will have coordinates (0,0)
-//    // and the bottom right corner will have coordinates
-//    // (horizontal, vertical)
-//    horizontal = desktop.right;
-//    vertical = desktop.bottom;
-// }
+// Tests the input callback system
 
 void TestCallback(SDL_Event& event) {
     // Testing callback ...
@@ -85,11 +71,7 @@ int main(int argc, char* argv[])
 
     // Add recursive handler to collection:
 
-    //inp.add_callback(SDL_KEYDOWN, std::bind(&KeyCallbacks::handle_event, &key, std::placeholders::_1));
-
-    inp.add_callback_test(SDL_KEYDOWN, key, &KeyCallbacks::handle_event);
-
-    // Finally, add exit function if we get exit key:
+    inp.add_callback(SDL_KEYDOWN, std::bind(&KeyCallbacks::handle_event, &key, std::placeholders::_1));
 
     // Loop forever:
 

@@ -59,8 +59,6 @@ class CallbackCollection
         void handle_event(SDL_Event& event); // Sends an event through the handlers
         virtual int extract_key(SDL_Event& event) {return 0;}; // Extracts a valid key from the event
         void add_callback(int type, std::function<void(SDL_Event&)> func);  // Ties a callback to an event
-        template<class T, class C>
-        void add_callback_test(int type, T& thing, void (C::*)(SDL_Event&)); // Same as usual, but with class methods
 
 };
 

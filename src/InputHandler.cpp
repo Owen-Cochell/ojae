@@ -169,15 +169,6 @@ void CallbackCollection::add_callback(int type, std::function<void(SDL_Event&)> 
 
 }
 
-template<class T, class C>
-void CallbackCollection::add_callback_test(int type, T& thing, void (C::*func)(SDL_Event&)) {
-
-    // Convert the function into something we can use:
-
-    this->add_callback(SDL_KEYDOWN, std::bind(&T::func, &thing, std::placeholders::_1));
-
-}
-
 int InputTemp::extract_key(SDL_Event& event) {
 
     // Top level CallbackCollection, return event type:
