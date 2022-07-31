@@ -35,12 +35,16 @@ private:
 
     int largest_y; // Largest y coordinate in our contents
 
+    int size_limit; // How many elements the contents are allowed to store 
+        // before beginning to delete itself
+
 public:
 
     int display_start; // Starting index of where our y is rendering
 
     TextRenderer();
-    TextRenderer(int start_x, int end_x, int start_y, int end_y);
+    TextRenderer(int start_x, int end_x, int start_y, int end_y, 
+        int text_limit);
     ~TextRenderer();
 
     int get_font();

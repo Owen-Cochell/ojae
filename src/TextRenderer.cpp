@@ -14,9 +14,11 @@ TextRenderer::TextRenderer()
     end_y = 0;
     largest_y = 0;
     display_start = 0;
+    size_limit = 0;
 }
 
-TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y) 
+TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y,
+    int text_limit) 
 {
     available_fonts.push_back(16);
 
@@ -31,6 +33,7 @@ TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y)
     this->end_y = end_y;
     largest_y = 0;
     display_start = 0;
+    this->size_limit = size_limit;
 }
 
 TextRenderer::~TextRenderer() {}
@@ -62,38 +65,7 @@ void TextRenderer::add(std::string new_content)
 
     for(char c : new_content)
     {
-        if(c == '\n')
-        {
-            // Put the cursor on the next line
-            set_cursor_pos(0, cursor_pos.second += 1);
-            if((cursor_pos.second * font * 1.5) >= largest_y)
-        {
-            largest_y = (cursor_pos.second * font * 1.5);
-        }
-            continue;
-        }
-
-        contents.push_back({c, std::pair<int,int>
-        {
-            start_x + (cursor_pos.first * font), 
-            start_y + (cursor_pos.second * font * 1.5)
-        }});
-
-        // Increment the cursor's character position by 1
-        cursor_pos.first++;
-        
-
-        // If the next character would print out of bounds
-        if(start_x + (cursor_pos.first * font) > (end_x - font))
-        {
-            // Put the cursor on the next line
-            set_cursor_pos(0, cursor_pos.second += 1);
-        }
-
-        if((cursor_pos.second * font * 1.5) >= largest_y)
-        {
-            largest_y = (cursor_pos.second * font * 1.5);
-        }
+        add(c);
     }
 }
 

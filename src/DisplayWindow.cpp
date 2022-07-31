@@ -9,12 +9,12 @@ DisplayWindow::DisplayWindow() : BaseWindow()
 }
 
 DisplayWindow::DisplayWindow(int start_x, int end_x, int start_y, int end_y, 
-    InputHandler* input_handler, bool taking_input) :
+    InputHandler* input_handler, bool taking_input, int text_limit) :
         BaseWindow(start_x, end_x, start_y, end_y, taking_input)
 {
     this->input_handler = input_handler;
     this->text_renderer = new TextRenderer(this->start_x, this->end_x, 
-        this->start_y, this->end_y);
+        this->start_y, this->end_y, text_limit);
 }
 
 DisplayWindow::~DisplayWindow() {}

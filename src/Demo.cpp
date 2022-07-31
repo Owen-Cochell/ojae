@@ -56,11 +56,13 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     input_handler = new InputHandler();
 
     //DisplayWindow
-    main_window = new DisplayWindow(int(width / 2), width, 0, height, input_handler, false);
+    main_window = new DisplayWindow(int(width / 2), width, 0, height, 
+        input_handler, false, 25);
 
     //TilemapWindow
     tilemap = new Tilemap(15, 15);
     tilemap->fill_tilemap(new Tile("Floor", '.', true, 0));
+    tilemap->add(new Tile("Chest", 'c', false, 5), 10, 10);
 
     tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
          input_handler, true);
@@ -103,13 +105,6 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
-    main_window->clear_all_text();
-    for(int i = 0; i < 100; i++)
-    {
-        main_window->add_text("I: ");
-        main_window->add_text(std::to_string(i));
-        main_window->add_text('\n');
-    }
     input_handler->update();
 }
 
@@ -214,8 +209,13 @@ void Demo::handle_keys()
         {
             // w
             case 119:
-
+            
                 tilemap->move(player, 0, -1);   
+                main_window->add_text("You moved to: (");
+                main_window->add_text(std::to_string(player->get_x()));
+                main_window->add_text(", ");
+                main_window->add_text(std::to_string(player->get_y()));
+                main_window->add_text(")\n");
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
@@ -223,6 +223,11 @@ void Demo::handle_keys()
             case 115:
                 
                 tilemap->move(player, 0, 1); 
+                main_window->add_text("You moved to: (");
+                main_window->add_text(std::to_string(player->get_x()));
+                main_window->add_text(", ");
+                main_window->add_text(std::to_string(player->get_y()));
+                main_window->add_text(")\n");
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
@@ -230,6 +235,11 @@ void Demo::handle_keys()
             case 100:
 
                 tilemap->move(player, 1, 0); 
+                main_window->add_text("You moved to: (");
+                main_window->add_text(std::to_string(player->get_x()));
+                main_window->add_text(", ");
+                main_window->add_text(std::to_string(player->get_y()));
+                main_window->add_text(")\n");
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
@@ -237,6 +247,11 @@ void Demo::handle_keys()
             case 97:
 
                 tilemap->move(player, -1, 0); 
+                main_window->add_text("You moved to: (");
+                main_window->add_text(std::to_string(player->get_x()));
+                main_window->add_text(", ");
+                main_window->add_text(std::to_string(player->get_y()));
+                main_window->add_text(")\n");
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 

@@ -19,7 +19,7 @@ public:
 
     DisplayWindow();
     DisplayWindow(int start_x, int end_x, int start_y, int end_y, 
-        InputHandler* input_handler, bool taking_input);
+        InputHandler* input_handler, bool taking_input, int text_limit);
     ~DisplayWindow();
 
     int get_font();

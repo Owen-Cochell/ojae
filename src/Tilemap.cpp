@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <iostream>
 
 #include "Tilemap.h"
 
@@ -230,6 +229,32 @@ void Tilemap::move(Entity* entity, int x_amount, int y_amount)
     if(!bound_check(targ_x, targ_y))
     {
         return;
+    }
+
+    // Loop through the tiles at this position and check if there are any 
+    // non traversable tiles
+    for(Tile* tile : tiles[{targ_x, targ_y}])
+    {
+
+        if(!tile->is_traversable())
+        {
+            return;
+        }
+    }
+
+    // Check if there is an entity at this location
+    if(entities.count({targ_x, targ_y}) != 0)
+    {
+        // Loop through the entities at this position and check if there are any 
+            // non traversable entities
+
+        for(Entity* entity : entities[{targ_x, targ_y}])
+        {
+            if(!entity->is_traversable())
+            {
+                return;
+            }
+        }
     }
 
     remove(entity);
