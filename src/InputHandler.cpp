@@ -4,8 +4,8 @@
 
 #include "InputHandler.h"
 
-std::vector<char> InputHandler::keys;
-std::map<char, Uint64> InputHandler::keys_delay;
+std::vector<int> InputHandler::keys;
+std::map<int, Uint64> InputHandler::keys_delay;
 
 SDL_Event event;
 
@@ -21,9 +21,9 @@ void InputHandler::update()
 
     Uint64 current_time = SDL_GetTicks64();
 
-    std::vector<char> keys_to_delete;
+    std::vector<int> keys_to_delete;
 
-    for(std::map<char,Uint64>::iterator it = keys_delay.begin();
+    for(std::map<int,Uint64>::iterator it = keys_delay.begin();
         it != keys_delay.end(); it++)
     {
         if(it->second <= current_time)
@@ -38,7 +38,7 @@ void InputHandler::update()
     }
 }
 
-void InputHandler::set_delay(char c, int miliseconds)
+void InputHandler::set_delay(int i, int miliseconds)
 {
     /*
     Sets the timestamp for delayed input for the specified character
@@ -47,10 +47,10 @@ void InputHandler::set_delay(char c, int miliseconds)
     :PARAM miliseconds: Number of miliseconds 
     */
 
-    keys_delay[c] = SDL_GetTicks64() + miliseconds;
+    keys_delay[i] = SDL_GetTicks64() + miliseconds;
 }
 
-void InputHandler::add_key(char key)
+void InputHandler::add_key(int key)
 {
     /*
     Adds a key to our vector of active keys if the keys is not already present
@@ -66,7 +66,7 @@ void InputHandler::add_key(char key)
     }
 }
 
-void InputHandler::remove_key(char key)
+void InputHandler::remove_key(int key)
 {
     /*
     Removes a key from the vector of active keys if it exists. This will also
@@ -86,7 +86,7 @@ void InputHandler::remove_key(char key)
     keys.erase(std::remove(keys.begin(), keys.end(), key), keys.end());
 }
 
-std::vector<char> InputHandler::get_active_keys() 
+std::vector<int> InputHandler::get_active_keys() 
 { 
     /*
     Loops through the vector of actively pressed keys, and returns a vector 
@@ -96,9 +96,9 @@ std::vector<char> InputHandler::get_active_keys()
     :RETURN: Keys that do not have a frame delay
     */
 
-    std::vector<char> active_keys;
+    std::vector<int> active_keys;
 
-    for(char key: keys)
+    for(int key: keys)
     {
         if(keys_delay.count(key) == 0)
         {

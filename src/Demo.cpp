@@ -133,38 +133,30 @@ void Demo::handle_events()
 
                 case SDLK_d:
 
-                    input_handler->add_key('d');
+                    input_handler->add_key(100);
                     break;
 
                 case SDLK_a:
 
-                    input_handler->add_key('a');
+                    input_handler->add_key(97);
                     break;
 
                 case SDLK_w:
 
-                    input_handler->add_key('w');
+                    input_handler->add_key(119);
                     break;
 
                 case SDLK_s:
 
-                    input_handler->add_key('s');
+                    input_handler->add_key(115);
                     break;
 
                 case SDLK_EQUALS:
-                    input_handler->add_key('=');
+                    input_handler->add_key(61);
                     break;
                 
                 case SDLK_MINUS:
-                    input_handler->add_key('-');
-                    break;
-
-                case SDLK_LEFTBRACKET:
-                    input_handler->add_key('[');
-                    break;
-                
-                case SDLK_RIGHTBRACKET:
-                    input_handler->add_key(']');
+                    input_handler->add_key(45);
                     break;
 
                 default:
@@ -177,41 +169,32 @@ void Demo::handle_events()
 
             switch(event.key.keysym.sym)
             {
-
                 case SDLK_d:
 
-                    input_handler->remove_key('d');
+                    input_handler->remove_key(100);
                     break;
 
                 case SDLK_a:
 
-                    input_handler->remove_key('a');
+                    input_handler->remove_key(97);
                     break;
 
                 case SDLK_w:
 
-                    input_handler->remove_key('w');
+                    input_handler->remove_key(119);
                     break;
 
                 case SDLK_s:
 
-                    input_handler->remove_key('s');
+                    input_handler->remove_key(115);
                     break;
 
                 case SDLK_EQUALS:
-                    input_handler->remove_key('=');
+                    input_handler->remove_key(61);
                     break;
                 
                 case SDLK_MINUS:
-                    input_handler->remove_key('-');
-                    break;
-
-                case SDLK_LEFTBRACKET:
-                    input_handler->remove_key('[');
-                    break;
-                
-                case SDLK_RIGHTBRACKET:
-                    input_handler->remove_key(']');
+                    input_handler->remove_key(45);
                     break;
 
                 default:
@@ -223,50 +206,50 @@ void Demo::handle_events()
 
 void Demo::handle_keys()
 {
-    std::vector<char> keys = input_handler->get_active_keys();
+    std::vector<int> keys = input_handler->get_active_keys();
 
-    for(char c : keys)
+    for(int i : keys)
     {
-        switch(c)
+        switch(i)
         {
-            case 'w':
+            // w
+            case 119:
 
                 tilemap->move(player, 0, -1);   
-                input_handler->set_delay(c, standard_input_delay);
+                input_handler->set_delay(i, standard_input_delay);
                 break;
 
-            case 's':
+            // s
+            case 115:
                 
                 tilemap->move(player, 0, 1); 
-                input_handler->set_delay(c, standard_input_delay);
+                input_handler->set_delay(i, standard_input_delay);
                 break;
 
-            case 'd':
+            // w
+            case 100:
 
                 tilemap->move(player, 1, 0); 
-                input_handler->set_delay(c, standard_input_delay);
+                input_handler->set_delay(i, standard_input_delay);
                 break;
 
-            case 'a':
+            // a
+            case 97:
 
                 tilemap->move(player, -1, 0); 
-                input_handler->set_delay(c, standard_input_delay);
+                input_handler->set_delay(i, standard_input_delay);
                 break;
 
-            case '=':
+            // =
+            case 61:
                 main_window->scroll_down();
-                input_handler->set_delay(c, 100);
+                input_handler->set_delay(i, 100);
                 break;
             
-            case '-':
+            // -
+            case 45:
                 main_window->scroll_up();
-                input_handler->set_delay(c, 100);
-                break;
-
-            case ']':
-                break;
-            
-            case '[':
+                input_handler->set_delay(i, 100);
                 break;
 
             default:
