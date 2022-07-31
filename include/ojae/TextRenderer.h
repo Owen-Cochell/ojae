@@ -35,8 +35,9 @@ private:
 
     int largest_y; // Largest y coordinate in our contents
 
-    int size_limit; // How many elements the contents are allowed to store 
-        // before beginning to delete itself
+    int time_limit; // How long each character will exist in the contents 
+        // until it is removed. If this value is -1, each character stays 
+        // until the contents are manually deleted
 
 public:
 

@@ -14,11 +14,10 @@ TextRenderer::TextRenderer()
     end_y = 0;
     largest_y = 0;
     display_start = 0;
-    size_limit = 0;
 }
 
 TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y,
-    int text_limit) 
+    int time_limit) 
 {
     available_fonts.push_back(16);
 
@@ -33,7 +32,6 @@ TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y,
     this->end_y = end_y;
     largest_y = 0;
     display_start = 0;
-    this->size_limit = size_limit;
 }
 
 TextRenderer::~TextRenderer() {}
@@ -75,11 +73,7 @@ void TextRenderer::add(char new_content)
     {
         // Put the cursor on the next line
         set_cursor_pos(0, cursor_pos.second += 1);
-        if((cursor_pos.second * font * 1.5) >= largest_y)
-        {
-            largest_y = (cursor_pos.second * font * 1.5);
-        }
-        return;
+        goto CALCULATE_LARGEST_Y;
     }
 
     contents.push_back({new_content, std::pair<int,int>
@@ -99,9 +93,15 @@ void TextRenderer::add(char new_content)
         set_cursor_pos(0, cursor_pos.second += 1);
     }
 
+    CALCULATE_LARGEST_Y:
     if((cursor_pos.second * font * 1.5) >= largest_y)
     {
         largest_y = (cursor_pos.second * font * 1.5);
+
+        if(largest_y - (end_y - start_y) >= 0)
+        {
+            display_start = largest_y - (end_y - start_y);
+        }
     }
 }
 
