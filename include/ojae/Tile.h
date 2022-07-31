@@ -5,12 +5,16 @@
 class Tile
 {
 
-private:
+    /*
+    A 'Tile' is a texture on the screen.
+    */
+
+protected:
 
     std::string name; // Name of the tile
 
     char character; // Visual character that is rendered
-    
+
     int x_pos; // X Coordinate
     int y_pos; // Y Coordinate
     int priority; // Rendering priority of the Tile

@@ -7,6 +7,8 @@
 std::vector<char> InputHandler::keys;
 std::map<char, Uint64> InputHandler::keys_delay;
 
+SDL_Event event;
+
 InputHandler::InputHandler() {}
 InputHandler::~InputHandler() {}
 
@@ -169,11 +171,16 @@ void CallbackCollection::add_callback(int type, std::function<void(SDL_Event&)> 
 
 }
 
-int InputTemp::extract_key(SDL_Event& event) {
+void InputTemp::get_event() {
+    // Gets events from SDL and handles them:
 
-    // Top level CallbackCollection, return event type:
+    while(SDL_PollEvent(&event)) {
 
-    return event.type;
+        // Send each key though the callbacks:
+
+        this->handle_event(event);
+
+    }
 }
 
 int KeyCallbacks::extract_key(SDL_Event& event) {

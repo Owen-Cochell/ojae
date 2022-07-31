@@ -86,6 +86,7 @@ int main(int argc, char* argv[])
             //std::cout << "Before handling event: " << event.type << std::endl;
 
             inp.handle_event(event);
+
         }
     }
 
