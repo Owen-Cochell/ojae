@@ -46,6 +46,7 @@ class CallbackCollection
     From there, we run each function that is tied to the key, along with the GLOBAL callbacks,
     which are called on every event encountered.
     If a key is not found, then we run all callbacks under the UNKOWN key.
+    TODO: Implement meta keys, global and unknown
 
     Each callback will be given a reference to an event 
     */
@@ -57,7 +58,7 @@ class CallbackCollection
     public:
 
         void handle_event(SDL_Event& event); // Sends an event through the handlers
-        virtual int extract_key(SDL_Event& event) {return 0;}; // Extracts a valid key from the event
+        virtual int extract_key(SDL_Event& event) {return event.type;}; // Extracts a valid key from the event
         void add_callback(int type, std::function<void(SDL_Event&)> func);  // Ties a callback to an event
 
 };
@@ -72,17 +73,15 @@ class InputTemp: public CallbackCollection
     Multiple callbacks can be tied to a certain event,
     and multiple keys can be attached to a callback.
 
-    We also support callback ordering, which determines the order the callbacks are called in.
-    We also support callback pairs(do we?) that will only trigger once a sequence of keys have been encountered,
-    such as a key up and down event (This seems really ill defined, maybe this is unecessary?)
-
     Each callback will be given a reference to the given event.
     This event data can then be used to further process and deal with the event.
 
     We utilize some recursion to handle nested events.
     For example, keyboard events have data that can differentiae them from others,
     such as KEY_DOWN and KEY_UP, and the type of key that was pressed.
-    We do this by creating callbacks that are apart of larger 
+    
+    Users can also access the keys currently pressed down by accessing the keysarray parameter,
+    or by using the access methods.
     */
 
     private:
@@ -94,8 +93,9 @@ class InputTemp: public CallbackCollection
         InputTemp();
         ~InputTemp();
 
+        const Uint8* keysarray = const_cast <Uint8*> (SDL_GetKeyboardState(NULL));  // Array of keys pressed down
+
         void get_event();  // Gets events from SDL and handles them
-        int extract_key(SDL_Event& event) override;  // Implement the virtual method
 };
 
 class KeyCallbacks: public CallbackCollection
@@ -109,10 +109,6 @@ class KeyCallbacks: public CallbackCollection
     The key we extract from the event is 'event.key.keysym.sym',
     which should be an int that represents a certain key.
     */
-
-   private:
-
-        std::map<int, Callbacks> callbacks;  // Maps of events to functions
 
    public:
 
