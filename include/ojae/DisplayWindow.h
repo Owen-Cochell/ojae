@@ -26,6 +26,8 @@ public:
 
     void update() override;
     void display() override;
+    void scroll_up();
+    void scroll_down();
     void draw_text();
     void set_cursor_pos(int x, int y);
     void add_component(Component* component, int x, int y);

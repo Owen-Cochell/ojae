@@ -28,6 +28,7 @@ Demo::Demo()
     screen_height = 0;
     frame_start = 0;
     frame_time = 0;
+    standard_input_delay = 200;
 } 
 
 Demo::~Demo() {}
@@ -103,12 +104,12 @@ void Demo::execution_loop()
 void Demo::update()
 {
     main_window->clear_all_text();
-    main_window->add_text("Player Coordinates: (");
-    main_window->add_text(std::to_string(player->get_x()));
-    main_window->add_text(", ");
-    main_window->add_text(std::to_string(player->get_y()));
-    main_window->add_text(")");
-    //main_window->update();    main_window->add_text("This is a test");
+    for(int i = 0; i < 100; i++)
+    {
+        main_window->add_text("I: ");
+        main_window->add_text(std::to_string(i));
+        main_window->add_text('\n');
+    }
     input_handler->update();
 }
 
@@ -231,31 +232,35 @@ void Demo::handle_keys()
             case 'w':
 
                 tilemap->move(player, 0, -1);   
-                input_handler->set_delay(c, 200);
+                input_handler->set_delay(c, standard_input_delay);
                 break;
 
             case 's':
                 
                 tilemap->move(player, 0, 1); 
-                input_handler->set_delay(c, 200);
+                input_handler->set_delay(c, standard_input_delay);
                 break;
 
             case 'd':
 
                 tilemap->move(player, 1, 0); 
-                input_handler->set_delay(c, 200);
+                input_handler->set_delay(c, standard_input_delay);
                 break;
 
             case 'a':
 
                 tilemap->move(player, -1, 0); 
-                input_handler->set_delay(c, 200);
+                input_handler->set_delay(c, standard_input_delay);
                 break;
 
             case '=':
+                main_window->scroll_down();
+                input_handler->set_delay(c, 100);
                 break;
             
             case '-':
+                main_window->scroll_up();
+                input_handler->set_delay(c, 100);
                 break;
 
             case ']':

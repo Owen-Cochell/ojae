@@ -49,6 +49,27 @@ void DisplayWindow::display()
     draw_text();
 }
 
+void DisplayWindow::scroll_up()
+{
+    if(text_renderer->display_start - (get_font() * 1.5) >= 0)
+    {
+        text_renderer->display_start -= (get_font() * 1.5);
+    }
+}
+
+void DisplayWindow::scroll_down()
+{
+    std::cout << "Display Start: " << text_renderer->display_start << "\n";
+    std::cout << "Screen Size: " << (end_y - start_y) / get_font() << "\n";
+    std::cout << "Largest y: " << text_renderer->get_largest_y() << "\n\n";
+
+    if(text_renderer->display_start + (end_y - start_y)
+     + (get_font() * 1.5) < text_renderer->get_largest_y())
+    {
+        text_renderer->display_start += (get_font() * 1.5);
+    }
+}
+
 void DisplayWindow::draw_text()
 {
     /*

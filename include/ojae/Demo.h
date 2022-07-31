@@ -23,6 +23,7 @@ private:
 
     int screen_width; // Width of the screen
     int screen_height; // Height of the screen
+    int standard_input_delay; // Standard delay for generic key input
 
 
 public:

@@ -33,13 +33,18 @@ private:
     int start_y;
     int end_y;
 
+    int largest_y; // Largest y coordinate in our contents
+
 public:
+
+    int display_start; // Starting index of where our y is rendering
 
     TextRenderer();
     TextRenderer(int start_x, int end_x, int start_y, int end_y);
     ~TextRenderer();
 
     int get_font();
+    int get_largest_y();
 
     bool check_font(int font_size);
 

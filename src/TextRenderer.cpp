@@ -12,6 +12,8 @@ TextRenderer::TextRenderer()
     end_x = 0;
     start_y = 0;
     end_y = 0;
+    largest_y = 0;
+    display_start = 0;
 }
 
 TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y) 
@@ -27,11 +29,15 @@ TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y)
     this->end_x = end_x;
     this->start_y = start_y;
     this->end_y = end_y;
+    largest_y = 0;
+    display_start = 0;
 }
 
 TextRenderer::~TextRenderer() {}
 
 int TextRenderer::get_font() { return font; }
+
+int TextRenderer::get_largest_y() { return largest_y; }
 
 bool TextRenderer::check_font(int font_size)
 {
@@ -60,6 +66,10 @@ void TextRenderer::add(std::string new_content)
         {
             // Put the cursor on the next line
             set_cursor_pos(0, cursor_pos.second += 1);
+            if((cursor_pos.second * font * 1.5) >= largest_y)
+        {
+            largest_y = (cursor_pos.second * font * 1.5);
+        }
             continue;
         }
 
@@ -79,6 +89,11 @@ void TextRenderer::add(std::string new_content)
             // Put the cursor on the next line
             set_cursor_pos(0, cursor_pos.second += 1);
         }
+
+        if((cursor_pos.second * font * 1.5) >= largest_y)
+        {
+            largest_y = (cursor_pos.second * font * 1.5);
+        }
     }
 }
 
@@ -88,6 +103,10 @@ void TextRenderer::add(char new_content)
     {
         // Put the cursor on the next line
         set_cursor_pos(0, cursor_pos.second += 1);
+        if((cursor_pos.second * font * 1.5) >= largest_y)
+        {
+            largest_y = (cursor_pos.second * font * 1.5);
+        }
         return;
     }
 
@@ -107,6 +126,11 @@ void TextRenderer::add(char new_content)
         // Put the cursor on the next line
         set_cursor_pos(0, cursor_pos.second += 1);
     }
+
+    if((cursor_pos.second * font * 1.5) >= largest_y)
+    {
+        largest_y = (cursor_pos.second * font * 1.5);
+    }
 }
 
 void TextRenderer::clear()
@@ -116,6 +140,7 @@ void TextRenderer::clear()
     */
 
     contents.clear();
+    largest_y = 0;
     set_cursor_pos(0, 0);
 }
 
@@ -166,11 +191,18 @@ void TextRenderer::draw_all()
 
     for(std::pair<char, std::pair<int, int>> element : contents)
     {
-
         char c = element.first;
 
         int x_pos = element.second.first;
         int y_pos = element.second.second;
+
+        // If the character it wants to render is outside of the current 
+        // amount of text we are displaying
+        if(y_pos < display_start ||
+            y_pos > display_start + end_y - start_y)
+        {
+            continue;
+        }
 
         src.x = (((c - 33) % 8) * font) - 1; // Character ascii value - 65 which would make '!' be 0
         src.y = (((c - 33) / 8) * font) - 1; // Divide this by 8 so that if the ascii value exceeds 
@@ -179,7 +211,7 @@ void TextRenderer::draw_all()
         src.h = font;
 
         dest.x = x_pos;
-        dest.y = y_pos;
+        dest.y = y_pos - display_start;
         dest.w = font;
         dest.h = font;
 
