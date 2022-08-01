@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <iostream>
+#include <SDL2/SDL.h>
 
 #include "TextRenderer.h"
 #include "Debug.h"
@@ -14,6 +14,7 @@ TextRenderer::TextRenderer()
     end_y = 0;
     largest_y = 0;
     display_start = 0;
+    time_limit = 0;
 }
 
 TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y,
@@ -32,6 +33,7 @@ TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y,
     this->end_y = end_y;
     largest_y = 0;
     display_start = 0;
+    this->time_limit = time_limit;
 }
 
 TextRenderer::~TextRenderer() {}
@@ -50,6 +52,35 @@ bool TextRenderer::check_font(int font_size)
 
     return std::find(available_fonts.begin(), available_fonts.end(),
         font_size) != available_fonts.end();
+}
+
+void TextRenderer::update()
+{
+    /*
+    Called once per frame. If the time limit for the contents of this 
+    text renderer does not equal -1, this function will loop through all 
+    the contents and delete the members that have exceed their time stamp limit
+    */
+
+    if(time_limit == -1)
+    {
+        return;
+    }
+
+    Uint64 current_ticks = SDL_GetTicks64();
+    std::cout << "Current ticks: " << current_ticks << "\n\n";
+
+    for(int i = 0; i < contents.size(); i++)
+    {
+        std::cout << contents.at(i).first.first << ": " <<
+            contents.at(i).second << "\n";
+
+        if(contents.at(i).second <= current_ticks)
+        {
+            contents.erase(contents.begin() + i);
+            i -= 1;
+        }
+    }
 }
 
 void TextRenderer::add(std::string new_content)
@@ -76,11 +107,23 @@ void TextRenderer::add(char new_content)
         goto CALCULATE_LARGEST_Y;
     }
 
-    contents.push_back({new_content, std::pair<int,int>
+    if(time_limit == -1)
     {
+        contents.push_back({{new_content, std::pair<int,int>
+        {
         start_x + (cursor_pos.first * font), 
         start_y + (cursor_pos.second * font * 1.5)
-    }});
+        }}, -1});
+    }
+
+    else
+    {
+        contents.push_back({{new_content, std::pair<int,int>
+        {
+        start_x + (cursor_pos.first * font), 
+        start_y + (cursor_pos.second * font * 1.5)
+        }}, SDL_GetTicks64() + time_limit});
+    }
 
     // Increment the cursor's character position by 1
     cursor_pos.first++;
@@ -103,6 +146,7 @@ void TextRenderer::add(char new_content)
             display_start = largest_y - (end_y - start_y);
         }
     }
+
 }
 
 void TextRenderer::clear()
@@ -161,12 +205,12 @@ void TextRenderer::draw_all()
     Loops through contents and displays the text to the screen
     */
 
-    for(std::pair<char, std::pair<int, int>> element : contents)
+    for(std::pair<std::pair<char, std::pair<int, int>>, int> element : contents)
     {
-        char c = element.first;
+        char c = element.first.first;
 
-        int x_pos = element.second.first;
-        int y_pos = element.second.second;
+        int x_pos = element.first.second.first;
+        int y_pos = element.first.second.second;
 
         // If the character it wants to render is outside of the current 
         // amount of text we are displaying

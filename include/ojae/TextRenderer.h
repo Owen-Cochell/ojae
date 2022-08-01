@@ -24,7 +24,8 @@ private:
     int font; // Font size of the text being displayed
 
     std::vector<int> available_fonts; // List of available fonts 
-    std::vector<std::pair<char, std::pair<int, int>>> contents; // List of the content to render
+    std::vector<std::pair<std::pair<char, std::pair<int, int>>, int>> contents;
+        // List of the content to render
 
     std::pair<int, int> cursor_pos;
 
@@ -45,7 +46,7 @@ public:
 
     TextRenderer();
     TextRenderer(int start_x, int end_x, int start_y, int end_y, 
-        int text_limit);
+        int time_limit);
     ~TextRenderer();
 
     int get_font();
@@ -53,6 +54,7 @@ public:
 
     bool check_font(int font_size);
 
+    void update();
     void add(std::string new_content);
     void add(char new_content);
     void clear();

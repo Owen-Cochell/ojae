@@ -57,7 +57,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     //DisplayWindow
     main_window = new DisplayWindow(int(width / 2), width, 0, height, 
-        input_handler, false, 25);
+        input_handler, false, 2000);
 
     //TilemapWindow
     tilemap = new Tilemap(15, 15);
@@ -105,6 +105,7 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
+    main_window->update();
     input_handler->update();
 }
 
