@@ -50,7 +50,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     {
         window = SDL_CreateWindow(title, x, y, width, height, flags);
         renderer = SDL_CreateRenderer(window, -1, 0);
-        SDL_SetRenderDrawColor(renderer, 27, 27, 65, 255);
+        SDL_SetRenderDrawColor(renderer, 25, 25, 25, 255);
     }
 
     input_handler = new InputHandler();

@@ -34,6 +34,7 @@ private:
     int start_y;
     int end_y;
 
+    int smallest_y; // Smallest y coordinate in our contents
     int largest_y; // Largest y coordinate in our contents
 
     int time_limit; // How long each character will exist in the contents 

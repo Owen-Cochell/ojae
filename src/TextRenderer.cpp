@@ -12,6 +12,7 @@ TextRenderer::TextRenderer()
     end_x = 0;
     start_y = 0;
     end_y = 0;
+    smallest_y = 0;
     largest_y = 0;
     display_start = 0;
     time_limit = 0;
@@ -31,6 +32,7 @@ TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y,
     this->end_x = end_x;
     this->start_y = start_y;
     this->end_y = end_y;
+    smallest_y = 0;
     largest_y = 0;
     display_start = 0;
     this->time_limit = time_limit;
@@ -68,19 +70,49 @@ void TextRenderer::update()
     }
 
     Uint64 current_ticks = SDL_GetTicks64();
-    std::cout << "Current ticks: " << current_ticks << "\n\n";
 
+    if(contents.size() > 0)
+    {
+        smallest_y = contents.at(0).first.second.second;
+    }
+
+    else
+    {
+        smallest_y = 0;
+    }
+
+    // Loop through the contents and remove elements that have exceeded their
+    // time stamp, and find the smallest y value
+    
     for(int i = 0; i < contents.size(); i++)
     {
-        std::cout << contents.at(i).first.first << ": " <<
-            contents.at(i).second << "\n";
-
         if(contents.at(i).second <= current_ticks)
         {
             contents.erase(contents.begin() + i);
             i -= 1;
+            continue;
+        }
+
+        if(contents.at(i).first.second.second < smallest_y)
+        {
+            smallest_y = contents.at(i).first.second.second;
         }
     }
+
+    int move_up_amount = 0;
+
+    if(display_start < smallest_y)
+    {
+        display_start = smallest_y;
+        move_up_amount = smallest_y - display_start;
+        cursor_pos.second -= move_up_amount;
+    }
+
+    for(int i = 0; i < contents.size(); i++)
+    {
+        contents.at(i).first.second.second -= move_up_amount;
+    }
+
 }
 
 void TextRenderer::add(std::string new_content)
