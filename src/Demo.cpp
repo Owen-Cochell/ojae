@@ -49,11 +49,11 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     {
         window = SDL_CreateWindow(title, x, y, width, height, flags);
         renderer = SDL_CreateRenderer(window, -1, 0);
-        SDL_SetRenderDrawColor(renderer, 27, 27, 65, 255);
+        SDL_SetRenderDrawColor(renderer, 25, 25, 25, 255);
     }
 
     input_handler = new InputHandler();
-
+    
     //TilemapWindow
     tilemap = new Tilemap(15, 15);
     tilemap->fill_tilemap(new Tile("Floor", '.', true, 0));
@@ -100,6 +100,7 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
+    main_window->update();
     input_handler->update();
 }
 

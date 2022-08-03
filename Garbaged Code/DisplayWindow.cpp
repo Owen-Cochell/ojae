@@ -24,13 +24,15 @@ int DisplayWindow::get_font() { return text_renderer->get_font(); }
 void DisplayWindow::update()
 {
     /*
-    Updates all components
+    Updates all components and our text renderer
     */
 
     for(Component* component : components)
     {
         component->update();
     }
+
+    text_renderer->update();
 }
 
 void DisplayWindow::display()
