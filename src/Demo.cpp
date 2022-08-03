@@ -53,11 +53,11 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     }
 
     input_handler = new InputHandler();
-    
+
     //TilemapWindow
-    tilemap = new Tilemap(15, 15);
+    tilemap = new Tilemap(10, 10);
     tilemap->fill_tilemap(new Tile("Floor", '.', true, 0));
-    tilemap->add(new Tile("Chest", 'c', false, 5), 10, 10);
+    tilemap->add(new Tile("Chest", 'c', false, 5), 8, 8);
 
     tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
          input_handler, true);
@@ -77,7 +77,7 @@ void Demo::execution_loop()
     /*
     Runs our main simulation, at 60 frames per second
     */
-
+   
     while(running)
     {
         frame_start = SDL_GetTicks64();
@@ -100,7 +100,6 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
-    main_window->update();
     input_handler->update();
 }
 

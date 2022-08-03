@@ -24,26 +24,15 @@ private:
     int font; // Font size of the text being displayed
 
     std::vector<int> available_fonts; // List of available fonts 
-    std::vector<std::pair<std::pair<char, std::pair<int, int>>, int>> contents;
-        // List of the content to render
-
-    std::pair<int, int> cursor_pos;
+    std::vector<std::pair<std::pair<int, int>, char>> contents; // List of content
+        // to render each frame
 
     int start_x;
     int end_x;
     int start_y;
     int end_y;
 
-    int smallest_y; // Smallest y coordinate in our contents
-    int largest_y; // Largest y coordinate in our contents
-
-    int time_limit; // How long each character will exist in the contents 
-        // until it is removed. If this value is -1, each character stays 
-        // until the contents are manually deleted
-
 public:
-
-    int display_start; // Starting index of where our y is rendering
 
     TextRenderer();
     TextRenderer(int start_x, int end_x, int start_y, int end_y, 
@@ -51,15 +40,11 @@ public:
     ~TextRenderer();
 
     int get_font();
-    int get_largest_y();
 
     bool check_font(int font_size);
 
-    void update();
-    void add(std::string new_content);
-    void add(char new_content);
+    void add(char new_content, int x, int y);
     void clear();
     void set_font(int font_size);
-    void set_cursor_pos(int x, int y);
-    void draw_all();
+    void draw();
 };

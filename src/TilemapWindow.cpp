@@ -23,7 +23,6 @@ TilemapWindow::TilemapWindow(Tilemap* tilemap, int start_x, int end_x,
 
 int TilemapWindow::get_font() { return text_renderer->get_font(); }
 
-
 void TilemapWindow::display()
 {
     /*
@@ -33,12 +32,26 @@ void TilemapWindow::display()
     draw_border();
     text_renderer->clear();
 
+    int x_pos = start_x + border_size;
+    int y_pos = start_y + border_size;
+    int font = text_renderer->get_font();
+
     for(char c : tilemap->get_display())
     {
-        text_renderer->add(c);
+        
+        if(c == '\n')
+        {
+            y_pos += font * 2;
+            x_pos = start_x + border_size;
+            continue;
+        }
+
+        text_renderer->add(c, x_pos, y_pos);
+
+        x_pos += font * 2;
     }
 
-    text_renderer->draw_all();
+    text_renderer->draw();
 }
 
 void TilemapWindow::set_font(int font_size)
