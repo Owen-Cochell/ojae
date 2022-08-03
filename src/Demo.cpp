@@ -3,7 +3,7 @@
 #include "Demo.h"
 #include "TextRenderer.h"
 #include "Component.h"
-#include "DisplayWindow.h"
+#include "ScrollWindow.h"
 #include "TilemapWindow.h"
 
 SDL_Window* Demo::window = nullptr;
@@ -15,7 +15,6 @@ bool Demo::running = false;
 InputHandler* Demo::input_handler = nullptr;
 TextRenderer* text_renderer = nullptr;
 
-DisplayWindow* main_window;
 TilemapWindow* tilemap_window;
 
 Tilemap* tilemap;
@@ -54,10 +53,6 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     }
 
     input_handler = new InputHandler();
-
-    //DisplayWindow
-    main_window = new DisplayWindow(int(width / 2), width, 0, height, 
-        input_handler, false, 25);
 
     //TilemapWindow
     tilemap = new Tilemap(15, 15);
@@ -211,11 +206,6 @@ void Demo::handle_keys()
             case 119:
             
                 tilemap->move(player, 0, -1);   
-                main_window->add_text("You moved to: (");
-                main_window->add_text(std::to_string(player->get_x()));
-                main_window->add_text(", ");
-                main_window->add_text(std::to_string(player->get_y()));
-                main_window->add_text(")\n");
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
@@ -223,11 +213,6 @@ void Demo::handle_keys()
             case 115:
                 
                 tilemap->move(player, 0, 1); 
-                main_window->add_text("You moved to: (");
-                main_window->add_text(std::to_string(player->get_x()));
-                main_window->add_text(", ");
-                main_window->add_text(std::to_string(player->get_y()));
-                main_window->add_text(")\n");
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
@@ -235,11 +220,6 @@ void Demo::handle_keys()
             case 100:
 
                 tilemap->move(player, 1, 0); 
-                main_window->add_text("You moved to: (");
-                main_window->add_text(std::to_string(player->get_x()));
-                main_window->add_text(", ");
-                main_window->add_text(std::to_string(player->get_y()));
-                main_window->add_text(")\n");
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
@@ -247,23 +227,18 @@ void Demo::handle_keys()
             case 97:
 
                 tilemap->move(player, -1, 0); 
-                main_window->add_text("You moved to: (");
-                main_window->add_text(std::to_string(player->get_x()));
-                main_window->add_text(", ");
-                main_window->add_text(std::to_string(player->get_y()));
-                main_window->add_text(")\n");
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
             // =
             case 61:
-                main_window->scroll_down();
+                //main_window->scroll_down();
                 input_handler->set_delay(i, 100);
                 break;
             
             // -
             case 45:
-                main_window->scroll_up();
+                //main_window->scroll_up();
                 input_handler->set_delay(i, 100);
                 break;
 
@@ -276,8 +251,6 @@ void Demo::handle_keys()
 void Demo::draw_all()
 {
     SDL_RenderClear(renderer);
-
-    main_window->display();
     tilemap_window->display();
 
     SDL_RenderPresent(renderer);

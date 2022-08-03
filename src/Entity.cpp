@@ -4,7 +4,7 @@ void MovementEntity::calc_move() {
     
     // Determine the delta time:
 
-    uint64_t delta = (SLD_GetPerformanceCounter() - this->last) / this->freq;
+    uint64_t delta = (SDL_GetPerformanceCounter() - this->last) / this->freq;
 
     // Determine the new velocity::
 
