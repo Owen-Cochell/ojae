@@ -35,8 +35,7 @@ private:
 public:
 
     TextRenderer();
-    TextRenderer(int start_x, int end_x, int start_y, int end_y, 
-        int time_limit);
+    TextRenderer(int start_x, int end_x, int start_y, int end_y);
     ~TextRenderer();
 
     int get_font();

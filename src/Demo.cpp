@@ -3,7 +3,7 @@
 #include "Demo.h"
 #include "TextRenderer.h"
 #include "Component.h"
-#include "ScrollWindow.h"
+#include "TextWindow.h"
 #include "TilemapWindow.h"
 
 SDL_Window* Demo::window = nullptr;
@@ -16,6 +16,7 @@ InputHandler* Demo::input_handler = nullptr;
 TextRenderer* text_renderer = nullptr;
 
 TilemapWindow* tilemap_window;
+TextWindow* scroll_window;
 
 Tilemap* tilemap;
 
@@ -54,13 +55,17 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     input_handler = new InputHandler();
 
-    //TilemapWindow
+    // TextWindow
+    scroll_window = new TextWindow(int(width / 2) + 1, width, 0, height, 
+        input_handler, 5000);
+
+    // TilemapWindow
     tilemap = new Tilemap(10, 10);
     tilemap->fill_tilemap(new Tile("Floor", '.', true, 0));
     tilemap->add(new Tile("Chest", 'c', false, 5), 8, 8);
 
     tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
-         input_handler, true);
+        input_handler);
 
     player = new Entity("Player", 'P', 20);
     tilemap->add(player, 3, 3);
@@ -100,6 +105,7 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
+    scroll_window->update();
     input_handler->update();
 }
 
@@ -200,12 +206,13 @@ void Demo::handle_keys()
 
     for(int i : keys)
     {
+
         switch(i)
         {
             // w
             case 119:
-            
-                tilemap->move(player, 0, -1);   
+
+                tilemap->move(player, 0, -1);
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
@@ -251,7 +258,9 @@ void Demo::handle_keys()
 void Demo::draw_all()
 {
     SDL_RenderClear(renderer);
+   
     tilemap_window->display();
+    scroll_window->display();
 
     SDL_RenderPresent(renderer);
 }

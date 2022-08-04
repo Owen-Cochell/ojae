@@ -13,8 +13,7 @@ TextRenderer::TextRenderer()
     end_y = 0;
 }
 
-TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y,
-    int time_limit) 
+TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y) 
 {
     available_fonts.push_back(16);
 

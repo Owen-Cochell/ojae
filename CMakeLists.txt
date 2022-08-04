@@ -17,6 +17,7 @@ add_library(ojae
     src/BaseWindow.cpp
     src/Tilemap.cpp
     src/TilemapWindow.cpp
+    src/TextWindow.cpp
 )
 
 target_include_directories(ojae

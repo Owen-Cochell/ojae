@@ -20,7 +20,7 @@ public:
 
     TilemapWindow();
     TilemapWindow(Tilemap* tilemap, int start_x, int end_x, int start_y,
-    int end_y, InputHandler* input_handler, bool taking_input);
+    int end_y, InputHandler* input_handler);
     ~TilemapWindow();
 
     int get_font();

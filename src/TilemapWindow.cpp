@@ -12,13 +12,18 @@ TilemapWindow::TilemapWindow() : BaseWindow()
 }
 
 TilemapWindow::TilemapWindow(Tilemap* tilemap, int start_x, int end_x,
-    int start_y, int end_y, InputHandler* input_handler, bool taking_input) : 
-    BaseWindow(start_x, end_x, start_y, end_y, taking_input)
+    int start_y, int end_y, InputHandler* input_handler) : 
+    BaseWindow(start_x, end_x, start_y, end_y, true)
 {
     this->tilemap = tilemap;
     this->input_handler = input_handler;
     text_renderer = new TextRenderer(this->start_x, this->end_x, 
-        this->start_y, this->end_y, -1);
+        this->start_y, this->end_y);
+}
+
+TilemapWindow::~TilemapWindow()
+{
+    delete text_renderer;
 }
 
 int TilemapWindow::get_font() { return text_renderer->get_font(); }
