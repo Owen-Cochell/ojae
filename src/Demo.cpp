@@ -1,10 +1,15 @@
 #include <iostream>
+#include <fstream>
 
 #include "Demo.h"
+#include "Player.h"
 #include "TextRenderer.h"
 #include "Component.h"
 #include "TextWindow.h"
 #include "TilemapWindow.h"
+#include "TextFunnel.h"
+
+static std::fstream file_stream;
 
 SDL_Window* Demo::window = nullptr;
 SDL_Renderer* Demo::renderer = nullptr;
@@ -13,14 +18,14 @@ SDL_Event Demo::event;
 bool Demo::running = false;
 
 InputHandler* Demo::input_handler = nullptr;
-TextRenderer* text_renderer = nullptr;
+TextFunnel* text_funnel = nullptr;
 
 TilemapWindow* tilemap_window;
-TextWindow* scroll_window;
+TextWindow* text_window;
 
 Tilemap* tilemap;
 
-Entity* player;
+Player* player;
 
 Demo::Demo() 
 {
@@ -36,6 +41,14 @@ Demo::~Demo() {}
 void Demo::init(const char* title, int x, int y, int width, int height,
     bool fullscreen)
 {
+    file_stream.open("OutputLog.txt", std::ios::app);
+    if(file_stream.is_open())
+    {
+        file_stream << "[OUT] Initializing SDL Window and Objects...\n";
+        file_stream.close();
+    }
+    file_stream.clear();
+
     screen_width = width;
     screen_height = height;
 
@@ -54,21 +67,31 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     }
 
     input_handler = new InputHandler();
+    text_funnel = new TextFunnel();
 
     // TextWindow
-    scroll_window = new TextWindow(int(width / 2) + 1, width, 0, height, 
+    text_window = new TextWindow(int(width / 2) + 1, width, 0, height, 
         input_handler, 5000);
 
     // TilemapWindow
-    tilemap = new Tilemap(10, 10);
+    player = new Player(input_handler, text_funnel, "Player", 'P');
+
+    tilemap = new Tilemap(text_funnel, player, 10, 10);
     tilemap->fill_tilemap(new Tile("Floor", '.', true, 0));
     tilemap->add(new Tile("Chest", 'c', false, 5), 8, 8);
 
     tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
         input_handler);
 
-    player = new Entity("Player", 'P', 20);
     tilemap->add(player, 3, 3);
+
+    file_stream.open("OutputLog.txt", std::ios::app);
+    if(file_stream.is_open())
+    {
+        file_stream << "[OUT] Done\n";
+        file_stream.close();
+    }
+    file_stream.clear();
 }
 
 void Demo::start()
@@ -89,7 +112,7 @@ void Demo::execution_loop()
 
         update();
         handle_events();
-        handle_keys();
+        //handle_keys();
         draw_all();
 
         frame_time = SDL_GetTicks64() - frame_start;
@@ -105,8 +128,21 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
-    scroll_window->update();
+    text_window->update();
     input_handler->update();
+
+    tilemap->update_all_entities();
+    tilemap->move_all_entities();
+
+    tilemap->update_player();
+    tilemap->move_player();
+
+    for(std::string element : text_funnel->get_contents())
+    {
+        text_window->add(element);
+    }
+
+    text_funnel->clear();
 }
 
 void Demo::handle_events()
@@ -200,6 +236,7 @@ void Demo::handle_events()
     }
 }
 
+/*
 void Demo::handle_keys()
 {
     std::vector<int> keys = input_handler->get_active_keys();
@@ -212,28 +249,28 @@ void Demo::handle_keys()
             // w
             case 119:
 
-                tilemap->move(player, 0, -1);
+                tilemap->move(player);
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
             // s
             case 115:
                 
-                tilemap->move(player, 0, 1); 
+                tilemap->move(player); 
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
             // w
             case 100:
 
-                tilemap->move(player, 1, 0); 
+                tilemap->move(player); 
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
             // a
             case 97:
 
-                tilemap->move(player, -1, 0); 
+                tilemap->move(player); 
                 input_handler->set_delay(i, standard_input_delay);
                 break;
 
@@ -254,13 +291,14 @@ void Demo::handle_keys()
         }
     }
 }
+*/
 
 void Demo::draw_all()
 {
     SDL_RenderClear(renderer);
    
     tilemap_window->display();
-    scroll_window->display();
+    text_window->display();
 
     SDL_RenderPresent(renderer);
 }

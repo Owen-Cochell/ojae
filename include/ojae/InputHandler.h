@@ -21,7 +21,7 @@ public:
     ~InputHandler();
 
     void update();
-    void set_delay(int c, int frames = 8);
+    void set_delay(int i, int miliseconds = 135);
     void add_key(int key);
     void remove_key(int key);
 

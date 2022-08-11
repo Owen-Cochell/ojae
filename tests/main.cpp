@@ -3,10 +3,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <fstream>
 //#include <wtypes.h>
 
 #include "Demo.h"
 #include "FileHandler.h"
+
+static std::fstream file_stream;
 
 // // Get the horizontal and vertical screen sizes in pixel
 // void GetDesktopResolution(int& horizontal, int& vertical)
@@ -25,8 +28,12 @@
 
 int main(int argc, char* argv[])
 {
-    int native_height = 1000;
-    int native_width = 1800;
+    // Clear the output log
+    file_stream.open("OutputLog.txt", std::ios::out);
+    file_stream.close();
+
+    int native_height = 1080;
+    int native_width = 1920;
 
     //GetDesktopResolution(native_width, native_height);
 

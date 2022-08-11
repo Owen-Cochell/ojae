@@ -12,9 +12,11 @@ add_library(ojae
     src/Entity.cpp
     src/FileHandler.cpp
     src/InputHandler.cpp
+    src/Player.cpp
     src/TextureHandler.cpp
     src/TextRenderer.cpp
     src/BaseWindow.cpp
+    src/TextFunnel.cpp
     src/Tilemap.cpp
     src/TilemapWindow.cpp
     src/TextWindow.cpp

@@ -1,7 +1,10 @@
 #include <algorithm>
 #include <iostream>
+#include <fstream>
 
 #include "Tilemap.h"
+
+static std::fstream file_stream;
 
 struct greater_priority
 {
@@ -32,6 +35,35 @@ Tilemap::Tilemap(int width, int height)
     keep_entities = false;
 }
 
+Tilemap::Tilemap(TextFunnel* _text_funnel, int _width, int _height)
+{
+    text_funnel = _text_funnel;
+    this->width = width;
+    this->height = height;
+    keep_tiles = false;
+    keep_entities = false;
+}
+
+Tilemap::Tilemap(Player* player, int width, int height)
+{
+    this->width = width;
+    this->height = height;
+    this->player = player;
+    keep_tiles = false;
+    keep_entities = false;
+}
+
+Tilemap::Tilemap(TextFunnel* _text_funnel, Player* _player, int _width,
+     int _height)
+{
+    width = _width;
+    height = _height;
+    player = _player;
+    text_funnel = _text_funnel;
+    keep_tiles = false;
+    keep_entities = false;
+}
+
 Tilemap::~Tilemap() {}
 
 std::vector<char> Tilemap::get_display() 
@@ -50,6 +82,32 @@ bool Tilemap::bound_check(int x, int y)
 
     return x >= 0 && x < width && y >= 0 && y < height;
 }
+
+void Tilemap::update_player()
+{
+    /*
+    Updates the player
+    */
+
+    if(player == nullptr)
+    {
+        file_stream.open("OutputLog.txt", std::ios::app);
+
+        if(file_stream.is_open())
+        {
+            file_stream << "[ERROR] Tilemap.update_player(): Player has not "
+            "been instanciated\n";
+            file_stream << "[OUT] Stopping...";
+            SDL_Quit();
+            file_stream.close();
+        }
+        exit(0);
+    }
+
+    player->update();
+}
+
+void Tilemap::update_all_entities() {}
 
 void Tilemap::fill_tilemap(Tile* tile)
 {
@@ -167,6 +225,56 @@ void Tilemap::add(Entity* entity, int x, int y)
     entity->set_position(x, y);
 }
 
+void Tilemap::move(Tile* tile, int x_amount, int y_amount) {}
+
+void Tilemap::move(Entity* entity, int x, int y)
+{
+    /*
+    Attemps to move an entity to the passed coordinates. This function adds
+    the x_amount and y_amount to the entity's coordinates rather than moveing
+    this entity to a specified coordinate
+
+    :PARAM entity: Entity to move
+    :PARAM x_amount: X amount to add to coordinate
+    :PARAM y_amount: Y amount to add to coordinate
+    */
+
+    // If the new spot is out of bounds, we do not want to move this entity
+    if(!bound_check(x, y))
+    {
+        return;
+    }
+
+    // Loop through the tiles at this position and check if there are any 
+    // non traversable tiles
+    for(Tile* tile : tiles[{x, y}])
+    {
+
+        if(!tile->is_traversable())
+        {
+            return;
+        }
+    }
+
+    // Check if there is an entity at this location
+    if(entities.count({x, y}) != 0)
+    {
+        // Loop through the entities at this position and check if there are any 
+            // non traversable entities
+
+        for(Entity* entity : entities[{x, y}])
+        {
+            if(!entity->is_traversable())
+            {
+                return;
+            }
+        }
+    }
+
+    remove(entity);
+    add(entity, x, y);
+}
+
 void Tilemap::remove(Tile* tile, bool deconstruct)
 {
     /*
@@ -207,56 +315,33 @@ void Tilemap::remove(Entity* entity, bool deconstruct)
     }
 }
 
-void Tilemap::move(Tile* tile, int x_amount, int y_amount) {}
-
-void Tilemap::move(Entity* entity, int x_amount, int y_amount)
+void Tilemap::move_player()
 {
     /*
-    Moves an entity in accordance to the passed paramteres. This function adds
-    the x_amount and y_amount to the entity's coordinates rather than moveing
-    this entity to a specified coordinate
-
-    :PARAM entity: Entity to move
-    :PARAM x_amount: X amount to add to coordinate
-    :PARAM y_amount: Y amount to add to coordinate
+    Attempts to move the player in accordance to its position and current 
+    velocity
     */
 
-    // Calculate the spot the entity is trying to move to
-    int targ_x = entity->get_x() + x_amount;
-    int targ_y = entity->get_y() + y_amount;
-
-    // If the new spot is out of bounds, we do not want to move this entity
-    if(!bound_check(targ_x, targ_y))
+    if(player == nullptr)
     {
-        return;
-    }
+        file_stream.open("OutputLog.txt", std::ios::app);
 
-    // Loop through the tiles at this position and check if there are any 
-    // non traversable tiles
-    for(Tile* tile : tiles[{targ_x, targ_y}])
-    {
-
-        if(!tile->is_traversable())
+        if(file_stream.is_open())
         {
-            return;
+            file_stream << "[ERROR] Tilemap.move_player(): Player has not "
+            "been instanciated\n";
+            file_stream << "[OUT] Stopping...";
+            SDL_Quit();
+            file_stream.close();
         }
+        exit(0);
     }
 
-    // Check if there is an entity at this location
-    if(entities.count({targ_x, targ_y}) != 0)
-    {
-        // Loop through the entities at this position and check if there are any 
-            // non traversable entities
+    int targ_x = player->get_x() + player->x_velocity;
+    int targ_y = player->get_y() + player->y_velocity;
 
-        for(Entity* entity : entities[{targ_x, targ_y}])
-        {
-            if(!entity->is_traversable())
-            {
-                return;
-            }
-        }
-    }
-
-    remove(entity);
-    add(entity, targ_x, targ_y);
+    move(player, targ_x, targ_y);
 }
+
+void Tilemap::move_all_entities() {}
+
