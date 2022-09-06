@@ -116,6 +116,7 @@ KeyCallbacks::KeyCallbacks() {}
 KeyCallbacks::~KeyCallbacks() {}
 
 void CallbackCollection::handle_event(SDL_Event& event) {
+    
     // Sends the given event though the handlers associated with it:
 
     // Get the key for the event:
