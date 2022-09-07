@@ -1,5 +1,7 @@
 #include "TextWindow.h"
 
+#include <iostream>
+
 TextWindow::TextWindow() : BaseWindow()
 {
     life_time = 0;
@@ -7,14 +9,17 @@ TextWindow::TextWindow() : BaseWindow()
     text_renderer = nullptr;
 }
 
-TextWindow::TextWindow(int start_x, int end_x, int start_y, int end_y,
+TextWindow::TextWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
+    int start_x, int end_x, int start_y, int end_y, 
     InputHandler* input_handler, int life_time) : 
-    BaseWindow(start_x, end_x, start_y, end_y, true)
+    BaseWindow(_texture_handler, _debugger, start_x, end_x, start_y, end_y, true)
 {
+
     this->life_time = life_time;
     this->input_handler = input_handler;
-    text_renderer = new TextRenderer(this->start_x, this->end_x, 
-        this->start_y, this->end_y);
+
+    text_renderer = new TextRenderer(_texture_handler, _debugger, 
+        this->start_x, this->end_x, this->start_y, this->end_y);
 }
 
 TextWindow::~TextWindow()
@@ -50,9 +55,10 @@ void TextWindow::display()
 
     text_renderer->clear();
 
-    int x_pos = start_x + border_size;
-    int y_pos = start_y + border_size;
-    int font = text_renderer->get_font();
+    int x_pos = start_x;
+    int y_pos = start_y;
+    int font_width = text_renderer->get_font_width();
+    int font_height = text_renderer->get_font_height();
 
     for(std::pair<std::string,Uint64> element : contents)
     {
@@ -60,13 +66,13 @@ void TextWindow::display()
         {
             if(c == '\n')
             {
-                y_pos += font * 1.5;
-                x_pos = start_x + border_size;
+                y_pos += font_height * 3;
+                x_pos = start_x;
                 goto CHECK_Y_LIMIT;
             }
 
             text_renderer->add(c, x_pos, y_pos);
-            x_pos += font;
+            x_pos += font_width * 2;
 
             CHECK_Y_LIMIT:
 
@@ -94,7 +100,7 @@ void TextWindow::clear()
     contents.clear();
 }
 
-void TextWindow::set_font(int font_size)
-{
-    text_renderer->set_font(font_size);
-}
+// void TextWindow::set_font(int font_size)
+// {
+//     text_renderer->set_font(font_size);
+// }

@@ -4,7 +4,7 @@
 #include "Demo.h"
 #include "Player.h"
 #include "TextRenderer.h"
-#include "Component.h"
+#include "TextureHandler.h"
 #include "TextWindow.h"
 #include "TilemapWindow.h"
 #include "TextFunnel.h"
@@ -41,13 +41,10 @@ Demo::~Demo() {}
 void Demo::init(const char* title, int x, int y, int width, int height,
     bool fullscreen)
 {
-    file_stream.open("OutputLog.txt", std::ios::app);
-    if(file_stream.is_open())
-    {
-        file_stream << "[OUT] Initializing SDL Window and Objects...\n";
-        file_stream.close();
-    }
-    file_stream.clear();
+
+    debugger = new Debugger("OutputLog.txt");
+
+    debugger->log("[OUT] Initializing SDL");
 
     screen_width = width;
     screen_height = height;
@@ -66,36 +63,37 @@ void Demo::init(const char* title, int x, int y, int width, int height,
         SDL_SetRenderDrawColor(renderer, 25, 25, 25, 255);
     }
 
+    debugger->log("[OUT] Creating Handler Objects");
+
+    texture_handler = new TextureHandler(renderer, debugger);
+
     input_handler = new InputHandler();
     text_funnel = new TextFunnel();
 
     // TextWindow
-    text_window = new TextWindow(int(width / 2) + 1, width, 0, height, 
-        input_handler, 5000);
+    text_window = new TextWindow(texture_handler, debugger,
+        int(width / 2) + 1, width, 0, height, input_handler, 5000);
 
-    // TilemapWindow
+    text_window->add("Content");
+
     player = new Player(input_handler, text_funnel, "Player", 'P');
 
     tilemap = new Tilemap(text_funnel, player, 10, 10);
     tilemap->fill_tilemap(new Tile("Floor", '.', true, 0));
-    tilemap->add(new Tile("Chest", 'c', false, 5), 8, 8);
+    tilemap->add(new Tile("Chest", 'C', false, 5), 8, 8);
 
-    tilemap_window = new TilemapWindow(tilemap, 0, width / 2, 0, height,
-        input_handler);
+    // TilemapWindow
+    tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
+        0, width / 2, 0, height, input_handler);
 
     tilemap->add(player, 3, 3);
 
-    file_stream.open("OutputLog.txt", std::ios::app);
-    if(file_stream.is_open())
-    {
-        file_stream << "[OUT] Done\n";
-        file_stream.close();
-    }
-    file_stream.clear();
+    debugger->log("[OUT] Done");
 }
 
 void Demo::start()
 {
+    
     running = true;
     execution_loop();
 }

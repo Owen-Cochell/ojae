@@ -6,13 +6,13 @@
 #include <vector>
 #include <map>
 
+#include "TextureHandler.h"
+
+/**
+ * @brief Controls the output of text and textures to a set size of the 
+ * screen */
 class BaseWindow
 {
-    /*
-    Controls the output of text and textures to a set size of the screen. 
-    This window cannot be split into multiple parts. For functionality for 
-    multiple windows, see Masterwindow and Slavewindows
-    */
 
 protected:
 
@@ -25,6 +25,9 @@ protected:
 
     SDL_Texture* border;
     SDL_Texture* border_selected;
+
+    TextureHandler* texture_handler; // Instance of the TextureHandler
+    Debugger* debugger; // Instance of the Debugger
 
     int border_size; // Size of the border of the windows
 
@@ -39,7 +42,8 @@ protected:
 public:
 
     BaseWindow();
-    BaseWindow(int start_x, int end_x, int start_y, int end_y, bool taking_input);
+    BaseWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
+        int start_x, int end_x, int start_y, int end_y, bool taking_input);
     ~BaseWindow();
 
     virtual void update();

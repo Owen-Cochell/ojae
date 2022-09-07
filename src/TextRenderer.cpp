@@ -2,24 +2,32 @@
 #include <SDL2/SDL.h>
 
 #include "TextRenderer.h"
-#include "Debug.h"
 
 TextRenderer::TextRenderer() 
 {
-    font = 0;
+    font_width = 0;
+    font_height = 0;
+    texture_handler = nullptr;
+    debugger = nullptr;
     start_x = 0;
     end_x = 0;
     start_y = 0;
     end_y = 0;
 }
 
-TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y) 
+TextRenderer::TextRenderer(TextureHandler* _texture_handler, 
+    Debugger* _debugger, int start_x, int end_x, int start_y, int end_y) 
 {
-    available_fonts.push_back(16);
 
-    font = 16;
-    path = "assets/characters_font16.png";
-    texture = TextureHandler::load_texture(path.c_str());
+    texture_handler = _texture_handler;
+    debugger = _debugger;
+    
+    // available_fonts.push_back(12);
+
+    font_width = 7;
+    font_height = 11;
+    path = "assets/characters_font12.png";
+    texture = texture_handler->load_texture(path.c_str());
 
     this->start_x = start_x;
     this->end_x = end_x;
@@ -29,19 +37,21 @@ TextRenderer::TextRenderer(int start_x, int end_x, int start_y, int end_y)
 
 TextRenderer::~TextRenderer() {}
 
-int TextRenderer::get_font() { return font; }
+int TextRenderer::get_font_width() { return font_width; }
 
-bool TextRenderer::check_font(int font_size)
-{
-    /*
-    Checks if a given font is available to use
+int TextRenderer::get_font_height() { return font_height; }
 
-    :PARAM font_size: Font to check
-    */
+// bool TextRenderer::check_font(int font_size)
+// {
+//     /*
+//     Checks if a given font is available to use
 
-    return std::find(available_fonts.begin(), available_fonts.end(),
-        font_size) != available_fonts.end();
-}
+//     :PARAM font_size: Font to check
+//     */
+
+//     return std::find(available_fonts.begin(), available_fonts.end(),
+//         font_size) != available_fonts.end();
+// }
 
 void TextRenderer::add(char new_content, int x, int y)    
 {
@@ -65,22 +75,22 @@ void TextRenderer::clear()
     contents.clear();
 }
 
-void TextRenderer::set_font(int new_font)
-{
-    /*
-    Sets the font to the new font if it is supported 
+// void TextRenderer::set_font(int new_font)
+// {
+//     /*
+//     Sets the font to the new font if it is supported 
 
-    :PARAM new_font: New font to be set
-    */
+//     :PARAM new_font: New font to be set
+//     */
 
-    if(check_font(new_font))
-    {
-        font = new_font;
-        path = "assets/characters_font" + std::to_string(font) + ".png";
-        SDL_DestroyTexture(texture);
-        texture = TextureHandler::load_texture(path.c_str());
-    }
-}
+//     if(check_font(new_font))
+//     {
+//         font = new_font;
+//         path = "assets/characters_font" + std::to_string(font) + ".png";
+//         SDL_DestroyTexture(texture);
+//         texture = texture_handler->load_texture(path.c_str());
+//     }
+// }
 
 void TextRenderer::draw()
 {
@@ -97,18 +107,18 @@ void TextRenderer::draw()
         int x_pos = element.first.first;
         int y_pos = element.first.second;
 
-        src.x = (((c - 33) % 8) * font) - 1; // Character ascii value - 65 which would make '!' be 0
-        src.y = (((c - 33) / 8) * font) - 1; // Divide this by 8 so that if the ascii value exceeds 
+        src.x = (((c - 33) % 8) * font_width); // Character ascii value - 65 which would make '!' be 0
+        src.y = (int((c - 33) / 8) * font_height); // Divide this by 8 so that if the ascii value exceeds 
             // a division of 8 it increments y by 1, to correspond with the png image.
-        src.w = font;
-        src.h = font;
+        src.w = font_width;
+        src.h = font_height;
 
         dest.x = x_pos;
         dest.y = y_pos;
-        dest.w = font;
-        dest.h = font;
+        dest.w = font_width * 2;
+        dest.h = font_height * 2;
 
-        TextureHandler::draw(texture, src, dest); // Draw the character
+        texture_handler->draw(texture, src, dest); // Draw the character
     }  
 }
 

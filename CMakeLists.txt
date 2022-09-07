@@ -12,6 +12,7 @@ add_library(ojae
     src/Entity.cpp
     src/FileHandler.cpp
     src/InputHandler.cpp
+    src/Debugger.cpp
     src/Player.cpp
     src/TextureHandler.cpp
     src/TextRenderer.cpp

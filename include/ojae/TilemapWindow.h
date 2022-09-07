@@ -4,6 +4,7 @@
 #include "Tilemap.h"
 #include "InputHandler.h"
 #include "TextRenderer.h"
+#include "Debugger.h"
 
 class TilemapWindow : public BaseWindow
 {
@@ -19,12 +20,13 @@ private:
 public:
 
     TilemapWindow();
-    TilemapWindow(Tilemap* tilemap, int start_x, int end_x, int start_y,
-    int end_y, InputHandler* input_handler);
+    TilemapWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
+        Tilemap* tilemap, int start_x, int end_x, int start_y, int end_y, 
+        InputHandler* input_handler);
     ~TilemapWindow();
 
     int get_font();
 
     void display() override; 
-    void set_font(int font_size);
+    // void set_font(int font_size);
 };

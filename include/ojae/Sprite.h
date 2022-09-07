@@ -3,17 +3,19 @@
 
 #include "TextureHandler.h"
 
+
+/**
+ * @brief Stores data for each object when it is rendered to the screen, for instance
+    storing a texture, SDL Rects for renderering and position
+ * 
+ */
 class Sprite
 {
-    /*
-    Stores data for each object when it is rendered to the screen, for instance
-    storing a texture, SDL Rects for renderering and position
-    */
-
 private:
 
     SDL_Rect src, dest;
     SDL_Texture* texture;
+    TextureHandler* texture_handler; // Instance of the TextureHandler
 
 public:
 
@@ -30,10 +32,11 @@ public:
         dest.h = 0;
     }
 
-    Sprite(const char* path, int src_x, int src_y, int src_w, int src_h, int dest_x, int dest_y,
-        int dest_w, int dest_h)
+    Sprite(TextureHandler* _texture_handler, const char* path, int src_x, int src_y, int src_w, 
+        int src_h, int dest_x, int dest_y, int dest_w, int dest_h)
     {
-        texture = TextureHandler::load_texture(path);
+        texture_handler = _texture_handler;
+        texture = texture_handler->load_texture(path);
 
         src.x = src_x;
         src.y = src_y;
@@ -74,6 +77,6 @@ public:
         Draws the texture to the screen
         */
 
-        TextureHandler::draw(texture, src, dest);
+        texture_handler->draw(texture, src, dest);
     }
 };

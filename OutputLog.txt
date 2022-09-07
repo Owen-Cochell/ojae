@@ -1,2 +1,9 @@
-[OUT] Initializing SDL Window and Objects...
-[OUT] Done
+0 ms: [OUT] Initializing SDL
+381 ms: [OUT] Creating Handler Objects
+381 ms: [OUT] Creating texture from path: assets/border.png
+384 ms: [OUT] Creating texture from path: assets/border_selected.png
+386 ms: [OUT] Creating texture from path: assets/characters_font12.png
+389 ms: [OUT] Creating texture from path: assets/border.png
+390 ms: [OUT] Creating texture from path: assets/border_selected.png
+392 ms: [OUT] Creating texture from path: assets/characters_font12.png
+394 ms: [OUT] Done

@@ -5,6 +5,7 @@
 
 #include "TextureHandler.h"
 #include "InputHandler.h"
+#include "Debugger.h"
 
 class Demo
 {
@@ -13,6 +14,9 @@ private:
 
     static SDL_Window* window;
     static InputHandler* input_handler;
+
+    TextureHandler* texture_handler;
+    Debugger* debugger;
 
     const int TARG_FPS = 60; // How many frames per second we want 
     const int FRAME_DELAY = 1000 / TARG_FPS; // Miliseconds delay between each frame to 
