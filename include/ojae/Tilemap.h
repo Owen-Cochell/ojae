@@ -27,6 +27,8 @@ private:
 
     Player* player; // Instance of the Player
 
+    InputHandler* input_handler; // Instance of the InputHandler
+
     TextFunnel* text_funnel; // Instance of the TextFunnel
 
 public:
@@ -35,17 +37,19 @@ public:
     bool keep_entities;// If the tilemap keeps the entities in heap memory when deleted
 
     Tilemap();
-    Tilemap(int width, int height);
-    Tilemap(TextFunnel* _text_funnel, int _width, int _height);
-    Tilemap(Player* player, int width, int height);
-    Tilemap(TextFunnel* _text_funnel, Player* _player, int _width, int _height);
+    // Tilemap(int width, int height);
+    Tilemap(InputHandler* _input_handler, TextFunnel* _text_funnel, int _width,
+        int _height);
+    // Tilemap(Player* player, int width, int height);
+    Tilemap(InputHandler* _input_handler,
+        TextFunnel* _text_funnel, Player* _player, int _width, int _height);
     ~Tilemap();
 
     std::vector<char> get_display();
 
     bool bound_check(int x, int y);
 
-    void update_player();
+    void handle_keys();
     void update_all_entities();
     void fill_tilemap(Tile* tile);
     void assemble_tilemap();
@@ -55,6 +59,5 @@ public:
     void move(Entity* entity, int x, int y);
     void remove(Tile* tile, bool deconstruct = false);
     void remove(Entity* entity, bool deconstruct = false);
-    void move_player();
     void move_all_entities();
 };

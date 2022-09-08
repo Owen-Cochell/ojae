@@ -36,10 +36,7 @@ public:
         traversable = false;
     }
 
-    ~Entity() 
-    {
-
-    }
+    ~Entity() override{}
 
     virtual void update() {};  // Method called upon each frame refresh
     virtual void start() {};  // Method called when entity is added

@@ -21,45 +21,33 @@ struct greater_priority
 
 Tilemap::Tilemap() 
 {
+    text_funnel = nullptr;
+    input_handler = nullptr;
     width = 0;
     height = 0;
     keep_tiles = false;
     keep_entities = false;
 }
 
-Tilemap::Tilemap(int width, int height)
-{
-    this->width = width;
-    this->height = height;
-    keep_tiles = false;
-    keep_entities = false;
-}
-
-Tilemap::Tilemap(TextFunnel* _text_funnel, int _width, int _height)
+Tilemap::Tilemap(InputHandler* _input_handler, TextFunnel* _text_funnel,
+    int _width, int _height)
 {
     text_funnel = _text_funnel;
-    this->width = width;
-    this->height = height;
+    input_handler = _input_handler;
+    this->width = _width;
+    this->height = _height;
     keep_tiles = false;
     keep_entities = false;
 }
 
-Tilemap::Tilemap(Player* player, int width, int height)
+Tilemap::Tilemap(InputHandler* _input_handler, TextFunnel* _text_funnel, 
+    Player* _player, int _width, int _height)
 {
-    this->width = width;
-    this->height = height;
-    this->player = player;
-    keep_tiles = false;
-    keep_entities = false;
-}
-
-Tilemap::Tilemap(TextFunnel* _text_funnel, Player* _player, int _width,
-     int _height)
-{
+    text_funnel = _text_funnel;
+    input_handler = _input_handler;
     width = _width;
     height = _height;
     player = _player;
-    text_funnel = _text_funnel;
     keep_tiles = false;
     keep_entities = false;
 }
@@ -83,28 +71,41 @@ bool Tilemap::bound_check(int x, int y)
     return x >= 0 && x < width && y >= 0 && y < height;
 }
 
-void Tilemap::update_player()
+void Tilemap::handle_keys()
 {
-    /*
-    Updates the player
-    */
-
-    if(player == nullptr)
+    for(int i : input_handler->get_active_keys())
     {
-        file_stream.open("OutputLog.txt", std::ios::app);
-
-        if(file_stream.is_open())
+        switch(i)
         {
-            file_stream << "[ERROR] Tilemap.update_player(): Player has not "
-            "been instanciated\n";
-            file_stream << "[OUT] Stopping...";
-            SDL_Quit();
-            file_stream.close();
-        }
-        exit(0);
-    }
+            // w
+            case 119:
 
-    player->update();
+                move(player, player->get_x(), player->get_y() - 1);
+                input_handler->set_delay(i);
+                break;
+
+            // s
+            case 115:
+                
+                move(player, player->get_x(), player->get_y() + 1);
+                input_handler->set_delay(i);
+                break;
+
+            // d
+            case 100:
+
+                move(player, player->get_x() + 1, player->get_y());
+                input_handler->set_delay(i);
+                break;
+
+            // a
+            case 97:
+
+                move(player, player->get_x() - 1, player->get_y());
+                input_handler->set_delay(i);
+                break;
+        }
+    }
 }
 
 void Tilemap::update_all_entities() {}
@@ -250,6 +251,11 @@ void Tilemap::move(Entity* entity, int x, int y)
     for(Tile* tile : tiles[{x, y}])
     {
 
+        if(tile->is_interactable())
+        {
+            tile->interact();
+        }
+
         if(!tile->is_traversable())
         {
             return;
@@ -313,34 +319,6 @@ void Tilemap::remove(Entity* entity, bool deconstruct)
     {
         delete entity;
     }
-}
-
-void Tilemap::move_player()
-{
-    /*
-    Attempts to move the player in accordance to its position and current 
-    velocity
-    */
-
-    if(player == nullptr)
-    {
-        file_stream.open("OutputLog.txt", std::ios::app);
-
-        if(file_stream.is_open())
-        {
-            file_stream << "[ERROR] Tilemap.move_player(): Player has not "
-            "been instanciated\n";
-            file_stream << "[OUT] Stopping...";
-            SDL_Quit();
-            file_stream.close();
-        }
-        exit(0);
-    }
-
-    int targ_x = player->get_x() + player->x_velocity;
-    int targ_y = player->get_y() + player->y_velocity;
-
-    move(player, targ_x, targ_y);
 }
 
 void Tilemap::move_all_entities() {}

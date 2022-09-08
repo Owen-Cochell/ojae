@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "Demo.h"
+#include "Objects/AllObjects.h"
 #include "Player.h"
 #include "TextRenderer.h"
 #include "TextureHandler.h"
@@ -41,7 +42,6 @@ Demo::~Demo() {}
 void Demo::init(const char* title, int x, int y, int width, int height,
     bool fullscreen)
 {
-
     debugger = new Debugger("OutputLog.txt");
 
     debugger->log("[OUT] Initializing SDL");
@@ -78,9 +78,9 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     player = new Player(input_handler, text_funnel, "Player", 'P');
 
-    tilemap = new Tilemap(text_funnel, player, 10, 10);
+    tilemap = new Tilemap(input_handler, text_funnel, player, 10, 10);
     tilemap->fill_tilemap(new Tile("Floor", '.', true, 0));
-    tilemap->add(new Tile("Chest", 'C', false, 5), 8, 8);
+    tilemap->add(new Chest(text_funnel), 8, 8);
 
     // TilemapWindow
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
@@ -88,22 +88,19 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     tilemap->add(player, 3, 3);
 
-    debugger->log("[OUT] Done");
+    debugger->log("[OUT] Game Initialized");
 }
 
 void Demo::start()
 {
-    
     running = true;
     execution_loop();
 }
 
+/**
+ * @brief Executes the main simulation, at a target 60 fps */
 void Demo::execution_loop()
 {
-    /*
-    Runs our main simulation, at 60 frames per second
-    */
-   
     while(running)
     {
         frame_start = SDL_GetTicks64();
@@ -131,9 +128,7 @@ void Demo::update()
 
     tilemap->update_all_entities();
     tilemap->move_all_entities();
-
-    tilemap->update_player();
-    tilemap->move_player();
+    tilemap->handle_keys();
 
     for(std::string element : text_funnel->get_contents())
     {

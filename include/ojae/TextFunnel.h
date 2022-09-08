@@ -17,7 +17,7 @@ public:
 
     std::vector<std::string> get_contents();
 
-    void add(std::string new_content);
+    void add(std::string new_content, bool new_line = true);
     void clear();
 
 };

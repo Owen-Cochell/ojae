@@ -2,6 +2,9 @@
 
 #include <string>
 
+/**
+ * @brief Basic character that can be added to a tilemap. Offers little 
+ * functionality */
 class Tile
 {
 
@@ -20,6 +23,7 @@ protected:
     int priority; // Rendering priority of the Tile
 
     bool traversable; // If this tile is traversable by things that can move
+    bool interactable; // If this tile is able to be interacted with
 
 public:
 
@@ -30,19 +34,22 @@ public:
         y_pos = 0;
         priority = 0;
         traversable = true;
+        interactable = false;
     }
 
-    Tile(std::string name, char character, bool traversable, int priority)
+    Tile(std::string _name, char _character, 
+        bool _traversable, int _priority)
     {
-        this->name = name;
-        this->character = character;
+        this->name = _name;
+        this->character = _character;
         x_pos = 0;
         y_pos = 0;
-        this->priority = priority;
-        this->traversable = traversable;
+        priority = _priority;
+        traversable = _traversable;
+        interactable = false;
     }
 
-    ~Tile() {}
+    virtual ~Tile() {}
 
     std::string get_name() { return name; }
 
@@ -55,6 +62,8 @@ public:
     int get_priority() { return priority; }
 
     bool is_traversable() { return traversable; }
+
+    bool is_interactable() { return interactable; }
 
     void set_position(int x, int y)
     {
@@ -69,4 +78,8 @@ public:
         y_pos = y;
     }
     
+    /**
+     * @brief Called whenever an entity attempts to move/interact with this 
+     * tile */
+    virtual void interact() {}
 };

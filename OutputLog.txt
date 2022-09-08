@@ -1,9 +1,9 @@
 0 ms: [OUT] Initializing SDL
-381 ms: [OUT] Creating Handler Objects
-381 ms: [OUT] Creating texture from path: assets/border.png
-384 ms: [OUT] Creating texture from path: assets/border_selected.png
-386 ms: [OUT] Creating texture from path: assets/characters_font12.png
-389 ms: [OUT] Creating texture from path: assets/border.png
-390 ms: [OUT] Creating texture from path: assets/border_selected.png
-392 ms: [OUT] Creating texture from path: assets/characters_font12.png
-394 ms: [OUT] Done
+294 ms: [OUT] Creating Handler Objects
+294 ms: [OUT] Creating texture from path: assets/border.png
+295 ms: [OUT] Creating texture from path: assets/border_selected.png
+296 ms: [OUT] Creating texture from path: assets/characters_font12.png
+300 ms: [OUT] Creating texture from path: assets/border.png
+304 ms: [OUT] Creating texture from path: assets/border_selected.png
+307 ms: [OUT] Creating texture from path: assets/characters_font12.png
+309 ms: [OUT] Game Initialized
