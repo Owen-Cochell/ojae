@@ -77,33 +77,96 @@ void Tilemap::handle_keys()
     {
         switch(i)
         {
-            // w
-            case 119:
+            // // w
+            // case 119:
 
-                move(player, player->get_x(), player->get_y() - 1);
+            //     move(player, player->get_x(), player->get_y() - 1);
+            //     input_handler->set_delay(i);
+            //     break;
+
+            // // s
+            // case 115:
+                
+            //     move(player, player->get_x(), player->get_y() + 1);
+            //     input_handler->set_delay(i);
+            //     break;
+
+            // // d
+            // case 100:
+
+            //     move(player, player->get_x() + 1, player->get_y());
+            //     input_handler->set_delay(i);
+            //     break;
+
+            // // a
+            // case 97:
+
+            //     move(player, player->get_x() - 1, player->get_y());
+            //     input_handler->set_delay(i);
+            //     break;
+
+            // 1 (Keypad)
+            case 1073741913:
+
+                move(player, player->get_x() - 1, player->get_y() + 1);
                 input_handler->set_delay(i);
                 break;
+            
+            // 2 (Keypad)
+            case 1073741914:
 
-            // s
-            case 115:
-                
                 move(player, player->get_x(), player->get_y() + 1);
                 input_handler->set_delay(i);
                 break;
+            
+            // 3 (Keypad)
+            case 1073741915:
 
-            // d
-            case 100:
-
-                move(player, player->get_x() + 1, player->get_y());
+                move(player, player->get_x() + 1, player->get_y() + 1);
                 input_handler->set_delay(i);
                 break;
-
-            // a
-            case 97:
+            
+            // 4 (Keypad)
+            case 1073741916:
 
                 move(player, player->get_x() - 1, player->get_y());
                 input_handler->set_delay(i);
                 break;
+
+            // 5 (Keypad)
+            case 1073741917:
+
+                move(player, player->get_x(), player->get_y() + 1);
+                input_handler->set_delay(i);
+                break;
+            
+            // 6 (Keypad)
+            case 1073741918:
+
+                move(player, player->get_x() + 1, player->get_y());
+                input_handler->set_delay(i);
+                break;
+            
+            // 7 (Keypad)
+            case 1073741919:
+
+                move(player, player->get_x() - 1, player->get_y() - 1);
+                input_handler->set_delay(i);
+                break;
+            
+            // 8 (Keypad)
+            case 1073741920:
+
+                move(player, player->get_x(), player->get_y() - 1);
+                input_handler->set_delay(i);
+                break;
+            
+            // 9 (Keypad)
+            case 1073741921:
+
+                move(player, player->get_x() + 1, player->get_y() - 1);
+                input_handler->set_delay(i);
+                break;       
         }
     }
 }

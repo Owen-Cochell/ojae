@@ -60,7 +60,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     {
         window = SDL_CreateWindow(title, x, y, width, height, flags);
         renderer = SDL_CreateRenderer(window, -1, 0);
-        SDL_SetRenderDrawColor(renderer, 25, 25, 25, 255);
+        SDL_SetRenderDrawColor(renderer, 25, 25, 35, 255);
     }
 
     debugger->log("[OUT] Creating Handler Objects");
@@ -79,8 +79,9 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     player = new Player(input_handler, text_funnel, "Player", 'P');
 
     tilemap = new Tilemap(input_handler, text_funnel, player, 10, 10);
-    tilemap->fill_tilemap(new Tile("Floor", '.', true, 0));
+    tilemap->fill_tilemap(new Tile("Floor", '*', true, 0));
     tilemap->add(new Chest(text_funnel), 8, 8);
+    tilemap->add(new Tile("Mushroom", 'M', true, 1), 4, 4);
 
     // TilemapWindow
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
@@ -107,7 +108,6 @@ void Demo::execution_loop()
 
         update();
         handle_events();
-        //handle_keys();
         draw_all();
 
         frame_time = SDL_GetTicks64() - frame_start;
@@ -156,135 +156,19 @@ void Demo::handle_events()
                     running = false;
                     break;
 
-                case SDLK_d:
-
-                    input_handler->add_key(100);
-                    break;
-
-                case SDLK_a:
-
-                    input_handler->add_key(97);
-                    break;
-
-                case SDLK_w:
-
-                    input_handler->add_key(119);
-                    break;
-
-                case SDLK_s:
-
-                    input_handler->add_key(115);
-                    break;
-
-                case SDLK_EQUALS:
-                    input_handler->add_key(61);
-                    break;
-                
-                case SDLK_MINUS:
-                    input_handler->add_key(45);
-                    break;
-
                 default:
+
+                    input_handler->add_key(event.key.keysym.sym);
                     break;
             }
         }
 
         else if(event.type == SDL_KEYUP)
         {
-
-            switch(event.key.keysym.sym)
-            {
-                case SDLK_d:
-
-                    input_handler->remove_key(100);
-                    break;
-
-                case SDLK_a:
-
-                    input_handler->remove_key(97);
-                    break;
-
-                case SDLK_w:
-
-                    input_handler->remove_key(119);
-                    break;
-
-                case SDLK_s:
-
-                    input_handler->remove_key(115);
-                    break;
-
-                case SDLK_EQUALS:
-                    input_handler->remove_key(61);
-                    break;
-                
-                case SDLK_MINUS:
-                    input_handler->remove_key(45);
-                    break;
-
-                default:
-                    break;
-            }
+            input_handler->remove_key(event.key.keysym.sym);
         }
     }
 }
-
-/*
-void Demo::handle_keys()
-{
-    std::vector<int> keys = input_handler->get_active_keys();
-
-    for(int i : keys)
-    {
-
-        switch(i)
-        {
-            // w
-            case 119:
-
-                tilemap->move(player);
-                input_handler->set_delay(i, standard_input_delay);
-                break;
-
-            // s
-            case 115:
-                
-                tilemap->move(player); 
-                input_handler->set_delay(i, standard_input_delay);
-                break;
-
-            // w
-            case 100:
-
-                tilemap->move(player); 
-                input_handler->set_delay(i, standard_input_delay);
-                break;
-
-            // a
-            case 97:
-
-                tilemap->move(player); 
-                input_handler->set_delay(i, standard_input_delay);
-                break;
-
-            // =
-            case 61:
-                //main_window->scroll_down();
-                input_handler->set_delay(i, 100);
-                break;
-            
-            // -
-            case 45:
-                //main_window->scroll_up();
-                input_handler->set_delay(i, 100);
-                break;
-
-            default:
-                break;
-        }
-    }
-}
-*/
 
 void Demo::draw_all()
 {

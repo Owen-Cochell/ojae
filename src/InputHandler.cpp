@@ -32,9 +32,9 @@ void InputHandler::update()
         }
     }
 
-    for(char c : keys_to_delete)
+    for(int i : keys_to_delete)
     {
-        keys_delay.erase(c);
+        keys_delay.erase(i);
     }
 }
 
