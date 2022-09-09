@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <SDL2/SDL.h>
+#include <iostream>
 
 #include "TextRenderer.h"
 
@@ -9,6 +10,7 @@ TextRenderer::TextRenderer()
     font_height = 0;
     texture_handler = nullptr;
     debugger = nullptr;
+    texture = nullptr;
     start_x = 0;
     end_x = 0;
     start_y = 0;
@@ -21,13 +23,10 @@ TextRenderer::TextRenderer(TextureHandler* _texture_handler,
 
     texture_handler = _texture_handler;
     debugger = _debugger;
-    
-    // available_fonts.push_back(12);
 
-    font_width = 7;
-    font_height = 11;
-    path = "assets/characters_font12.png";
-    texture = texture_handler->load_texture(path.c_str());
+    texture = nullptr;
+
+    load_font("assets/ojae_font.json");
 
     this->start_x = start_x;
     this->end_x = end_x;
@@ -41,17 +40,50 @@ int TextRenderer::get_font_width() { return font_width; }
 
 int TextRenderer::get_font_height() { return font_height; }
 
-// bool TextRenderer::check_font(int font_size)
-// {
-//     /*
-//     Checks if a given font is available to use
+std::string TextRenderer::get_font_path() { return std::string(path); }
 
-//     :PARAM font_size: Font to check
-//     */
+void TextRenderer::load_font(std::string json_path)
+{
+    debugger->log("[OUT] Loading font from path: ", true, false);
+    debugger->log(json_path, false, true);
 
-//     return std::find(available_fonts.begin(), available_fonts.end(),
-//         font_size) != available_fonts.end();
-// }
+    if(!debugger->file_exists(json_path.c_str()))
+    {
+        debugger->log("[FAIL] TextRenderer.load_font -> Could not open file: ",
+            true, false);
+        debugger->log(json_path, false, true);
+        exit(0);
+    }
+
+    file_stream.open(json_path, std::ios::in);
+
+    if(file_stream.is_open())
+    {
+        file_stream >> j_loader;
+
+        file_stream.close();
+    }
+    file_stream.clear();
+
+    // Path to the png font file
+    std::string targ_path = j_loader.at("path");
+
+    if(!debugger->file_exists(targ_path.c_str()))
+    {
+        debugger->log("[FAIL] TextRenderer.load_font -> Could not open file: ",
+            true, false);
+        debugger->log(targ_path, false, true);
+        exit(0);
+    }
+
+    path = targ_path;
+
+    font_width = j_loader["width"];
+    font_height = j_loader["height"];
+
+    if(texture != nullptr) { SDL_DestroyTexture(texture); }
+    texture = texture_handler->load_texture(path.c_str());
+}
 
 void TextRenderer::add(char new_content, int x, int y)    
 {
@@ -74,23 +106,6 @@ void TextRenderer::clear()
 
     contents.clear();
 }
-
-// void TextRenderer::set_font(int new_font)
-// {
-//     /*
-//     Sets the font to the new font if it is supported 
-
-//     :PARAM new_font: New font to be set
-//     */
-
-//     if(check_font(new_font))
-//     {
-//         font = new_font;
-//         path = "assets/characters_font" + std::to_string(font) + ".png";
-//         SDL_DestroyTexture(texture);
-//         texture = texture_handler->load_texture(path.c_str());
-//     }
-// }
 
 void TextRenderer::draw()
 {

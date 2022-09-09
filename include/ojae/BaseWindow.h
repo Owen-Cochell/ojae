@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 
+#include "TextRenderer.h"
 #include "TextureHandler.h"
 
 /**
@@ -26,6 +27,11 @@ protected:
     SDL_Texture* border;
     SDL_Texture* border_selected;
 
+    TextRenderer* text_renderer; // Instance of the TextRenderer
+    SDL_Texture* font_texture; // Texture for the active font
+
+    const char* path; // Path to the font png
+
     TextureHandler* texture_handler; // Instance of the TextureHandler
     Debugger* debugger; // Instance of the Debugger
 
@@ -45,6 +51,15 @@ public:
     BaseWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
         int start_x, int end_x, int start_y, int end_y, bool taking_input);
     ~BaseWindow();
+
+    std::string get_font_path();
+
+    /**
+     * @brief Loads a new font into the TilemapWindow's TextRenderer
+     * 
+     * @param new_path Path to the new json font file
+    */
+    void load_font(const char* new_path);
 
     virtual void update();
     virtual void display();

@@ -18,7 +18,6 @@ private:
         // remove this string from the contents
     
     InputHandler* input_handler; // Instance of the InputHandler
-    TextRenderer* text_renderer; // Instance of the TextRenderer
 
     int life_time; // Amount of time each member of the contents will stay in 
         // in the contents, until it is removed automatically
@@ -33,7 +32,7 @@ public:
 
     void update() override;
     void display() override;
-    void add(std::string new_content);
+    void add(std::string new_content, bool new_line = true);
     void clear();
     // void set_font(int font_size);
 };

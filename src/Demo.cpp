@@ -26,7 +26,7 @@ TextWindow* text_window;
 
 Tilemap* tilemap;
 
-Player* player;
+Player* player; 
 
 Demo::Demo() 
 {
@@ -74,14 +74,13 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     text_window = new TextWindow(texture_handler, debugger,
         int(width / 2) + 1, width, 0, height, input_handler, 5000);
 
-    text_window->add("Content");
+    text_window->add("Content.MoreContent");
 
     player = new Player(input_handler, text_funnel, "Player", 'P');
 
     tilemap = new Tilemap(input_handler, text_funnel, player, 10, 10);
-    tilemap->fill_tilemap(new Tile("Floor", '*', true, 0));
+    tilemap->fill_tilemap(new Tile("Floor", '~', true, 0));
     tilemap->add(new Chest(text_funnel), 8, 8);
-    tilemap->add(new Tile("Mushroom", 'M', true, 1), 4, 4);
 
     // TilemapWindow
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
@@ -108,6 +107,7 @@ void Demo::execution_loop()
 
         update();
         handle_events();
+        handle_keys();
         draw_all();
 
         frame_time = SDL_GetTicks64() - frame_start;
@@ -166,6 +166,32 @@ void Demo::handle_events()
         else if(event.type == SDL_KEYUP)
         {
             input_handler->remove_key(event.key.keysym.sym);
+        }
+    }
+}
+
+void Demo::handle_keys()
+{
+    for(int i: input_handler->get_active_keys())
+    {
+
+        // f
+        if(i == 102)
+        {
+            text_window->add("Changing font");
+
+            if(tilemap_window->get_font_path() == "assets/ojae_font.png")
+            {
+                tilemap_window->load_font("assets/monocraft_font.json");
+                text_window->load_font("assets/monocraft_font.json");
+            }
+
+            else
+            {
+                tilemap_window->load_font("assets/ojae_font.json");
+                text_window->load_font("assets/ojae_font.json");
+            }
+            input_handler->set_delay(102, 350);
         }
     }
 }

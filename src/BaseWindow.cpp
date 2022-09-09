@@ -6,6 +6,7 @@ BaseWindow::BaseWindow()
     resize_window(0, 0, 0, 0);
     taking_input = false;
     texture_handler = nullptr;
+    text_renderer = nullptr;
     debugger = nullptr;
     border = texture_handler->load_texture("assets/border.png");
     border_selected = texture_handler->load_texture("assets/border_selected.png");
@@ -20,9 +21,24 @@ BaseWindow::BaseWindow(TextureHandler* _texture_handler, Debugger* _debugger,
     debugger = _debugger;
     border = texture_handler->load_texture("assets/border.png");
     border_selected = texture_handler->load_texture("assets/border_selected.png");
+    text_renderer = new TextRenderer(_texture_handler, _debugger,
+        this->start_x, this->end_x, this->start_y, this->end_y);
 }
 
-BaseWindow::~BaseWindow() {}
+BaseWindow::~BaseWindow() 
+{
+    delete text_renderer;
+}
+
+std::string BaseWindow::get_font_path() 
+{ 
+    return text_renderer->get_font_path(); 
+}   
+
+void BaseWindow::load_font(const char* new_path)
+{
+    text_renderer->load_font(new_path);
+}
 
 void BaseWindow::update() {}
 
@@ -46,8 +62,8 @@ void BaseWindow::draw_border()
 }
 
 /**
- * @brief Sets the size of the DisplayWindows rendering constraints to the 
- *  passed values and configures the Rects for the borders to accurately wrap
+ * @brief Sets the size of the BaseWindow's rendering constraints to the 
+ *  passed values, and configures the Rects for the borders to accurately wrap
  *  around the new size.
  * 
  * @param start_x X Coordinate where the screen will start

@@ -1,9 +1,27 @@
 0 ms: [OUT] Initializing SDL
-454 ms: [OUT] Creating Handler Objects
-455 ms: [OUT] Creating texture from path: assets/border.png
-458 ms: [OUT] Creating texture from path: assets/border_selected.png
-459 ms: [OUT] Creating texture from path: assets/characters_font12.png
-463 ms: [OUT] Creating texture from path: assets/border.png
-465 ms: [OUT] Creating texture from path: assets/border_selected.png
-467 ms: [OUT] Creating texture from path: assets/characters_font12.png
-469 ms: [OUT] Game Initialized
+452 ms: [OUT] Creating Handler Objects
+452 ms: [OUT] Creating texture from path: assets/border.png
+454 ms: [OUT] Creating texture from path: assets/border_selected.png
+455 ms: [OUT] Loading font from path: assets/ojae_font.json
+457 ms: [OUT] Creating texture from path: assets/ojae_font.png
+461 ms: [OUT] Creating texture from path: assets/border.png
+462 ms: [OUT] Creating texture from path: assets/border_selected.png
+463 ms: [OUT] Loading font from path: assets/ojae_font.json
+465 ms: [OUT] Creating texture from path: assets/ojae_font.png
+466 ms: [OUT] Game Initialized
+827 ms: [OUT] Loading font from path: assets/monocraft_font.json
+829 ms: [OUT] Creating texture from path: assets/monocraft_font.png
+830 ms: [OUT] Loading font from path: assets/monocraft_font.json
+831 ms: [OUT] Creating texture from path: assets/monocraft_font.png
+991 ms: [OUT] Loading font from path: assets/ojae_font.json
+992 ms: [OUT] Creating texture from path: assets/ojae_font.png
+994 ms: [OUT] Loading font from path: assets/ojae_font.json
+996 ms: [OUT] Creating texture from path: assets/ojae_font.png
+4875 ms: [OUT] Loading font from path: assets/monocraft_font.json
+4877 ms: [OUT] Creating texture from path: assets/monocraft_font.png
+4879 ms: [OUT] Loading font from path: assets/monocraft_font.json
+4880 ms: [OUT] Creating texture from path: assets/monocraft_font.png
+5089 ms: [OUT] Loading font from path: assets/ojae_font.json
+5090 ms: [OUT] Creating texture from path: assets/ojae_font.png
+5092 ms: [OUT] Loading font from path: assets/ojae_font.json
+5093 ms: [OUT] Creating texture from path: assets/ojae_font.png

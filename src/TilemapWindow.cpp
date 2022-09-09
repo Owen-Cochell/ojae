@@ -7,7 +7,6 @@ TilemapWindow::TilemapWindow() : BaseWindow()
 {
     tilemap = nullptr;
     input_handler = nullptr;
-    text_renderer = nullptr;
 }
 
 TilemapWindow::TilemapWindow(TextureHandler* _texture_handler,
@@ -17,19 +16,9 @@ TilemapWindow::TilemapWindow(TextureHandler* _texture_handler,
 {
     this->tilemap = tilemap;
     this->input_handler = input_handler;
-    text_renderer = new TextRenderer(_texture_handler, _debugger,
-        this->start_x, this->end_x, this->start_y, this->end_y);
 }
 
-TilemapWindow::~TilemapWindow()
-{
-    delete text_renderer;
-}
-
-// int TilemapWindow::get_font() { return text_renderer->get_font(); }
-
-/**
- * @brief Called once per frame. Renders the tilemap to the window */
+TilemapWindow::~TilemapWindow() {}
 
 void TilemapWindow::display()
 {
@@ -78,8 +67,3 @@ void TilemapWindow::display()
 
     text_renderer->draw();
 }
-
-// void TilemapWindow::set_font(int font_size)
-// {
-//     text_renderer->set_font(font_size);
-// }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "BaseWindow.h"
 #include "Tilemap.h"
 #include "InputHandler.h"
@@ -14,7 +16,6 @@ private:
     Tilemap* tilemap; // Instance of the tilemap
 
     InputHandler* input_handler; // Instance of the InputHandler
-    TextRenderer* text_renderer; // Instance of the TextRenderer
 
 
 public:
@@ -25,8 +26,5 @@ public:
         InputHandler* input_handler);
     ~TilemapWindow();
 
-    int get_font();
-
-    void display() override; 
-    // void set_font(int font_size);
+    void display() override;;
 };

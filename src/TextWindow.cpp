@@ -6,7 +6,6 @@ TextWindow::TextWindow() : BaseWindow()
 {
     life_time = 0;
     input_handler = nullptr;
-    text_renderer = nullptr;
 }
 
 TextWindow::TextWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
@@ -17,9 +16,6 @@ TextWindow::TextWindow(TextureHandler* _texture_handler, Debugger* _debugger,
 
     this->life_time = life_time;
     this->input_handler = input_handler;
-
-    text_renderer = new TextRenderer(_texture_handler, _debugger, 
-        this->start_x, this->end_x, this->start_y, this->end_y);
 }
 
 TextWindow::~TextWindow()
@@ -89,8 +85,10 @@ void TextWindow::display()
     text_renderer->draw();
 }
 
-void TextWindow::add(std::string new_content)
+void TextWindow::add(std::string new_content, bool new_line)
 {
+    if(new_line) { new_content += '\n'; }
+
     contents.insert(contents.begin(), 
         {new_content, SDL_GetTicks64() + life_time});
 }
