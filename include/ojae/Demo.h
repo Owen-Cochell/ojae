@@ -29,8 +29,6 @@ private:
     int screen_height; // Height of the screen
     int standard_input_delay; // Standard delay for generic key input
 
-    int count = 0;
-
 public:
 
     static SDL_Renderer* renderer;
