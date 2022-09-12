@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <iostream>
+
 #include <fstream>
 
 #include "Tilemap.h"
@@ -73,9 +73,9 @@ bool Tilemap::bound_check(int x, int y)
 
 void Tilemap::handle_keys()
 {
-    for(int i : input_handler->get_active_keys())
+    for(Key* key : input_handler->get_active_keys())
     {
-        switch(i)
+        switch(key->id)
         {
             // // w
             // case 119:
@@ -105,67 +105,96 @@ void Tilemap::handle_keys()
             //     input_handler->set_delay(i);
             //     break;
 
+            // UP ARROW KEY 
+            case SDLK_UP:
+                
+                move(player, player->get_x(), player->get_y() - 1);
+                input_handler->set_delay(key->id);
+                break;
+
+            // Right ARROW KEY
+            case SDLK_RIGHT:
+
+                move(player, player->get_x() + 1, player->get_y());
+                input_handler->set_delay(key->id);
+                break;
+            
+            // DOWN ARROW KEY
+            case SDLK_DOWN:
+                
+                move(player, player->get_x(), player->get_y() + 1);
+                input_handler->set_delay(key->id);
+                break;
+
+            // LEFT ARROW KEY 
+            case SDLK_LEFT:
+
+                move(player, player->get_x() - 1, player->get_y());
+                input_handler->set_delay(key->id);
+                break;
+
+
             // 1 (Keypad)
             case 1073741913:
 
                 move(player, player->get_x() - 1, player->get_y() + 1);
-                input_handler->set_delay(i);
+                input_handler->set_delay(key->id);
                 break;
             
             // 2 (Keypad)
             case 1073741914:
 
                 move(player, player->get_x(), player->get_y() + 1);
-                input_handler->set_delay(i);
+                input_handler->set_delay(key->id);
                 break;
             
             // 3 (Keypad)
             case 1073741915:
 
                 move(player, player->get_x() + 1, player->get_y() + 1);
-                input_handler->set_delay(i);
+                input_handler->set_delay(key->id);
                 break;
             
             // 4 (Keypad)
             case 1073741916:
 
                 move(player, player->get_x() - 1, player->get_y());
-                input_handler->set_delay(i);
+                input_handler->set_delay(key->id);
                 break;
 
             // 5 (Keypad)
             case 1073741917:
 
                 move(player, player->get_x(), player->get_y() + 1);
-                input_handler->set_delay(i);
+                input_handler->set_delay(key->id);
                 break;
             
             // 6 (Keypad)
             case 1073741918:
 
                 move(player, player->get_x() + 1, player->get_y());
-                input_handler->set_delay(i);
+               input_handler->set_delay(key->id);
                 break;
             
             // 7 (Keypad)
             case 1073741919:
 
                 move(player, player->get_x() - 1, player->get_y() - 1);
-                input_handler->set_delay(i);
+                input_handler->set_delay(key->id);
                 break;
             
             // 8 (Keypad)
             case 1073741920:
 
                 move(player, player->get_x(), player->get_y() - 1);
-                input_handler->set_delay(i);
+                input_handler->set_delay(key->id);
                 break;
             
             // 9 (Keypad)
             case 1073741921:
 
                 move(player, player->get_x() + 1, player->get_y() - 1);
-                input_handler->set_delay(i);
+                input_handler->set_delay(key->id);
                 break;       
         }
     }
@@ -289,7 +318,11 @@ void Tilemap::add(Entity* entity, int x, int y)
     entity->set_position(x, y);
 }
 
-void Tilemap::move(Tile* tile, int x_amount, int y_amount) {}
+void Tilemap::move(Tile* tile, int x, int y) 
+{
+    remove(tile);
+    add(tile, x, y);
+}
 
 void Tilemap::move(Entity* entity, int x, int y)
 {

@@ -6,17 +6,61 @@
 
 #include <SDL2/SDL.h>
 
+
+/**
+ * @brief 
+ * 
+ */
+struct Key
+{
+    int id; // The int this key represents
+    
+    /**
+     * @brief Number of frames this key has been pressed without being released
+     */
+    int frames_active;
+
+    /**
+     * @brief // Number of frames this key will be not be allowed to be used
+     * until
+     */
+    int frames_delay; 
+
+    Key() 
+    {
+        id = 0;
+        frames_active = 0;
+        frames_delay = 0;
+    }
+    
+    Key(int _id) 
+    {
+        id = _id;
+        frames_active = 0;
+        frames_delay = 0;
+    }
+    
+    ~Key() {}
+
+};
+
 class InputHandler
 {
 
 private:
 
-    static std::vector<int> keys; // Keys that are currently active
+    // std::vector<int> keys; // Keys that are currently active
+
+    // /**
+    //  * @brief Frame delay before the keys will 
+    //  * be allowed to be used again */
+    // std::map<int, Uint64> keys_delay; 
 
     /**
-     * @brief Frame delay before the keys will 
-     * be allowed to be used again */
-    static std::map<int, Uint64> keys_delay; 
+     * @brief Key values that are pressed to their respective key objects
+     */
+    std::map<int, Key*> keys;
+
 
 public:
 
@@ -24,14 +68,19 @@ public:
     ~InputHandler();
 
     void update();
-    void set_delay(int i, int miliseconds = 200);
+    void set_delay(int i, int frames = 10);
+
+    /**
+     * @brief Adds a key to the key map if it is not already present
+     * 
+     * @param key Key to add
+     */
     void add_key(int key);
     void remove_key(int key);
 
-    std::vector<int> get_active_keys();
+    std::vector<Key*> get_active_keys();
 
 };
-
 
 typedef std::vector<std::function<void(SDL_Event&)>> Callbacks;
 

@@ -57,9 +57,9 @@ public:
     /**
      * @brief Loads a new font into the TilemapWindow's TextRenderer
      * 
-     * @param new_path Path to the new json font file
+     * @param path Path to the new json font file
     */
-    void load_font(const char* new_path);
+    void load_font(const char* path);
 
     virtual void update();
     virtual void display();

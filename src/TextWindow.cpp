@@ -1,6 +1,6 @@
 #include "TextWindow.h"
 
-#include <iostream>
+
 
 TextWindow::TextWindow() : BaseWindow()
 {
@@ -11,7 +11,7 @@ TextWindow::TextWindow() : BaseWindow()
 TextWindow::TextWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
     int start_x, int end_x, int start_y, int end_y, 
     InputHandler* input_handler, int life_time) : 
-    BaseWindow(_texture_handler, _debugger, start_x, end_x, start_y, end_y, true)
+    BaseWindow(_texture_handler, _debugger, start_x, end_x, start_y, end_y, false)
 {
 
     this->life_time = life_time;
@@ -48,7 +48,8 @@ void TextWindow::display()
     Loops throught the contents, and adds text to the text renderer to render 
     to the screen
     */
-
+    
+    draw_border();
     text_renderer->clear();
 
     int x_pos = start_x;

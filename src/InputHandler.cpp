@@ -4,110 +4,169 @@
 
 #include "InputHandler.h"
 
-std::vector<int> InputHandler::keys;
-std::map<int, Uint64> InputHandler::keys_delay;
-
 SDL_Event event;
 
 InputHandler::InputHandler() {}
 InputHandler::~InputHandler() {}
 
-void InputHandler::update()
+void InputHandler::update() 
 {
-    /*
-    Called once per frame. Checks if any key equals or exceed its timestamp
-    for a delayed input. If so, it removes the key from the delayed map
-    */
 
-    Uint64 current_time = SDL_GetTicks64();
-
-    std::vector<int> keys_to_delete;
-
-    for(std::map<int,Uint64>::iterator it = keys_delay.begin();
-        it != keys_delay.end(); it++)
+    // Iterate through each Key and deduct 1 frame from its delay
+    for(std::map<int,Key*>::iterator it = keys.begin(); it != keys.end(); it++)
     {
-        if(it->second <= current_time)
+
+        it->second->frames_delay -= 1;
+        if(it->second->frames_delay < 0)
         {
-            keys_to_delete.push_back(it->first);
+            it->second->frames_delay = 0;
+        }
+    }
+}
+
+void InputHandler::set_delay(int i, int frames) 
+{
+    if(keys.count(i) != 0)
+    {   
+        keys[i]->frames_delay = frames;
+    }
+}
+
+void InputHandler::add_key(int key) 
+{
+    if(keys.count(key) == 0)
+    {
+        keys[key] = new Key(key);
+    }
+}
+
+void InputHandler::remove_key(int key) 
+{
+    if(keys.count(key) != 0)
+    {
+        delete keys[key];
+        keys.erase(key);
+    }
+}
+
+std::vector<Key*> InputHandler::get_active_keys() 
+{
+    std::vector<Key*> available_keys;
+
+    for(std::map<int, Key*>::iterator it = keys.begin(); it != keys.end(); 
+        it++)
+    {
+        if(it->second->frames_delay == 0)
+        {
+            available_keys.push_back(it->second);
         }
     }
 
-    for(int i : keys_to_delete)
-    {
-        keys_delay.erase(i);
-    }
+    return available_keys;
 }
 
-void InputHandler::set_delay(int i, int miliseconds)
-{
-    /*
-    Sets the timestamp for delayed input for the specified character
 
-    :PARAM c: Target Character
-    :PARAM miliseconds: Number of miliseconds 
-    */
+// void InputHandler::update()
+// {
+//     /*
+//     Called once per frame. Checks if any key equals or exceed its timestamp
+//     for a delayed input. If so, it removes the key from the delayed map
+//     */
 
-    keys_delay[i] = SDL_GetTicks64() + miliseconds;
-}
+//     Uint64 current_time = SDL_GetTicks64();
 
-void InputHandler::add_key(int key)
-{
-    /*
-    Adds a key to our vector of active keys if the keys is not already present
-    in the vector
+//     std::vector<int> keys_to_delete;
 
-    :PARAM key: Key to add
-    */
+//     for(std::map<int,Uint64>::iterator it = keys_delay.begin();
+//         it != keys_delay.end(); it++)
+//     {
+//         if(it->second <= current_time)
+//         {
+//             keys_to_delete.push_back(it->first);
+//         }
+//     }
 
-    //If we did not find the key present in keys 
-    if(std::find(keys.begin(), keys.end(), key) == keys.end())
-    {
-        keys.push_back(key);
-    }
-}
+//     for(int i : keys_to_delete)
+//     {
+//         keys_delay.erase(i);
+//     }
+// }
 
-void InputHandler::remove_key(int key)
-{
-    /*
-    Removes a key from the vector of active keys if it exists. This will also
-    remove the key from the vector of keys with input delay if it exists in the
-    map
+// void InputHandler::set_delay(int i, int miliseconds)
+// {
+//     /*
+//     Sets the timestamp for delayed input for the specified character
 
-    :PARAM key: Key to remove
-    */
+//     :PARAM c: Target Character
+//     :PARAM miliseconds: Number of miliseconds 
+//     */
 
-    // If the user has stopped pressing the key, we want to remove the delay
-    // from their next key press of this key so they can tap as fast as they 
-    // want to input this key without being blocked by a delay
-    if(keys_delay.count(key) != 0){
-        keys_delay.erase(key);
-    }
+//     keys_delay[i] = SDL_GetTicks64() + miliseconds;
+// }
 
-    keys.erase(std::remove(keys.begin(), keys.end(), key), keys.end());
-}
+// void InputHandler::add_key(int key)
+// {
+//     /*
+//     Adds a key to our vector of active keys if the keys is not already present
+//     in the vector
 
-std::vector<int> InputHandler::get_active_keys() 
-{ 
-    /*
-    Loops through the vector of actively pressed keys, and returns a vector 
-    of active keys depending on if they do not have a frame delay attached to 
-    them
+//     :PARAM key: Key to add
+//     */
 
-    :RETURN: Keys that do not have a frame delay
-    */
+//     //If we did not find the key present in keys 
+//     if(std::find(keys.begin(), keys.end(), key) == keys.end())
+//     {
+//         keys.push_back(key);
+//     }
+// }
 
-    std::vector<int> active_keys;
+// void InputHandler::remove_key(int key)
+// {
+//     /*
+//     Removes a key from the vector of active keys if it exists. This will also
+//     remove the key from the vector of keys with input delay if it exists in the
+//     map
 
-    for(int key: keys)
-    {
-        if(keys_delay.count(key) == 0)
-        {
-            active_keys.push_back(key);
-        }
-    }
+//     :PARAM key: Key to remove
+//     */
 
-    return active_keys; 
-};
+//     // If the user has stopped pressing the key, we want to remove the delay
+//     // from their next key press of this key so they can tap as fast as they 
+//     // want to input this key without being blocked by a delay
+//     if(keys_delay.count(key) != 0){
+//         keys_delay.erase(key);
+//     }
+
+//     keys.erase(std::remove(keys.begin(), keys.end(), key), keys.end());
+// }
+
+// std::vector<int> InputHandler::get_active_keys() 
+// { 
+//     /*
+//     Loops through the vector of actively pressed keys, and returns a vector 
+//     of active keys depending on if they do not have a frame delay attached to 
+//     them
+
+//     :RETURN: Keys that do not have a frame delay
+//     */
+
+//     std::vector<int> active_keys;
+
+//     for(int key: keys)
+//     {
+//         if(keys_delay.count(key) == 0)
+//         {
+//             active_keys.push_back(key);
+//         }
+//     }
+
+//     return active_keys; 
+// };
+
+
+// Owen 
+//---------------------------------------------------------
+
 
 InputTemp::InputTemp() {}
 InputTemp::~InputTemp() {}

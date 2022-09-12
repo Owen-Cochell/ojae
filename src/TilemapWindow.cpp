@@ -31,16 +31,6 @@ void TilemapWindow::display()
     int font_width = text_renderer->get_font_width();
     int font_height = text_renderer->get_font_height();
 
-    // debugger->log("[OUT] X Pos : ", true, false);
-    // debugger->log(x_pos, false);
-    // debugger->log("[OUT] Y Pos : ", true, false);
-    // debugger->log(y_pos, false);
-    // debugger->log("[OUT] Font Width: ", true, false);
-    // debugger->log(font_width, false);
-    // debugger->log("[OUT] Font Height: ", true, false);
-    // debugger->log(font_height, false);
-
-
     for(char c : tilemap->get_display())
     {
         
@@ -52,13 +42,6 @@ void TilemapWindow::display()
         }
 
         text_renderer->add(c, x_pos, y_pos);
-        // debugger->log("[OUT] Adding character ", true, false);
-        // debugger->log(c, false, false);
-        // debugger->log(" at position: (", false, false);
-        // debugger->log(x_pos, false, false);
-        // debugger->log(", ", false, false);
-        // debugger->log(y_pos, false, false);
-        // debugger->log(")", false);
 
         x_pos += font_width * 3; // Multiplied by 3 for the multiple of 2 for 
         // text size, plsu a multiple of 1.5 to equally space characters out

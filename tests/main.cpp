@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL.h>
-#include <iostream>
+
 #include <fstream>
 //#include <wtypes.h>
 
@@ -32,18 +32,32 @@ int main(int argc, char* argv[])
     file_stream.open("OutputLog.txt", std::ios::out);
     file_stream.close();
 
-    int native_height = 1080;
-    int native_width = 1920;
+    nlohmann::json j_loader;
+
+    file_stream.open("assets/screen_properties.json");
+
+    if(file_stream.is_open())
+    {
+        file_stream >> j_loader;
+        file_stream.close();
+    }
+    file_stream.clear();
+
+    // int native_height = 0;
+    // int native_width = 0;
 
     //GetDesktopResolution(native_width, native_height);
 
-    int width = native_width;
-    int height = native_height;
+    int width = j_loader["width"];
+    int height = j_loader["height"];
+    int r = j_loader["r_value"];
+    int g = j_loader["g_value"];
+    int b = j_loader["b_value"];
     
     Demo demo;
 
     demo.init("Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-        width, height, false);
+        width, height, false, r, g, b);
     demo.start();
 
     return 0;

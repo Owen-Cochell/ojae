@@ -1,5 +1,5 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 #include "Demo.h"
 #include "Objects/AllObjects.h"
@@ -28,6 +28,8 @@ Tilemap* tilemap;
 
 Player* player; 
 
+// Constructors/Deconstructors
+
 Demo::Demo() 
 {
     screen_width = 0;
@@ -35,14 +37,67 @@ Demo::Demo()
     frame_start = 0;
     frame_time = 0;
     standard_input_delay = 200;
+    font_index = 0;
+    debugger = new Debugger("OutputLog.txt");
+    get_available_fonts();
 } 
 
 Demo::~Demo() {}
 
-void Demo::init(const char* title, int x, int y, int width, int height,
-    bool fullscreen)
+// Private Members
+
+void Demo::get_available_fonts()
 {
-    debugger = new Debugger("OutputLog.txt");
+
+    const char* path = "assets/available_fonts.json";
+
+    // If the file does not exist
+    if(!debugger->file_exists(path))
+    {
+        debugger->log("[FAIL] Demo.get_available_fonts() -> Could not open"
+            " file: ", true, false);
+        debugger->log(path, false, true);
+        debugger->log("[OUT] Exiting...");
+        exit(0);
+    }
+
+    // Load the fonts into the engine
+    file_stream.open(path, std::ios::in);
+
+    if(file_stream.is_open())
+    {
+        file_stream >> j_loader;
+
+        file_stream.close();
+    }
+
+    file_stream.clear();
+
+    for(nlohmann::json::iterator it = j_loader.begin(); it != j_loader.end(); it++)
+    {
+        std::string value = it.value();
+
+        debugger->log("[OUT] Getting font: ", true, false);
+        debugger->log(value, false, true);
+        available_fonts.push_back(value);
+        font_paths[value] = "assets/" + value  + "_font.json";
+    }
+
+    file_stream.clear();
+
+    if(available_fonts.size() == 0)
+    {
+        debugger->log("[FAIL] No available fonts to use");
+        debugger->log("[OUT] Exiting...");
+        exit(0);
+    }
+}
+
+// Public Members
+
+void Demo::init(const char* title, int x, int y, int width, int height,
+    bool fullscreen, int r, int g, int b)
+{
 
     debugger->log("[OUT] Initializing SDL");
 
@@ -60,7 +115,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     {
         window = SDL_CreateWindow(title, x, y, width, height, flags);
         renderer = SDL_CreateRenderer(window, -1, 0);
-        SDL_SetRenderDrawColor(renderer, 25, 25, 35, 255);
+        SDL_SetRenderDrawColor(renderer, r, g, b, 255);
     }
 
     debugger->log("[OUT] Creating Handler Objects");
@@ -71,10 +126,11 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     text_funnel = new TextFunnel();
 
     // TextWindow
-    text_window = new TextWindow(texture_handler, debugger,
-        int(width / 2) + 1, width, 0, height, input_handler, 5000);
+    // text_window = new TextWindow(texture_handler, debugger,
+    //     int(width / 2) + 1, width, 0, height, input_handler, 5000);
 
-    text_window->add("Content.MoreContent");
+    text_window = new TextWindow(texture_handler,debugger,
+        0, width, int(height / 2) + 1, height, input_handler,5000);
 
     player = new Player(input_handler, text_funnel, "Player", 'P');
 
@@ -83,8 +139,11 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     tilemap->add(new Chest(text_funnel), 8, 8);
 
     // TilemapWindow
+    // tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
+    //     0, width / 2, 0, height, input_handler);
+
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
-        0, width / 2, 0, height, input_handler);
+        0, width, 0, int(height / 2), input_handler);
 
     tilemap->add(player, 3, 3);
 
@@ -172,26 +231,21 @@ void Demo::handle_events()
 
 void Demo::handle_keys()
 {
-    for(int i: input_handler->get_active_keys())
+    for(Key* key: input_handler->get_active_keys())
     {
-
         // f
-        if(i == 102)
+        if(key->id == 102)
         {
-            text_window->add("Changing font");
+            font_index = (font_index + 1) % available_fonts.size();
+            const char* path = 
+                font_paths[available_fonts.at(font_index)].c_str();
 
-            if(tilemap_window->get_font_path() == "assets/ojae_font.png")
-            {
-                tilemap_window->load_font("assets/monocraft_font.json");
-                text_window->load_font("assets/monocraft_font.json");
-            }
+            text_window->add("Loading Font: ", false);
+            text_window->add(available_fonts.at(font_index), false);
 
-            else
-            {
-                tilemap_window->load_font("assets/ojae_font.json");
-                text_window->load_font("assets/ojae_font.json");
-            }
-            input_handler->set_delay(102, 350);
+            text_window->load_font(path);
+            tilemap_window->load_font(path);
+            input_handler->set_delay(102, 30);
         }
     }
 }

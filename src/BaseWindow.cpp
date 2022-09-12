@@ -35,9 +35,9 @@ std::string BaseWindow::get_font_path()
     return text_renderer->get_font_path(); 
 }   
 
-void BaseWindow::load_font(const char* new_path)
+void BaseWindow::load_font(const char* path)
 {
-    text_renderer->load_font(new_path);
+    text_renderer->load_font(path);
 }
 
 void BaseWindow::update() {}
@@ -47,18 +47,18 @@ void BaseWindow::display() {}
 void BaseWindow::draw_border()
 {
 
-    SDL_Texture* targ_text = border;
+    SDL_Texture* targ_texture = border;
 
     if(taking_input)
     {
-        targ_text = border_selected;
+        targ_texture = border_selected;
     }
     
     //Draw Borders
-    texture_handler->draw(targ_text, border_src, top_border);
-    texture_handler->draw(targ_text, border_src, right_border);
-    texture_handler->draw(targ_text, border_src, bottom_border);
-    texture_handler->draw(targ_text, border_src, left_border);
+    texture_handler->draw(targ_texture, border_src, top_border);
+    texture_handler->draw(targ_texture, border_src, right_border);
+    texture_handler->draw(targ_texture, border_src, bottom_border);
+    texture_handler->draw(targ_texture, border_src, left_border);
 }
 
 /**
@@ -73,7 +73,6 @@ void BaseWindow::draw_border()
  */
 void BaseWindow::resize_window(int start_x, int end_x, int start_y, int end_y)
 {
-
     border_size = 8;
 
     // Reset window dimensions with respect for border room

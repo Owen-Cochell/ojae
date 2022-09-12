@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <SDL2/SDL.h>
-#include <iostream>
+
 
 #include "TextRenderer.h"
 
