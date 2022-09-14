@@ -56,6 +56,7 @@ public:
     void init(const char* title, int x, int y, int width, int height, 
         bool fullscreen, int r, int g, int b);
     void start();
+    void get_colors(const char* path);
     void execution_loop();
     void update();
     void handle_events();

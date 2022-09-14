@@ -29,6 +29,11 @@ private:
 
     std::string path; // Path to the font png
 
+    /**
+     * @brief Color applied to printed text, leave empty for default text
+     */
+    std::string color;
+
     int font_width; // Width in pixels of the current font
     int font_height; // Height in pixels of the current font
 
@@ -60,6 +65,16 @@ public:
      * @param json_path Path to the json font file 
      * */
     void load_font(std::string json_path);
+
+    /**
+     * @brief Sets the color for printed text 
+     * 
+     * @param _color Name of the color
+     */
+    void set_color(std::string _color)
+    {
+        color = _color;
+    }
 
     /**
      * @brief Adds a character to a specific coordinate on the screen

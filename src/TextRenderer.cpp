@@ -20,7 +20,6 @@ TextRenderer::TextRenderer()
 TextRenderer::TextRenderer(TextureHandler* _texture_handler, 
     Debugger* _debugger, int start_x, int end_x, int start_y, int end_y) 
 {
-
     texture_handler = _texture_handler;
     debugger = _debugger;
 
@@ -83,8 +82,6 @@ void TextRenderer::load_font(std::string json_path)
 
     if(texture != nullptr) { SDL_DestroyTexture(texture); }
     texture = texture_handler->load_texture(path.c_str());
-
-    // SDL_SetTextureColorMod(texture, 255, 0, 0);
 }
 
 void TextRenderer::add(char new_content, int x, int y)    
@@ -117,7 +114,6 @@ void TextRenderer::draw()
 
     for(std::pair<std::pair<int,int>, char> element : contents)
     {
-        //display_int_pair(element.first, &element.second);
 
         char c = element.second;
 
@@ -135,7 +131,7 @@ void TextRenderer::draw()
         dest.w = font_width * 2;
         dest.h = font_height * 2;
 
-        texture_handler->draw(texture, src, dest); // Draw the character
+        texture_handler->draw(texture, src, dest, color); // Draw the character
     }  
 }
 

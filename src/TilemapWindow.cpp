@@ -1,4 +1,5 @@
 #include <map>
+#include <iostream>
 
 #include "TilemapWindow.h"
 
@@ -24,6 +25,7 @@ void TilemapWindow::display()
 {
 
     draw_border();
+
     text_renderer->clear();
 
     int x_pos = start_x;

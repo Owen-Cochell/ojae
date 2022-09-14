@@ -41,8 +41,10 @@ Demo::Demo()
     standard_input_delay = 200;
     font_index = 0;
     debugger = new Debugger("OutputLog.txt");
+    input_handler = new InputHandler();
+    text_funnel = new TextFunnel();
     get_available_fonts();
-} 
+}
 
 Demo::~Demo() {}
 
@@ -120,18 +122,17 @@ void Demo::init(const char* title, int x, int y, int width, int height,
         SDL_SetRenderDrawColor(renderer, r, g, b, 255);
     }
 
-    debugger->log("[OUT] Creating Handler Objects");
-
     texture_handler = new TextureHandler(renderer, debugger);
+    get_colors("assets/colors.json");
 
-    input_handler = new InputHandler();
-    text_funnel = new TextFunnel();
+    debugger->log("[OUT] Creating Handler Objects");
 
     // TextWindow
      text_window = new TextWindow(texture_handler, debugger,
          int(width / 2) + 1, width, 0, height, input_handler, 300);
 
     text_window->load_font(font_paths[available_fonts.at(font_index)].c_str());
+    text_window->set_color("Green");
 
     player = new Player(input_handler, text_funnel, "Player", 'P');
 
@@ -143,11 +144,12 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
         0, width / 2, 0, height, input_handler);
 
-    text_window->load_font(font_paths[available_fonts.at(font_index)].c_str());
+    tilemap_window->load_font(font_paths[available_fonts.at(font_index)].c_str());
+    tilemap_window->set_color("Blue");
 
     tilemap->add(player, 3, 3);
 
-    text_window->add("Text");
+    text_window->add("Text", "Blue");
 
     debugger->log("[OUT] Game Initialized");
 }
@@ -156,6 +158,40 @@ void Demo::start()
 {
     running = true;
     execution_loop();
+}
+
+void Demo::get_colors(const char* path)
+{
+
+    if(!debugger->file_exists(path))
+    {
+        debugger->log("[FAIL] Demo.load_colors() -> Could not open file: ", 
+            true, false);
+        debugger->log(path, false, true);
+        debugger->log("[OUT] Exiting...");
+        exit(0);
+    }
+
+    file_stream.open(path, std::ios::in);
+
+    if(file_stream.is_open())
+    {
+        file_stream >> j_loader;
+
+        file_stream.close();
+    }
+
+    file_stream.clear();
+
+    for(nlohmann::json::iterator it = j_loader.begin(); it != j_loader.end(); 
+        it++)
+    {
+        debugger->log("[OUT] Loading Color: ", true, false);
+        debugger->log(std::string(it.key()), false, true);
+
+        texture_handler->add_color(new Color(it.key(), it.value()[0], 
+            it.value()[1], it.value()[2]));
+    }
 }
 
 /**
@@ -194,7 +230,7 @@ void Demo::update()
 
     for(std::string element : text_funnel->get_contents())
     {
-        text_window->add(element);
+        text_window->add(element, "Blue");
     }
 
     text_funnel->clear();
@@ -243,10 +279,10 @@ void Demo::handle_keys()
             const char* targ_path = 
                 font_paths[available_fonts.at(font_index)].c_str();
 
-            // text_window->add("Loading Font: ", false);
-            // text_window->add(available_fonts.at(font_index), true);
+            text_window->add("Loading Font: ", "Blue", false);
+            text_window->add(available_fonts.at(font_index), "Blue", true);
 
-            // text_window->load_font(targ_path);
+            text_window->load_font(targ_path);
             tilemap_window->load_font(targ_path);
             input_handler->set_delay(102, 30);
         }
@@ -256,7 +292,7 @@ void Demo::handle_keys()
 void Demo::draw_all()
 {
     SDL_RenderClear(renderer);
-   
+
     tilemap_window->display();
     text_window->display();
 

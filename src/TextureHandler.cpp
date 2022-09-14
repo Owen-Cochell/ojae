@@ -1,4 +1,4 @@
-
+#include <iostream>
 #include <fstream>
 
 #include "TextureHandler.h"
@@ -53,7 +53,34 @@ SDL_Texture* TextureHandler::load_texture(const char* path)
     return texture;
 }
 
-void TextureHandler::draw(SDL_Texture* texture, SDL_Rect src, SDL_Rect dest, SDL_RendererFlip flip)
+void TextureHandler::add_color(Color* color)
 {
-    SDL_RenderCopyEx(renderer, texture, &src, &dest, 0, 0, flip);
+    colors.emplace(color->get_name(), color);
+}
+
+void TextureHandler::draw(SDL_Texture* texture, SDL_Rect& src, SDL_Rect& dest,
+    std::string color)
+{
+
+    // If an empty string was not passed
+    if(color.size() != 0)
+    {
+
+        // If the color doesn't exist in the registered colors map
+        if(colors.count(color) == 0)
+        {
+            debugger->log("[FAIL] TextureHandler.draw() -> Color not "
+                "registerd: ", true, false);
+            debugger->log(color, false, true);
+            debugger->log("[OUT] Exiting...");
+            exit(0);
+        }
+
+        Color* targ_color = colors[color];
+
+        SDL_SetTextureColorMod(texture, targ_color->get_r(), 
+            targ_color->get_g(),targ_color->get_b());
+    }
+
+    SDL_RenderCopy(renderer, texture, &src, &dest);
 }

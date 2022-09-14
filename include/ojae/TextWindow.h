@@ -5,32 +5,7 @@
 #include "TextRenderer.h"
 #include "TextureHandler.h"
 #include "Debugger.h"
-
-
-struct Text
-{
-    std::string content; // Contents of the text
-
-    /**
-     * @brief // Number of frames this key will be rendered until removed from
-     * the contents
-     */
-    int life_time; 
-
-    Text() 
-    {
-        life_time = 0;
-    }
-
-    Text(std::string _content, int _life_time)
-    {
-        content = _content;
-        life_time = _life_time;
-    }
-
-    ~Text() {}
-};
-
+#include "Text.h"
 
 class TextWindow : public BaseWindow
 {
@@ -62,7 +37,7 @@ public:
 
     void update() override;
     void display() override;
-    void add(std::string new_content, bool new_line = true);
+    void add(std::string new_content, std::string color, bool new_line = true);
     void clear();
     // void set_font(int font_size);
 };

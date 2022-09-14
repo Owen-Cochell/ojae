@@ -29,11 +29,11 @@ protected:
 
     TextRenderer* text_renderer; // Instance of the TextRenderer
     SDL_Texture* font_texture; // Texture for the active font
-
-    const char* path; // Path to the font png
-
+    
     TextureHandler* texture_handler; // Instance of the TextureHandler
     Debugger* debugger; // Instance of the Debugger
+
+    const char* path; // Path to the font png
 
     int border_size; // Size of the border of the windows
 
@@ -60,6 +60,13 @@ public:
      * @param path Path to the new json font file
     */
     void load_font(const char* path);
+
+    /**
+     * @brief Sets the color of printed text in this BaseWindow
+     * 
+     * @param _color Name of the color
+     */
+    void set_color(std::string _color);
 
     virtual void update();
     virtual void display();
