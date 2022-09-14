@@ -103,6 +103,11 @@ void TextRenderer::clear()
     Clears the contents
     */
 
+    for(Character* c: contents)
+    {
+        delete c;
+    }
+
     contents.clear();
 }
 

@@ -1,66 +1,22 @@
 0 ms: [OUT] Getting font: monocraft
-1 ms: [OUT] Getting font: ojae
+0 ms: [OUT] Getting font: ojae
 1 ms: [OUT] Initializing SDL
-252 ms: [OUT] Loading Color: Blue
-252 ms: [OUT] Loading Color: Green
-253 ms: [OUT] Loading Color: LBrown
-253 ms: [OUT] Loading Color: Red
-254 ms: [OUT] Loading Color: White
-255 ms: [OUT] Creating Handler Objects
-256 ms: [OUT] Creating texture from path: assets/border.png
-257 ms: [OUT] Creating texture from path: assets/border_selected.png
-258 ms: [OUT] Loading font from path: assets/ojae_font.json
-259 ms: [OUT] Creating texture from path: assets/ojae_font.png
-261 ms: [OUT] Loading font from path: assets/monocraft_font.json
-264 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-268 ms: [OUT] Creating texture from path: assets/border.png
-269 ms: [OUT] Creating texture from path: assets/border_selected.png
-270 ms: [OUT] Loading font from path: assets/ojae_font.json
-271 ms: [OUT] Creating texture from path: assets/ojae_font.png
-272 ms: [OUT] Loading font from path: assets/monocraft_font.json
-273 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-273 ms: [OUT] Game Initialized
-5374 ms: [OUT] Loading font from path: assets/ojae_font.json
-5375 ms: [OUT] Creating texture from path: assets/ojae_font.png
-5376 ms: [OUT] Loading font from path: assets/ojae_font.json
-5377 ms: [OUT] Creating texture from path: assets/ojae_font.png
-8119 ms: [OUT] Loading font from path: assets/monocraft_font.json
-8119 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-8121 ms: [OUT] Loading font from path: assets/monocraft_font.json
-8122 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-8718 ms: [OUT] Loading font from path: assets/ojae_font.json
-8719 ms: [OUT] Creating texture from path: assets/ojae_font.png
-8720 ms: [OUT] Loading font from path: assets/ojae_font.json
-8721 ms: [OUT] Creating texture from path: assets/ojae_font.png
-10022 ms: [OUT] Loading font from path: assets/monocraft_font.json
-10023 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-10024 ms: [OUT] Loading font from path: assets/monocraft_font.json
-10025 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-10237 ms: [OUT] Loading font from path: assets/ojae_font.json
-10238 ms: [OUT] Creating texture from path: assets/ojae_font.png
-10239 ms: [OUT] Loading font from path: assets/ojae_font.json
-10239 ms: [OUT] Creating texture from path: assets/ojae_font.png
-11373 ms: [OUT] Loading font from path: assets/monocraft_font.json
-11374 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-11375 ms: [OUT] Loading font from path: assets/monocraft_font.json
-11376 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-13270 ms: [OUT] Loading font from path: assets/ojae_font.json
-13270 ms: [OUT] Creating texture from path: assets/ojae_font.png
-13271 ms: [OUT] Loading font from path: assets/ojae_font.json
-13272 ms: [OUT] Creating texture from path: assets/ojae_font.png
-14075 ms: [OUT] Loading font from path: assets/monocraft_font.json
-14076 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-14077 ms: [OUT] Loading font from path: assets/monocraft_font.json
-14077 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-15102 ms: [OUT] Loading font from path: assets/ojae_font.json
-15103 ms: [OUT] Creating texture from path: assets/ojae_font.png
-15104 ms: [OUT] Loading font from path: assets/ojae_font.json
-15105 ms: [OUT] Creating texture from path: assets/ojae_font.png
-16059 ms: [OUT] Loading font from path: assets/monocraft_font.json
-16060 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-16062 ms: [OUT] Loading font from path: assets/monocraft_font.json
-16062 ms: [OUT] Creating texture from path: assets/monocraft_font.png
-17483 ms: [OUT] Loading font from path: assets/ojae_font.json
-17484 ms: [OUT] Creating texture from path: assets/ojae_font.png
-17485 ms: [OUT] Loading font from path: assets/ojae_font.json
-17485 ms: [OUT] Creating texture from path: assets/ojae_font.png
+262 ms: [OUT] Loading Color: Blue
+264 ms: [OUT] Loading Color: Green
+265 ms: [OUT] Loading Color: LBrown
+266 ms: [OUT] Loading Color: Red
+266 ms: [OUT] Loading Color: White
+267 ms: [OUT] Creating Handler Objects
+267 ms: [OUT] Creating texture from path: assets/border.png
+268 ms: [OUT] Creating texture from path: assets/border_selected.png
+269 ms: [OUT] Loading font from path: assets/ojae_font.json
+270 ms: [OUT] Creating texture from path: assets/ojae_font.png
+271 ms: [OUT] Loading font from path: assets/monocraft_font.json
+272 ms: [OUT] Creating texture from path: assets/monocraft_font.png
+274 ms: [OUT] Creating texture from path: assets/border.png
+274 ms: [OUT] Creating texture from path: assets/border_selected.png
+275 ms: [OUT] Loading font from path: assets/ojae_font.json
+276 ms: [OUT] Creating texture from path: assets/ojae_font.png
+278 ms: [OUT] Loading font from path: assets/monocraft_font.json
+279 ms: [OUT] Creating texture from path: assets/monocraft_font.png
+281 ms: [OUT] Game Initialized

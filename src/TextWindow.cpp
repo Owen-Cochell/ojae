@@ -93,6 +93,11 @@ void TextWindow::add(std::string new_content, std::string color, bool new_line)
 
 void TextWindow::clear()
 {
+    for(Text* t : contents)
+    {
+        delete t;
+    }
+
     contents.clear();
 }
 
