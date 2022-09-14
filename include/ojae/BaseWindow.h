@@ -61,13 +61,6 @@ public:
     */
     void load_font(const char* path);
 
-    /**
-     * @brief Sets the color of printed text in this BaseWindow
-     * 
-     * @param _color Name of the color
-     */
-    void set_color(std::string _color);
-
     virtual void update();
     virtual void display();
     void draw_border();

@@ -54,7 +54,7 @@ Tilemap::Tilemap(InputHandler* _input_handler, TextFunnel* _text_funnel,
 
 Tilemap::~Tilemap() {}
 
-std::vector<char> Tilemap::get_display() 
+std::vector<Character*> Tilemap::get_display() 
 {
     assemble_tilemap();
     return display;
@@ -255,6 +255,12 @@ void Tilemap::assemble_tilemap()
     the tiles and entities. This is used to render them to the screen. 
     */
 
+    // Delete character objects so we don't have memory leaks
+    for(Character* c : display)
+    {
+        delete c;
+    }
+
     display.clear();
 
     for(int y = 0; y < height; y++)
@@ -282,17 +288,21 @@ void Tilemap::assemble_tilemap()
                 if(entities[{x,y}].at(0)->get_priority() >= 
                     tiles[{x,y}].at(0)->get_priority())
                 {
-                    display.push_back(entities[{x,y}].at(0)->get_character());
+                    display.push_back(new Character
+                        (entities[{x,y}].at(0)->get_character(), 
+                        entities[{x,y}].at(0)->get_color(), 0, 0));
                     continue;
                 }
             }
 
             DISPLAY_HIGHEST_TILE:
 
-            display.push_back(tiles[{x,y}].at(0)->get_character());   
+            display.push_back(new Character
+                        (tiles[{x,y}].at(0)->get_character(), 
+                        tiles[{x,y}].at(0)->get_color(), 0, 0));   
         }
     
-        display.push_back('\n');
+        display.push_back(new Character('\n', "White", 0, 0));
     }
 }
 

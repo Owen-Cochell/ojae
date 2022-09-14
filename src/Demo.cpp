@@ -132,12 +132,11 @@ void Demo::init(const char* title, int x, int y, int width, int height,
          int(width / 2) + 1, width, 0, height, input_handler, 300);
 
     text_window->load_font(font_paths[available_fonts.at(font_index)].c_str());
-    text_window->set_color("Green");
 
     player = new Player(input_handler, text_funnel, "Player", 'P');
 
     tilemap = new Tilemap(input_handler, text_funnel, player, 10, 10);
-    tilemap->fill_tilemap(new Tile("Floor", '~', true, 0));
+    tilemap->fill_tilemap(new Tile("Floor", "White", '~', true, 0));
     tilemap->add(new Chest(text_funnel), 8, 8);
 
     //TilemapWindow
@@ -145,7 +144,6 @@ void Demo::init(const char* title, int x, int y, int width, int height,
         0, width / 2, 0, height, input_handler);
 
     tilemap_window->load_font(font_paths[available_fonts.at(font_index)].c_str());
-    tilemap_window->set_color("Blue");
 
     tilemap->add(player, 3, 3);
 
@@ -230,7 +228,7 @@ void Demo::update()
 
     for(std::string element : text_funnel->get_contents())
     {
-        text_window->add(element, "Blue");
+        text_window->add(element, "Green");
     }
 
     text_funnel->clear();

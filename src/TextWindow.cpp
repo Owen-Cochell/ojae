@@ -66,7 +66,7 @@ void TextWindow::display()
                 goto CHECK_Y_LIMIT;
             }
 
-            text_renderer->add(c, x_pos, y_pos);
+            text_renderer->add(c, t->color, x_pos, y_pos);
             x_pos += font_width * 2;
 
             CHECK_Y_LIMIT:

@@ -44,11 +44,6 @@ void BaseWindow::load_font(const char* path)
     text_renderer->load_font(path);
 }
 
-void BaseWindow::set_color(std::string _color)
-{
-    text_renderer->set_color(_color);
-}
-
 void BaseWindow::update() {}
 
 void BaseWindow::display() {}

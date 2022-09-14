@@ -9,6 +9,7 @@
 
 #include "TextureHandler.h"
 #include "nlohmann/json.hpp"
+#include "Character.h"
 
 class TextRenderer
 {
@@ -29,17 +30,10 @@ private:
 
     std::string path; // Path to the font png
 
-    /**
-     * @brief Color applied to printed text, leave empty for default text
-     */
-    std::string color;
-
     int font_width; // Width in pixels of the current font
     int font_height; // Height in pixels of the current font
 
-    // std::vector<int> available_fonts; // List of available fonts 
-    std::vector<std::pair<std::pair<int, int>, char>> contents; // List of content
-        // to render each frame
+    std::vector<Character*> contents; // Contents to render each frame
 
     int start_x;
     int end_x;
@@ -67,23 +61,13 @@ public:
     void load_font(std::string json_path);
 
     /**
-     * @brief Sets the color for printed text 
-     * 
-     * @param _color Name of the color
-     */
-    void set_color(std::string _color)
-    {
-        color = _color;
-    }
-
-    /**
      * @brief Adds a character to a specific coordinate on the screen
      * 
-     * @param new_content Character to be rendered
+     * @param symbol Character to be rendered
      * @param x X Coordinate
      * @param y Y Coordinate
     */
-    void add(char new_content, int x, int y);
+    void add(char symbol, std::string color, int x, int y);
 
     /**
      * @brief Clears all content

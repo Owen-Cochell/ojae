@@ -8,6 +8,7 @@
 #include "Entity.h"
 #include "Item.h"
 #include "Player.h"
+#include "Character.h"
 
 class Tilemap
 {
@@ -19,7 +20,7 @@ private:
     std::map<std::pair<int,int>, std::vector<Entity*>> entities; // List of entities to
         // their coordinates
 
-    std::vector<char> display; // Stores the top priority characters for 
+    std::vector<Character*> display; // Stores the top priority characters for 
         // rendering our tilemap
 
     int width; // Width of the tilemap
@@ -45,7 +46,7 @@ public:
         TextFunnel* _text_funnel, Player* _player, int _width, int _height);
     ~Tilemap();
 
-    std::vector<char> get_display();
+    std::vector<Character*> get_display();
 
     bool bound_check(int x, int y);
 

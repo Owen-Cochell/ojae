@@ -15,6 +15,7 @@ class Tile
 protected:
 
     std::string name; // Name of the tile
+    std::string color; // Color of the tile
 
     char character; // Visual character that is rendered
 
@@ -37,11 +38,12 @@ public:
         interactable = false;
     }
 
-    Tile(std::string _name, char _character, 
+    Tile(std::string _name, std::string _color, char _character, 
         bool _traversable, int _priority)
     {
-        this->name = _name;
-        this->character = _character;
+        name = _name;
+        color = _color;
+        character = _character;
         x_pos = 0;
         y_pos = 0;
         priority = _priority;
@@ -52,6 +54,8 @@ public:
     virtual ~Tile() {}
 
     std::string get_name() { return name; }
+
+    std::string get_color() { return color; }
 
     char get_character() { return character; }
 

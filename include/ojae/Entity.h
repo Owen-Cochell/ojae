@@ -17,7 +17,7 @@ class Entity: public Tile
 
 public:
 
-    Entity() 
+    Entity() : Tile()
     {
         character = ' ';
         x_pos = 0;
@@ -26,14 +26,11 @@ public:
         traversable = true;
     }
 
-    Entity(std::string name, char character, int priority)
+    Entity(std::string name, std::string color, char character, int priority) :
+        Tile(name, color, character, false, priority)
     {
-        this->name = name;
-        this->character = character;
         x_pos = 0;
         y_pos = 0;
-        this->priority = priority;
-        traversable = false;
     }
 
     ~Entity() override{}

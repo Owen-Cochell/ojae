@@ -7,7 +7,7 @@ Player::Player()
 }
 
 Player::Player(InputHandler* _input_handler, TextFunnel* _text_funnel, 
-    std::string _name, char _character) : Entity(_name, _character, 20) 
+    std::string _name, char _character) : Entity(_name, "Blue", _character, 20) 
 {
     input_handler = _input_handler;
     text_funnel = _text_funnel;

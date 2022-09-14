@@ -33,17 +33,17 @@ void TilemapWindow::display()
     int font_width = text_renderer->get_font_width();
     int font_height = text_renderer->get_font_height();
 
-    for(char c : tilemap->get_display())
+    for(Character* c : tilemap->get_display())
     {
         
-        if(c == '\n')
+        if(c->symbol == '\n')
         {
             y_pos += font_height * 3;
             x_pos = start_x;
             continue;
         }
 
-        text_renderer->add(c, x_pos, y_pos);
+        text_renderer->add(c->symbol, c->color, x_pos, y_pos);
 
         x_pos += font_width * 3; // Multiplied by 3 for the multiple of 2 for 
         // text size, plsu a multiple of 1.5 to equally space characters out

@@ -14,7 +14,7 @@ public:
 
     Chest() : Tile() {}
 
-    Chest(TextFunnel* _text_funnel) : Tile("Chest", 'C', false, 5) 
+    Chest(TextFunnel* _text_funnel) : Tile("Chest", "LBrown", 'C', false, 5) 
     {
         text_funnel = _text_funnel;
         interactable = true;

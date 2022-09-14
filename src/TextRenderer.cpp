@@ -84,7 +84,7 @@ void TextRenderer::load_font(std::string json_path)
     texture = texture_handler->load_texture(path.c_str());
 }
 
-void TextRenderer::add(char new_content, int x, int y)    
+void TextRenderer::add(char symbol, std::string color, int x, int y)    
 {
     /*
     Adds a character to the text renderer at the specified coordinates
@@ -94,7 +94,7 @@ void TextRenderer::add(char new_content, int x, int y)
     :PARAM y: Y Coordinate
     */
 
-    contents.push_back({{x,y}, new_content});
+    contents.push_back(new Character(symbol, color, x, y));
 }
 
 void TextRenderer::clear()
@@ -112,13 +112,14 @@ void TextRenderer::draw()
     Loops through contents and displays the text to the screen
     */
 
-    for(std::pair<std::pair<int,int>, char> element : contents)
+    //for(std::pair<std::pair<int,int>, char> element : contents)
+    for(Character* character : contents)
     {
 
-        char c = element.second;
+        char c = character->symbol;
 
-        int x_pos = element.first.first;
-        int y_pos = element.first.second;
+        int x_pos = character->x_pos;
+        int y_pos = character->y_pos;
 
         src.x = (((c - 33) % 8) * font_width); // Character ascii value - 65 which would make '!' be 0
         src.y = (int((c - 33) / 8) * font_height); // Divide this by 8 so that if the ascii value exceeds 
@@ -131,7 +132,8 @@ void TextRenderer::draw()
         dest.w = font_width * 2;
         dest.h = font_height * 2;
 
-        texture_handler->draw(texture, src, dest, color); // Draw the character
+        // Draw the character
+        texture_handler->draw(texture, src, dest, character->color);
     }  
 }
 
