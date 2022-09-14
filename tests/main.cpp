@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
     Demo demo;
 
     demo.init("Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-        width, height, false, r, g, b);
+        width / 2, height / 2, false, r, g, b);
     demo.start();
 
     return 0;

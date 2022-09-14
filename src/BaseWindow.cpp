@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "BaseWindow.h"
 #include "TextureHandler.h"
 
@@ -15,10 +17,12 @@ BaseWindow::BaseWindow()
 BaseWindow::BaseWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
     int start_x, int end_x, int start_y, int end_y, bool taking_input)
 {
+
     resize_window(start_x, end_x, start_y, end_y);
     this->taking_input = taking_input;
     texture_handler = _texture_handler;
     debugger = _debugger;
+
     border = texture_handler->load_texture("assets/border.png");
     border_selected = texture_handler->load_texture("assets/border_selected.png");
     text_renderer = new TextRenderer(_texture_handler, _debugger,

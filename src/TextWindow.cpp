@@ -1,5 +1,6 @@
-#include "TextWindow.h"
+#include <iostream>
 
+#include "TextWindow.h"
 
 
 TextWindow::TextWindow() : BaseWindow()
@@ -25,17 +26,14 @@ TextWindow::~TextWindow()
 
 void TextWindow::update()
 {
-    /*
-    Iterates through the content list, and checks if any member is exceeding 
-    its lifetime. If so, it is deleted from the content list
-    */
-
-    Uint32 current_time = SDL_GetTicks();
 
     for(int i = 0; i < contents.size(); i++)
     {
-        if(contents.at(i).second <= current_time)
+        contents.at(i)->life_time -= 1;
+        
+        if(contents.at(i)->life_time <= 0)
         {
+            delete contents.at(i);
             contents.erase(contents.begin() + i);
             i--;
         }
@@ -57,9 +55,9 @@ void TextWindow::display()
     int font_width = text_renderer->get_font_width();
     int font_height = text_renderer->get_font_height();
 
-    for(std::pair<std::string,Uint64> element : contents)
+    for(Text* t : contents)
     {
-        for(char c : element.first)
+        for(char c : t->content)
         {
             if(c == '\n')
             {
@@ -90,8 +88,7 @@ void TextWindow::add(std::string new_content, bool new_line)
 {
     if(new_line) { new_content += '\n'; }
 
-    contents.insert(contents.begin(), 
-        {new_content, SDL_GetTicks64() + life_time});
+    contents.push_back(new Text(new_content, life_time));
 }
 
 void TextWindow::clear()

@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <string>
+#include <iostream>
 
 #include "Debugger.h"
 
@@ -23,10 +24,12 @@ Debugger::~Debugger() {}
 
 void Debugger::dump(std::string content, bool output_time, bool new_line)
 {
+
     file_stream.open(path, std::ios::app);
 
     if(file_stream.is_open())
     {
+
         if(output_time)
         {
             file_stream << SDL_GetTicks64();

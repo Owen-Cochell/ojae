@@ -24,6 +24,8 @@ TextFunnel* text_funnel = nullptr;
 TilemapWindow* tilemap_window;
 TextWindow* text_window;
 
+SDL_Rect src, dest;
+
 Tilemap* tilemap;
 
 Player* player; 
@@ -126,11 +128,10 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     text_funnel = new TextFunnel();
 
     // TextWindow
-    // text_window = new TextWindow(texture_handler, debugger,
-    //     int(width / 2) + 1, width, 0, height, input_handler, 5000);
+     text_window = new TextWindow(texture_handler, debugger,
+         int(width / 2) + 1, width, 0, height, input_handler, 300);
 
-    text_window = new TextWindow(texture_handler,debugger,
-        0, width, int(height / 2) + 1, height, input_handler,5000);
+    text_window->load_font(font_paths[available_fonts.at(font_index)].c_str());
 
     player = new Player(input_handler, text_funnel, "Player", 'P');
 
@@ -138,14 +139,15 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     tilemap->fill_tilemap(new Tile("Floor", '~', true, 0));
     tilemap->add(new Chest(text_funnel), 8, 8);
 
-    // TilemapWindow
-    // tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
-    //     0, width / 2, 0, height, input_handler);
-
+    //TilemapWindow
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
-        0, width, 0, int(height / 2), input_handler);
+        0, width / 2, 0, height, input_handler);
+
+    text_window->load_font(font_paths[available_fonts.at(font_index)].c_str());
 
     tilemap->add(player, 3, 3);
+
+    text_window->add("Text");
 
     debugger->log("[OUT] Game Initialized");
 }
@@ -182,6 +184,7 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
+
     text_window->update();
     input_handler->update();
 
@@ -234,17 +237,17 @@ void Demo::handle_keys()
     for(Key* key: input_handler->get_active_keys())
     {
         // f
-        if(key->id == 102)
+        if(key->id == 102 && available_fonts.size() > 1)
         {
             font_index = (font_index + 1) % available_fonts.size();
-            const char* path = 
+            const char* targ_path = 
                 font_paths[available_fonts.at(font_index)].c_str();
 
-            text_window->add("Loading Font: ", false);
-            text_window->add(available_fonts.at(font_index), false);
+            // text_window->add("Loading Font: ", false);
+            // text_window->add(available_fonts.at(font_index), true);
 
-            text_window->load_font(path);
-            tilemap_window->load_font(path);
+            // text_window->load_font(targ_path);
+            tilemap_window->load_font(targ_path);
             input_handler->set_delay(102, 30);
         }
     }

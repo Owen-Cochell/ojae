@@ -6,21 +6,51 @@
 #include "TextureHandler.h"
 #include "Debugger.h"
 
+
+struct Text
+{
+    std::string content; // Contents of the text
+
+    /**
+     * @brief // Number of frames this key will be rendered until removed from
+     * the contents
+     */
+    int life_time; 
+
+    Text() 
+    {
+        life_time = 0;
+    }
+
+    Text(std::string _content, int _life_time)
+    {
+        content = _content;
+        life_time = _life_time;
+    }
+
+    ~Text() {}
+};
+
+
 class TextWindow : public BaseWindow
 {
     
 private:
 
-    Debugger* debugger; // Instance of the Debugger;
-
-    std::vector<std::pair<std::string, Uint32>> contents; // Contents to render
-        // each frame, containing the contents, and the time stamp of when to 
-        // remove this string from the contents
+    /**
+     * @brief Contents to render each frame. Contains Character structs that 
+     * hold data for rendering and deletion
+     */
+    std::vector<Text*> contents;
     
     InputHandler* input_handler; // Instance of the InputHandler
 
-    int life_time; // Amount of time each member of the contents will stay in 
+    /**
+     * @brief  Amount of time each member of the contents will stay in 
         // in the contents, until it is removed automatically
+     * 
+     */
+    int life_time;
 
 public:
 
@@ -36,3 +66,6 @@ public:
     void clear();
     // void set_font(int font_size);
 };
+
+
+

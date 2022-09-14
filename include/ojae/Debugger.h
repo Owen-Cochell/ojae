@@ -9,7 +9,7 @@ private:
 
     std::fstream file_stream; // Instance of the fstream
 
-    const char* path; // Path to logging file
+    
 
     /**
      * @brief Dumps the passed string to a file
@@ -19,6 +19,8 @@ private:
     void dump(std::string content, bool output_time, bool new_line);
 
 public:
+
+    const char* path; // Path to logging file
 
     Debugger();
     Debugger(const char* _path);

@@ -83,6 +83,8 @@ void TextRenderer::load_font(std::string json_path)
 
     if(texture != nullptr) { SDL_DestroyTexture(texture); }
     texture = texture_handler->load_texture(path.c_str());
+
+    // SDL_SetTextureColorMod(texture, 255, 0, 0);
 }
 
 void TextRenderer::add(char new_content, int x, int y)    
