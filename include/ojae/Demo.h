@@ -10,16 +10,19 @@
 #include "InputHandler.h"
 #include "Debugger.h"
 
+/**
+ * @brief Demonstration of the engine's capabilities
+ */
 class Demo
 {
 
 private:
 
-    static SDL_Window* window;
-    static InputHandler* input_handler;
+    static SDL_Window* window; // Instance of the SDL Window
+    static InputHandler* input_handler; // Instance of the Input Handler
 
-    TextureHandler* texture_handler;
-    Debugger* debugger;
+    TextureHandler* texture_handler; // Instance of the Texture Handler
+    Debugger* debugger; // Instance of the Debugger
 
     /**
      * @brief Path to available font files
@@ -42,7 +45,19 @@ private:
 
     nlohmann::json j_loader; // Json file handler
 
+    /**
+     * @brief Gets the usable fonts from a json file
+     * 
+     */
     void get_available_fonts();
+
+    /**
+     * @brief Gets the usable colors from a json file and loads new color 
+     * classes into the texture handler
+     * 
+     * @param path Json file holding color names and their perspective values
+     */
+    void get_colors(const char* path);
 
 public:
 
@@ -53,15 +68,59 @@ public:
     Demo();
     ~Demo();
 
+    /**
+     * @brief Initializes SDL and sets up the Game engine. Call 'start' to 
+     * begin the execution loop after the engine has been initialized
+     * 
+     * @param title Name of the executable window
+     * @param x X position of the window
+     * @param y Y position of the window
+     * @param width Width of the window
+     * @param height Height of the window
+     * @param fullscreen If the window should be fullscreen
+     * @param r Red value of the renderer background
+     * @param g Green value of the renderer background
+     * @param b Blue value of the renderer background
+     */
     void init(const char* title, int x, int y, int width, int height, 
         bool fullscreen, int r, int g, int b);
+    
+    /**
+     * @brief Starts the engine. Init must be called before this point
+     */
     void start();
-    void get_colors(const char* path);
+
+    /**
+     * @brief Main loop of the engine, updates and renders things to the 
+     * screen.
+     */
     void execution_loop();
+
+    /**
+     * @brief Called once per frame. Updates things that need updating
+     */
     void update();
+
+    /**
+     * @brief Called once per frame. Handles all SDL Events 
+     */
     void handle_events();
+
+    /**
+     * @brief Called once per frame. Iterates through the active keys in the 
+     * input handler and handles them
+
+     */
     void handle_keys();
+
+    /**
+     * @brief Called oncer per frame. Draws all things that need drawing
+     */
     void draw_all();
+
+    /**
+     * @brief Stops the engine
+     */
     void quit();
     
 

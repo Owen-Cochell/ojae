@@ -10,22 +10,22 @@
 #include "TextureHandler.h"
 
 /**
- * @brief Controls the output of text and textures to a set size of the 
- * screen */
+ * @brief Modular window for displaying text to the screen
+ */
 class BaseWindow
 {
 
 protected:
 
-    SDL_Rect border_src;
+    SDL_Rect border_src; // Source Rect for all the border textures
 
-    SDL_Rect top_border;
-    SDL_Rect right_border;
-    SDL_Rect bottom_border;
-    SDL_Rect left_border;
+    SDL_Rect top_border; // Destination Rect for the top border of the window
+    SDL_Rect right_border;// Destination Rect for the right border of the window
+    SDL_Rect bottom_border;// Destination Rect for the bottom border of the window
+    SDL_Rect left_border;// Destination Rect for the left border of the window
 
-    SDL_Texture* border;
-    SDL_Texture* border_selected;
+    SDL_Texture* border; // Window Border Texture
+    SDL_Texture* border_selected; // Selected Window Border Texture
 
     TextRenderer* text_renderer; // Instance of the TextRenderer
     SDL_Texture* font_texture; // Texture for the active font
@@ -63,6 +63,19 @@ public:
 
     virtual void update();
     virtual void display();
+
+    /**
+     * @brief Draws the border around this Window
+     */
     void draw_border();
+
+    /**
+     * @brief Resizes the window to new dimensinos
+     * 
+     * @param start_x Starting X positition
+     * @param end_x Ending X position
+     * @param start_y Starting Y position
+     * @param end_y Engind Y Position
+     */
     void resize_window(int start_x, int end_x, int start_y, int end_y);
 };

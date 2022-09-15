@@ -4,14 +4,18 @@
 #include "TextFunnel.h"
 #include "InputHandler.h"
 
-
+/**
+ * @brief Player class that is represented by the user. Extends an Entity 
+ * object to hold specific logic for the user
+ * 
+ */
 class Player : public Entity
 {
 
 private:
 
-    TextFunnel* text_funnel;
-    InputHandler* input_handler;
+    TextFunnel* text_funnel; // Instance of the TextFunnel
+    InputHandler* input_handler; // Instance of the InputHandler
 
 public:
 

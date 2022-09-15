@@ -15,8 +15,8 @@ private:
     int y_pos; // Y Coordinate
 
     bool traversable; // If this item is traversable by things that can move
-    bool held; // If this item is held by an entity
-
+    bool held; // If this item is held by an object
+    
 public:
 
     Item()

@@ -3,6 +3,9 @@
 #include <string>
 #include <cstdlib>
 
+/**
+ * @brief Contains data for a Color. Holds rgb values and a name
+ */
 class Color
 {
 

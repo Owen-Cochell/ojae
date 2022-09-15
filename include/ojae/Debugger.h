@@ -9,8 +9,6 @@ private:
 
     std::fstream file_stream; // Instance of the fstream
 
-    
-
     /**
      * @brief Dumps the passed string to a file
      * @param content Content to dump 
@@ -30,8 +28,8 @@ public:
      * @brief Adds content to the logging file 
      * @param contents Content to add
      * @param output_time Add the current time before the content 
-     * @param new_line Add a new line to the end of the 
-     *  content (default = true) */
+     * @param new_line Add a new line to the end of the content
+     */
     void log(const char* content, bool output_time = true, 
         bool new_line = true);
     void log(char content, bool output_time = true, bool new_line = true);

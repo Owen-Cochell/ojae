@@ -8,8 +8,10 @@
 
 
 /**
- * @brief 
- * 
+ * @brief Used to store inidividual elements for the input handler. This holds
+ * data such as an id, which represents the int it represents, how many frames
+ * this key should exist in the input handler, and the frame delay between 
+ * each key press before it will be allowed to be pressed again
  */
 struct Key
 {
@@ -44,17 +46,16 @@ struct Key
 
 };
 
+/**
+ * @brief Handles all pressed keys from the user, and if assigned a frame delay 
+ * to a specific key, disallows the user from using that key again until the 
+ * amount of target frames has elapsed. Stores 'Key' pointers as data for 
+ * pressed keys
+ */
 class InputHandler
 {
 
 private:
-
-    // std::vector<int> keys; // Keys that are currently active
-
-    // /**
-    //  * @brief Frame delay before the keys will 
-    //  * be allowed to be used again */
-    // std::map<int, Uint64> keys_delay; 
 
     /**
      * @brief Key values that are pressed to their respective key objects
@@ -78,6 +79,12 @@ public:
     void add_key(int key);
     void remove_key(int key);
 
+    /**
+     * @brief Returns a vector of Key pointers that are pressed by the user, 
+     * and are available to be used
+     * 
+     * @return Vector of Key pointers
+     */
     std::vector<Key*> get_active_keys();
 
 };

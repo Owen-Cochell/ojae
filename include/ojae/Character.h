@@ -2,6 +2,9 @@
 
 #include <string>
 
+/**
+ * @brief Contains data for printing chars to the screen. 
+ */
 struct Character
 {
     std::string color; // Color of the

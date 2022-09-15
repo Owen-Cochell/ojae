@@ -2,13 +2,13 @@
 #include <iostream>
 
 #include "Demo.h"
-#include "Objects/AllObjects.h"
 #include "Player.h"
 #include "TextRenderer.h"
 #include "TextureHandler.h"
 #include "TextWindow.h"
 #include "TilemapWindow.h"
 #include "TextFunnel.h"
+#include "Objects/Chest.h"
 
 static std::fstream file_stream;
 
@@ -79,12 +79,10 @@ void Demo::get_available_fonts()
 
     for(nlohmann::json::iterator it = j_loader.begin(); it != j_loader.end(); it++)
     {
-        std::string value = it.value();
-
         debugger->log("[OUT] Getting font: ", true, false);
-        debugger->log(value, false, true);
-        available_fonts.push_back(value);
-        font_paths[value] = "assets/" + value  + "_font.json";
+        debugger->log(it.key(), false, true);
+        available_fonts.push_back(it.key());
+        font_paths[it.key()] = it.value();
     }
 
     file_stream.clear();
@@ -96,6 +94,41 @@ void Demo::get_available_fonts()
         exit(0);
     }
 }
+
+void Demo::get_colors(const char* path)
+{
+
+    if(!debugger->file_exists(path))
+    {
+        debugger->log("[FAIL] Demo.load_colors() -> Could not open file: ", 
+            true, false);
+        debugger->log(path, false, true);
+        debugger->log("[OUT] Exiting...");
+        exit(0);
+    }
+
+    file_stream.open(path, std::ios::in);
+
+    if(file_stream.is_open())
+    {
+        file_stream >> j_loader;
+
+        file_stream.close();
+    }
+
+    file_stream.clear();
+
+    for(nlohmann::json::iterator it = j_loader.begin(); it != j_loader.end(); 
+        it++)
+    {
+        debugger->log("[OUT] Loading Color: ", true, false);
+        debugger->log(std::string(it.key()), false, true);
+
+        texture_handler->add_color(new Color(it.key(), it.value()[0], 
+            it.value()[1], it.value()[2]));
+    }
+}
+
 
 // Public Members
 
@@ -158,42 +191,6 @@ void Demo::start()
     execution_loop();
 }
 
-void Demo::get_colors(const char* path)
-{
-
-    if(!debugger->file_exists(path))
-    {
-        debugger->log("[FAIL] Demo.load_colors() -> Could not open file: ", 
-            true, false);
-        debugger->log(path, false, true);
-        debugger->log("[OUT] Exiting...");
-        exit(0);
-    }
-
-    file_stream.open(path, std::ios::in);
-
-    if(file_stream.is_open())
-    {
-        file_stream >> j_loader;
-
-        file_stream.close();
-    }
-
-    file_stream.clear();
-
-    for(nlohmann::json::iterator it = j_loader.begin(); it != j_loader.end(); 
-        it++)
-    {
-        debugger->log("[OUT] Loading Color: ", true, false);
-        debugger->log(std::string(it.key()), false, true);
-
-        texture_handler->add_color(new Color(it.key(), it.value()[0], 
-            it.value()[1], it.value()[2]));
-    }
-}
-
-/**
- * @brief Executes the main simulation, at a target 60 fps */
 void Demo::execution_loop()
 {
     while(running)
