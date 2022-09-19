@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 
     nlohmann::json j_loader;
 
-    file_stream.open("assets/screen_properties.json");
+    file_stream.open("data/screen_properties.json");
 
     if(file_stream.is_open())
     {
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
     Demo demo;
 
     demo.init("Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-        width, height, false, r, g, b);
+        width / 2, height / 2, false, r, g, b);
     demo.start();
 
     return 0;

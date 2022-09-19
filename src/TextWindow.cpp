@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iostream>
 
 #include "TextWindow.h"
 
@@ -29,13 +30,17 @@ void TextWindow::update()
 
     for(int i = 0; i < contents.size(); i++)
     {
-        contents.at(i)->life_time -= 1;
-        
-        if(contents.at(i)->life_time <= 0)
+        // If the content's life_time is -1, we don't want to delete it
+        if(contents.at(i)->life_time >= 0)
         {
-            delete contents.at(i);
-            contents.erase(contents.begin() + i);
-            i--;
+            contents.at(i)->life_time -= 1;
+        
+            if(contents.at(i)->life_time == 0)
+            {
+                delete contents.at(i);
+                contents.erase(contents.begin() + i);
+                i--;
+            }
         }
     }
 }
@@ -46,7 +51,7 @@ void TextWindow::display()
     Loops throught the contents, and adds text to the text renderer to render 
     to the screen
     */
-    
+
     draw_border();
     text_renderer->clear();
 
@@ -86,6 +91,8 @@ void TextWindow::display()
 
 void TextWindow::add(std::string new_content, std::string color, bool new_line)
 {
+    
+
     if(new_line) { new_content += '\n'; }
 
     contents.push_back(new Text(new_content, color, life_time));

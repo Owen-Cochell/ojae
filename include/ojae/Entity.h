@@ -10,13 +10,20 @@
 #include "Tile.h"
 #include "Debugger.h"
 
+class EntityManager;
+
 /**
  * @brief A Tile with extended logic for moving and interacting.
  */
 class Entity: public Tile
 {
 
+protected:
+
+    EntityManager* entity_manager; // Instance of the EntityManager
+
 public:
+
 
     Entity();
 
@@ -28,6 +35,16 @@ public:
     // virtual void start();  // Method called when entity is added
     // virtual void stop();  // Method called when entity is removed
 
+    void set_entity_manager(EntityManager* _entity_manager);
+
+};
+
+struct entity_greater_priority
+{
+    inline bool operator()(Entity* a, Entity* b)
+    {
+        return a->get_priority() > b->get_priority();
+    }
 };
 
 class EntityManager
@@ -50,6 +67,18 @@ public:
     EntityManager();
     EntityManager(Debugger* _debugger, int _width, int _height);
     ~EntityManager();
+
+    std::map<std::pair<int,int>, std::vector<Entity*>> get_entities();
+
+    /**
+     * @brief Checks if a coordinate point in the map is within the 
+     * constrictions
+     * 
+     * @param x X Position
+     * @param y Y Position
+     * @return True if the spot is available to move to
+     */
+    bool bound_check(int x, int y);
 
     /**
      * @brief Adds an entity to the map of entities at a given position

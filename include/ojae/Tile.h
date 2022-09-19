@@ -1,6 +1,13 @@
 #pragma once
 
 #include <string>
+#include <map>
+#include <vector>
+
+#include "Debugger.h"
+
+
+class TileManager;
 
 /**
  * @brief Basic character that can be added to a tilemap. Offers little 
@@ -13,6 +20,8 @@ class Tile
     */
 
 protected:
+
+    TileManager* tile_manager; // Instance of the TileManager
 
     std::string name; // Name of the tile
     std::string color; // Color of the tile
@@ -82,8 +91,84 @@ public:
         y_pos = y;
     }
     
+    void set_tile_manager(TileManager* _tile_manager)
+    {
+        tile_manager = _tile_manager;
+    }
+
     /**
-     * @brief Called whenever an entity attempts to move/interact with this 
-     * tile */
-    virtual void interact() {}
+     * @brief Called whenever a Tile attempts to move/interact with this 
+     * tile
+     * @param t Tile that is interacting 
+     * */
+    virtual void interact(Tile* t) {}
+};
+
+struct tile_greater_priority
+{
+
+    inline bool operator()(Tile* a, Tile* b)
+    {
+        return a->get_priority() > b->get_priority();
+    }
+};
+
+class TileManager
+{
+
+private:
+
+    Debugger* debugger; // Instance of the Debugger
+
+    /**
+     * @brief Map of coordinate positions to a vector of tiles
+     */
+    std::map<std::pair<int,int>, std::vector<Tile*>> tiles;
+
+    int width; // Width in tiles limit for tile placement
+    int height; // Height in tiles limit for tile placement
+
+public:
+
+    TileManager();
+    TileManager(Debugger* _debugger, int _width, int _height);
+    ~TileManager();
+
+    std::map<std::pair<int,int>, std::vector<Tile*>> get_tiles();
+
+    /**
+     * @brief Checks if a coordinate point in the map is within the 
+     * constrictions
+     * 
+     * @param x X Position
+     * @param y Y Position
+     * @return True if the spot is available to move to
+     */
+    bool bound_check(int x, int y);
+
+    /**
+     * @brief Adds a TIle to the map of tiles at a given position
+     * 
+     * @param t Tile to add
+     */
+    void add_tile(Tile* t, int x, int y);
+
+    /**
+     * @brief Removes a Tile from the map of Tiles. Uses the Tiles's 
+     * current position to target which position to remove it from
+     * 
+     * @param t Tile to remove
+     * @param deconstruct Remove the Tile from heap memory
+     */
+    void remove_tile(Tile* t, bool deconstruct = false);
+
+    /**
+     * @brief Moves a Tile to a new position in the map
+     * 
+     * @param t Tile to move
+     * @param x X Position
+     * @param y Y Position
+     */
+    void move_tile(Tile* t, int x, int y);
+
 };

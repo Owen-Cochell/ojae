@@ -1,5 +1,7 @@
 {
-    "Width": 1400,
-    "Height": 800,
-    "Fullscreen": false
+    "width": 1920,
+    "height": 1080,
+    "r_value": 25,
+    "g_value": 25,
+    "b_value": 35
 }

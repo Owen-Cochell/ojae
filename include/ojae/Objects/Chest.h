@@ -14,7 +14,7 @@ public:
 
     Chest() : Tile() {}
 
-    Chest(TextFunnel* _text_funnel) : Tile("Chest", "LBrown", 'C', false, 5) 
+    Chest(TextFunnel* _text_funnel) : Tile("Chest", "Brown", 'C', false, 5) 
     {
         text_funnel = _text_funnel;
         interactable = true;
@@ -22,7 +22,7 @@ public:
 
     ~Chest() {}
 
-    void interact() override
+    void interact(Tile* tile) override
     {
         text_funnel->add("Opened Chest");
     }

@@ -34,6 +34,8 @@ public:
      * @return SDL_Texture* */
     SDL_Texture* load_texture(const char* path);
 
+    std::map<std::string, Color*> get_colors();
+
     /**
      * @brief Adds a color to the map of registered colors
      * 

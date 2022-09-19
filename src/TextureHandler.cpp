@@ -58,6 +58,8 @@ void TextureHandler::add_color(Color* color)
     colors.emplace(color->get_name(), color);
 }
 
+std::map<std::string, Color*> TextureHandler::get_colors(){ return colors; }
+
 void TextureHandler::draw(SDL_Texture* texture, SDL_Rect& src, SDL_Rect& dest,
     std::string color)
 {
@@ -70,7 +72,7 @@ void TextureHandler::draw(SDL_Texture* texture, SDL_Rect& src, SDL_Rect& dest,
         if(colors.count(color) == 0)
         {
             debugger->log("[FAIL] TextureHandler.draw() -> Color not "
-                "registerd: ", true, false);
+                "registered: ", true, false);
             debugger->log(color, false, true);
             debugger->log("[OUT] Exiting...");
             exit(0);

@@ -10,8 +10,8 @@ BaseWindow::BaseWindow()
     texture_handler = nullptr;
     text_renderer = nullptr;
     debugger = nullptr;
-    border = texture_handler->load_texture("assets/border.png");
-    border_selected = texture_handler->load_texture("assets/border_selected.png");
+    border = texture_handler->load_texture("assets/Sprites/border.png");
+    border_selected = texture_handler->load_texture("assets/Sprites/border_selected.png");
 }
 
 BaseWindow::BaseWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
@@ -23,8 +23,8 @@ BaseWindow::BaseWindow(TextureHandler* _texture_handler, Debugger* _debugger,
     texture_handler = _texture_handler;
     debugger = _debugger;
 
-    border = texture_handler->load_texture("assets/border.png");
-    border_selected = texture_handler->load_texture("assets/border_selected.png");
+    border = texture_handler->load_texture("assets/Sprites/border.png");
+    border_selected = texture_handler->load_texture("assets/Sprites/border_selected.png");
     text_renderer = new TextRenderer(_texture_handler, _debugger,
         this->start_x, this->end_x, this->start_y, this->end_y);
 }

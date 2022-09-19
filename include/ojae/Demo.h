@@ -28,7 +28,6 @@ private:
      * @brief Path to available font files
      */
     std::map<std::string, std::string> font_paths; // Paths to the available fonts 
-    std::vector<std::string> available_fonts; // Fonts that are available
 
     const int TARG_FPS = 60; // How many frames per second we want 
     const int FRAME_DELAY = 1000 / TARG_FPS; // Miliseconds delay between each frame to 
@@ -36,8 +35,6 @@ private:
     
     Uint32 frame_start; // Resembles the time stamp of the beginning of each frame
     int frame_time; // Measures the amount of time each frame took to execute
-
-    int font_index ; // Index of the available fonts that is currently selected
 
     int screen_width; // Width of the screen
     int screen_height; // Height of the screen
@@ -89,6 +86,8 @@ public:
      * @brief Starts the engine. Init must be called before this point
      */
     void start();
+
+    void startup_screen();
 
     /**
      * @brief Main loop of the engine, updates and renders things to the 

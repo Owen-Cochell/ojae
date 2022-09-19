@@ -15,10 +15,8 @@ class Tilemap
 
 private:
 
-    std::map<std::pair<int,int>, std::vector<Tile*>> tiles; // List of tiles to their 
-        // coordinates
-    std::map<std::pair<int,int>, std::vector<Entity*>> entities; // List of entities to
-        // their coordinates
+    TileManager* tile_manager; // Instance of the TileManager
+    EntityManager* entity_manager; // Instance of the EntityManager
 
     std::vector<Character*> display; // Stores the top priority characters for 
         // rendering our tilemap
@@ -39,26 +37,26 @@ public:
 
     Tilemap();
     // Tilemap(int width, int height);
-    Tilemap(InputHandler* _input_handler, TextFunnel* _text_funnel, int _width,
-        int _height);
+    Tilemap(InputHandler* _input_handler, TextFunnel* _text_funnel, 
+        Debugger* _debugger, int _width, int _height);
     // Tilemap(Player* player, int width, int height);
-    Tilemap(InputHandler* _input_handler,
-        TextFunnel* _text_funnel, Player* _player, int _width, int _height);
+    Tilemap(InputHandler* _input_handler, TextFunnel* _text_funnel,
+        Debugger* _debugger, Player* _player, int _width, int _height);
     ~Tilemap();
 
     std::vector<Character*> get_display();
 
-    bool bound_check(int x, int y);
+    // bool bound_check(int x, int y);
 
-    void handle_keys();
-    void update_all_entities();
+    // void handle_keys();
+    // void update_all_entities();
     void fill_tilemap(Tile* tile);
     void assemble_tilemap();
-    void add(Tile* tile, int x, int y);
-    void add(Entity* entity, int x, int y);
-    void move(Tile* tile, int x, int y);
-    void move(Entity* entity, int x, int y);
-    void remove(Tile* tile, bool deconstruct = false);
-    void remove(Entity* entity, bool deconstruct = false);
+    void add(Tile* t, int x, int y);
+    void add(Entity* e, int x, int y);
+    // void move(Tile* tile, int x, int y);
+    // void move(Entity* entity, int x, int y);
+    // void remove(Tile* tile, bool deconstruct = false);
+    // void remove(Entity* entity, bool deconstruct = false);
     void move_all_entities();
 };

@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <SDL2/SDL.h>
-
+#include <iostream>
 
 #include "TextRenderer.h"
 
@@ -24,8 +24,6 @@ TextRenderer::TextRenderer(TextureHandler* _texture_handler,
     debugger = _debugger;
 
     texture = nullptr;
-
-    load_font("assets/ojae_font.json");
 
     this->start_x = start_x;
     this->end_x = end_x;
@@ -117,7 +115,6 @@ void TextRenderer::draw()
     Loops through contents and displays the text to the screen
     */
 
-    //for(std::pair<std::pair<int,int>, char> element : contents)
     for(Character* character : contents)
     {
 

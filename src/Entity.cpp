@@ -1,6 +1,9 @@
+#include <algorithm>
+
 #include "Entity.h"
 
 // Entity ---------------------------------------------------------------------
+
 Entity::Entity() : Tile() {}
 
 Entity::Entity(std::string name, std::string color, char character, int priority) :
@@ -10,10 +13,16 @@ Entity::~Entity() {}
 
 void Entity::update() {}
 
+void Entity::set_entity_manager(EntityManager* _entity_manager)
+{
+    entity_manager = _entity_manager;
+}
+
 
 // EntityManager --------------------------------------------------------------
 
 // Constructors/Deconstructors
+
 EntityManager::EntityManager() {}
 
 EntityManager::EntityManager(Debugger* _debugger, int _width, int _height)
@@ -30,10 +39,23 @@ EntityManager::~EntityManager() {}
 
 // Public Members
 
+std::map<std::pair<int,int>, std::vector<Entity*>> 
+    EntityManager::get_entities()
+{
+    return entities;
+}
+
+bool EntityManager::bound_check(int x, int y)
+{
+    if(x < 0 || x >= width || y < 0 || y >= height) { return false; }
+
+    return true;
+}
+
 void EntityManager::add_entity(Entity* e, int x, int y)
 {
     // If the entity's placement position is outside boundaries
-    if(x < 0 || x > width || y < 0 || y > height)
+    if(!bound_check(x, y))
     {
         debugger->log("[FAIL] EntityManager.add_entity() -> attempting to add "
             "entity out of bounds: ", true, false);
@@ -55,6 +77,8 @@ void EntityManager::add_entity(Entity* e, int x, int y)
 
     entities[{x, y}].push_back(e);
     e->set_position(x, y);
+    e->set_entity_manager(this);
+    std::sort(entities[{x,y}].begin(), entities[{x,y}].end(), entity_greater_priority());
 }
 
 void EntityManager::remove_entity(Entity* e, bool deconstruct)
@@ -111,6 +135,21 @@ void EntityManager::remove_entity(Entity* e, bool deconstruct)
     exit(0);
 
 }
+
+void EntityManager::move_entity(Entity* e, int x, int y)
+{
+    // This position is out of bounds
+    if(!bound_check(x, y))
+    {
+        return;
+    }
+
+    std::vector<Tile*> interactable_tiles;
+    bool non_traversable_found = false;
+
+    remove_entity(e);
+    add_entity(e, x, y);
+} 
 
 
 // Owen -----------------------------------------------------------------------

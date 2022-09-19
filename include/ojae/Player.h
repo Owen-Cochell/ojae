@@ -24,5 +24,9 @@ public:
         std::string _name, char _character);
     ~Player();
 
-    
+    /**
+     * @brief Iterates through the keys in the input handler and handles them
+     * accordingly
+     */
+    void handle_keys();
 };

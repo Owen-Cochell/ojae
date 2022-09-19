@@ -23,6 +23,7 @@ TextFunnel* text_funnel = nullptr;
 
 TilemapWindow* tilemap_window;
 TextWindow* text_window;
+TextWindow* full_window;
 
 SDL_Rect src, dest;
 
@@ -39,7 +40,6 @@ Demo::Demo()
     frame_start = 0;
     frame_time = 0;
     standard_input_delay = 200;
-    font_index = 0;
     debugger = new Debugger("OutputLog.txt");
     input_handler = new InputHandler();
     text_funnel = new TextFunnel();
@@ -53,7 +53,7 @@ Demo::~Demo() {}
 void Demo::get_available_fonts()
 {
 
-    const char* path = "assets/available_fonts.json";
+    const char* path = "data/available_fonts.json";
 
     // If the file does not exist
     if(!debugger->file_exists(path))
@@ -81,13 +81,12 @@ void Demo::get_available_fonts()
     {
         debugger->log("[OUT] Getting font: ", true, false);
         debugger->log(it.key(), false, true);
-        available_fonts.push_back(it.key());
         font_paths[it.key()] = it.value();
     }
 
     file_stream.clear();
 
-    if(available_fonts.size() == 0)
+    if(font_paths.size() == 0)
     {
         debugger->log("[FAIL] No available fonts to use");
         debugger->log("[OUT] Exiting...");
@@ -156,7 +155,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     }
 
     texture_handler = new TextureHandler(renderer, debugger);
-    get_colors("assets/colors.json");
+    get_colors("data/colors.json");
 
     debugger->log("[OUT] Creating Handler Objects");
 
@@ -164,31 +163,88 @@ void Demo::init(const char* title, int x, int y, int width, int height,
      text_window = new TextWindow(texture_handler, debugger,
          int(width / 2) + 1, width, 0, height, input_handler, 300);
 
-    text_window->load_font(font_paths[available_fonts.at(font_index)].c_str());
+    text_window->load_font(font_paths["ojae"].c_str());
+
+    text_window->add("green", "Green");
 
     player = new Player(input_handler, text_funnel, "Player", 'P');
 
-    tilemap = new Tilemap(input_handler, text_funnel, player, 10, 10);
-    tilemap->fill_tilemap(new Tile("Floor", "White", '~', true, 0));
+    tilemap = new Tilemap(input_handler, text_funnel, debugger, player, 10, 10);
+tilemap->fill_tilemap(new Tile("Floor", "White", '.', true, 0));
     tilemap->add(new Chest(text_funnel), 8, 8);
+    tilemap->add(new Tile("Apple", "Red", 'A', true, 2), 2, 2);
+    tilemap->add(new Tile("Goblin", "Green", 'g', true, 2), 7, 2);
 
     //TilemapWindow
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
         0, width / 2, 0, height, input_handler);
 
-    tilemap_window->load_font(font_paths[available_fonts.at(font_index)].c_str());
+    tilemap_window->load_font(font_paths["ojae"].c_str());
 
     tilemap->add(player, 3, 3);
 
-    text_window->add("Text", "Blue");
-
     debugger->log("[OUT] Game Initialized");
+
+    full_window = new TextWindow(texture_handler, debugger, 0, width, 0, 
+        height, input_handler, -1);
+    full_window->load_font(font_paths["ojae"].c_str());
 }
 
 void Demo::start()
 {
+    startup_screen();
     running = true;
     execution_loop();
+}
+
+void Demo::startup_screen()
+{   
+    full_window->add("OJAE (Owen-Joel ASCII ENGINE)", "White");
+    full_window->add("Version: ", "White", false);
+    full_window->add("0.1", "Blue");
+
+    std::map<std::string, Color*> active_colors = texture_handler->get_colors(); 
+
+    for(std::map<std::string, Color*>::iterator it = active_colors.begin();
+        it != active_colors.end(); it++)
+    {
+        full_window->add(it->first, it->first);
+    }
+
+    full_window->add("Press Escape to Continue...", "White");
+
+    // Loop until the user presses Escape
+
+    while(true)
+    {
+        frame_start = SDL_GetTicks64();
+
+        SDL_RenderClear(renderer);
+        full_window->display();
+        SDL_RenderPresent(renderer);
+
+        while(SDL_PollEvent(&event))
+        {
+            if(event.type == SDL_QUIT)
+            {
+                SDL_Quit();
+                exit(0);
+            }
+
+            else if(event.type == SDL_KEYDOWN &&
+                event.key.keysym.sym  == SDLK_ESCAPE)
+            {
+                return;
+            }
+        }
+
+        frame_time = SDL_GetTicks64() - frame_start;
+
+        if(FRAME_DELAY > frame_time)
+        {
+            SDL_Delay(FRAME_DELAY - frame_time);
+        }
+    }
 }
 
 void Demo::execution_loop()
@@ -199,7 +255,7 @@ void Demo::execution_loop()
 
         update();
         handle_events();
-        handle_keys();
+        // handle_keys();
         draw_all();
 
         frame_time = SDL_GetTicks64() - frame_start;
@@ -215,13 +271,10 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
-
     text_window->update();
     input_handler->update();
 
-    tilemap->update_all_entities();
-    tilemap->move_all_entities();
-    tilemap->handle_keys();
+    player->handle_keys();
 
     for(std::string element : text_funnel->get_contents())
     {
@@ -263,26 +316,7 @@ void Demo::handle_events()
     }
 }
 
-void Demo::handle_keys()
-{
-    for(Key* key: input_handler->get_active_keys())
-    {
-        // f
-        if(key->id == 102 && available_fonts.size() > 1)
-        {
-            font_index = (font_index + 1) % available_fonts.size();
-            const char* targ_path = 
-                font_paths[available_fonts.at(font_index)].c_str();
-
-            text_window->add("Loading Font: ", "Blue", false);
-            text_window->add(available_fonts.at(font_index), "Blue", true);
-
-            text_window->load_font(targ_path);
-            tilemap_window->load_font(targ_path);
-            input_handler->set_delay(102, 30);
-        }
-    }
-}
+void Demo::handle_keys() {}
 
 void Demo::draw_all()
 {

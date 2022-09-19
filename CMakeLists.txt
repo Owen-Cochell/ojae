@@ -18,6 +18,7 @@ add_library(ojae
     src/TextRenderer.cpp
     src/BaseWindow.cpp
     src/TextFunnel.cpp
+    src/Tile.cpp
     src/Tilemap.cpp
     src/TilemapWindow.cpp
     src/TextWindow.cpp
