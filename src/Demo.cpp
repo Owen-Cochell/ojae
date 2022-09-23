@@ -170,10 +170,12 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     player = new Player(input_handler, text_funnel, "Player", 'P');
 
     tilemap = new Tilemap(input_handler, text_funnel, debugger, player, 10, 10);
-tilemap->fill_tilemap(new Tile("Floor", "White", '.', true, 0));
+    tilemap->fill_tilemap(new Tile("Floor", "White", '.', true, 0));
     tilemap->add(new Chest(text_funnel), 8, 8);
-    tilemap->add(new Tile("Apple", "Red", 'A', true, 2), 2, 2);
+    tilemap->add(new Tile("Apple", "Red", 'a', true, 2), 2, 2);
     tilemap->add(new Tile("Goblin", "Green", 'g', true, 2), 7, 2);
+    tilemap->add(new Tile("Gold", "Yellow", 'G', true, 2), 2, 7);
+    tilemap->add(player, 3, 3);
 
     //TilemapWindow
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
@@ -181,13 +183,11 @@ tilemap->fill_tilemap(new Tile("Floor", "White", '.', true, 0));
 
     tilemap_window->load_font(font_paths["ojae"].c_str());
 
-    tilemap->add(player, 3, 3);
-
-    debugger->log("[OUT] Game Initialized");
-
     full_window = new TextWindow(texture_handler, debugger, 0, width, 0, 
         height, input_handler, -1);
     full_window->load_font(font_paths["ojae"].c_str());
+
+    debugger->log("[OUT] Game Initialized");
 }
 
 void Demo::start()
@@ -201,7 +201,7 @@ void Demo::startup_screen()
 {   
     full_window->add("OJAE (Owen-Joel ASCII ENGINE)", "White");
     full_window->add("Version: ", "White", false);
-    full_window->add("0.1", "Blue");
+    full_window->add("0.2 (Beta)", "White");
 
     std::map<std::string, Color*> active_colors = texture_handler->get_colors(); 
 

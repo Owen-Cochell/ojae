@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
 
     demo.init("Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
         width / 2, height / 2, false, r, g, b);
+        
     demo.start();
 
     return 0;
