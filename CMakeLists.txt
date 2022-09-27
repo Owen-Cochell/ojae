@@ -9,16 +9,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_library(ojae
     src/Demo.cpp
-    src/Entity.cpp
     src/FileHandler.cpp
     src/InputHandler.cpp
     src/Debugger.cpp
-    src/Player.cpp
     src/TextureHandler.cpp
+    src/Tilemap.cpp
     src/TextRenderer.cpp
     src/BaseWindow.cpp
     src/TextFunnel.cpp
-    src/Tile.cpp
     src/Tilemap.cpp
     src/TilemapWindow.cpp
     src/TextWindow.cpp

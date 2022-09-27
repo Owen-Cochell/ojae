@@ -35,6 +35,7 @@ void TilemapWindow::display()
 
     for(Character* c : tilemap->get_display())
     {
+
         
         if(c->symbol == '\n')
         {
@@ -46,9 +47,14 @@ void TilemapWindow::display()
         text_renderer->add(c->symbol, c->color, x_pos, y_pos);
 
         x_pos += font_width * 3; // Multiplied by 3 for the multiple of 2 for 
-        // text size, plsu a multiple of 1.5 to equally space characters out
+        // text size, plus a multiple of 1.5 to equally space characters out
         // as they are 1.5 times as wide in the height dimension
     }
 
     text_renderer->draw();
+}
+
+void TilemapWindow::update()
+{
+    tilemap->update();
 }

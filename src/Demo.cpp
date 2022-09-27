@@ -2,13 +2,14 @@
 #include <iostream>
 
 #include "Demo.h"
-#include "Player.h"
+#include "ECS.h"
 #include "TextRenderer.h"
 #include "TextureHandler.h"
 #include "TextWindow.h"
 #include "TilemapWindow.h"
 #include "TextFunnel.h"
-#include "Objects/Chest.h"
+#include "Tilemap.h"
+#include "Components.h"
 
 static std::fstream file_stream;
 
@@ -28,8 +29,6 @@ TextWindow* full_window;
 SDL_Rect src, dest;
 
 Tilemap* tilemap;
-
-Player* player; 
 
 // Constructors/Deconstructors
 
@@ -157,7 +156,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     texture_handler = new TextureHandler(renderer, debugger);
     get_colors("data/colors.json");
 
-    debugger->log("[OUT] Creating Handler Objects");
+    debugger->log("[OUT] Creating Windows and Objects");
 
     // TextWindow
      text_window = new TextWindow(texture_handler, debugger,
@@ -167,15 +166,22 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     text_window->add("green", "Green");
 
-    player = new Player(input_handler, text_funnel, "Player", 'P');
+    // player = new Player(input_handler, text_funnel, "Player", 'P');
 
-    tilemap = new Tilemap(input_handler, text_funnel, debugger, player, 10, 10);
-    tilemap->fill_tilemap(new Tile("Floor", "White", '.', true, 0));
-    tilemap->add(new Chest(text_funnel), 8, 8);
-    tilemap->add(new Tile("Apple", "Red", 'a', true, 2), 2, 2);
-    tilemap->add(new Tile("Goblin", "Green", 'g', true, 2), 7, 2);
-    tilemap->add(new Tile("Gold", "Yellow", 'G', true, 2), 2, 7);
-    tilemap->add(player, 3, 3);
+    tilemap = new Tilemap(debugger, 10, 10);
+
+    Entity* dwarf = new Entity("Dwarf");
+    dwarf->addComponent<TransformComponent>();
+    dwarf->addComponent<SpriteComponent>('D', "Blue", 10);
+    dwarf->addComponent<InputComponent>(input_handler);
+    tilemap->add_entity(dwarf, 3, 3);
+
+    // tilemap->fill_tilemap(new Tile("Floor", "White", '.', true, 0));
+    // tilemap->add(new Chest(text_funnel), 8, 8);
+    // tilemap->add(new Tile("Apple", "Red", 'a', true, 2), 2, 2);
+    // tilemap->add(new Tile("Goblin", "Green", 'g', true, 2), 7, 2);
+    // tilemap->add(new Tile("Gold", "Yellow", 'G', true, 2), 2, 7);
+    // tilemap->add(player, 3, 3);
 
     //TilemapWindow
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
@@ -255,7 +261,6 @@ void Demo::execution_loop()
 
         update();
         handle_events();
-        // handle_keys();
         draw_all();
 
         frame_time = SDL_GetTicks64() - frame_start;
@@ -273,8 +278,7 @@ void Demo::update()
 {
     text_window->update();
     input_handler->update();
-
-    player->handle_keys();
+    tilemap_window->update();
 
     for(std::string element : text_funnel->get_contents())
     {

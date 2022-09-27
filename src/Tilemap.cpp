@@ -1,111 +1,58 @@
-#include <algorithm>
-
-#include <fstream>
+#include <iostream>
 
 #include "Tilemap.h"
-
-static std::fstream file_stream;
+#include "SpriteComponent.h"
+#include "TransformComponent.h"
 
 Tilemap::Tilemap() 
 {
-    text_funnel = nullptr;
-    input_handler = nullptr;
-    entity_manager = nullptr;
-    tile_manager = nullptr;
+    debugger = nullptr;
+    entity_handler = nullptr;
     width = 0;
     height = 0;
-    keep_tiles = false;
-    keep_entities = false;
 }
 
-Tilemap::Tilemap(InputHandler* _input_handler, TextFunnel* _text_funnel,
-    Debugger* _debugger, int _width, int _height)
+Tilemap::Tilemap(Debugger* _debugger, int _width, int _height)
 {
-    text_funnel = _text_funnel;
-    input_handler = _input_handler;
-    entity_manager = new EntityManager(_debugger, _width, _height);
-    tile_manager = new TileManager(_debugger, _width, _height);
-    this->width = _width;
-    this->height = _height;
-    keep_tiles = false;
-    keep_entities = false;
-}
-
-Tilemap::Tilemap(InputHandler* _input_handler, TextFunnel* _text_funnel,
-    Debugger* _debugger, Player* _player, int _width, int _height)
-{
-    text_funnel = _text_funnel;
-    input_handler = _input_handler;
-    entity_manager = new EntityManager(_debugger, _width, _height);
-    tile_manager = new TileManager(_debugger, _width, _height);
+    entity_handler = new EntityHandler;
+    debugger = _debugger;
     width = _width;
     height = _height;
-    player = _player;
-    keep_tiles = false;
-    keep_entities = false;
-}
 
-Tilemap::~Tilemap() 
-{
-    delete entity_manager;
-}
-
-std::vector<Character*> Tilemap::get_display() 
-{
-    assemble_tilemap();
-    return display;
-}
-
-void Tilemap::fill_tilemap(Tile* tile)
-{
-    /*
-    Fills the tilemap with a tile, creating new copies of each tile
-
-    :PARAM tile: Tile to fill the tilemap with
-    */
-
-    int x = 0;
-    int y = 0;
-
-    // if(width > 0 && height > 0)
-    // {
-    //     // Place the tile that was passed as a parameter as the first tile 
-    //     // in the map, so that the new tile that had to be created to be 
-    //     // passed into the function does not sit useless in heap memory
-        
-    //     std::cout << "0, 0\n";
-    //     tiles[{0,0}].push_back(tile);
-    //     tile->set_position(0, 0);
-    //     x++;
-    //     y++;
-        
-    // }
-
-    while(y < height)
+    // Tilemap is too small, no entity can be present without exceeding the 
+    // tilemap's bounds
+    if(width < 1 || height < 1)
     {
-        x = 0;
-
-        while(x < width)
-        {
-
-            Tile* new_tile = new Tile(*tile);
-            tile_manager->add_tile(new_tile, x, y);
-            x++;
-        }
-
-        y++;
+        debugger->log("[FAIL] Tilemap.Constructor() -> Tilemap too small");
+        debugger->log("[OUT] Exiting...");
+        exit(0);
     }
 
-    return;
+    // Add non traversable entities along the edges of the tilemap so no
+    // entity can move out of bounds
+    Entity* edge_map_collider = new Entity("EDGE MAP COLLIDER");
+    edge_map_collider->add_tag("NON_TRAVERSABLE");
 
+    for(int x = 0; x < width; x++)
+    {
+        add_entity(edge_map_collider, x, -1);
+        add_entity(edge_map_collider, x, height);
+    }
+
+    for(int y = 0; y < height; y++)
+    {
+        add_entity(edge_map_collider, -1, y);
+        add_entity(edge_map_collider, width, y);
+    }
 }
 
-void Tilemap::assemble_tilemap()
+Tilemap::~Tilemap()
 {
-    /*
-    Creates a visual representation of the highest priority characters of 
-    the tiles and entities. This is used to render them to the screen. 
-    */
+    delete entity_handler;
+}
+
+std::vector<Character*> Tilemap::get_display()
+{
 
     // Delete character objects so we don't have memory leaks
     for(Character* c : display)
@@ -115,51 +62,101 @@ void Tilemap::assemble_tilemap()
 
     display.clear();
 
-    std::map<std::pair<int,int>, std::vector<Entity*>> entities = 
-        entity_manager->get_entities();
-
-    std::map<std::pair<int,int>, std::vector<Tile*>> tiles = 
-        tile_manager->get_tiles();
+    std::map<std::pair<int, int>, std::vector<Entity*>> entity_positions = 
+        entity_handler->get_entity_positions();
 
     for(int y = 0; y < height; y++)
     {
         for(int x = 0; x < width; x++)
         {
-            // If there is an entity in this coordinate
-            if(entities.count({x,y}) != 0)
+
+            if(entity_positions.count({x, y}) == 0)
             {
 
-                // If the entity at this position has a higher rendering 
-                // priority than the tile under it
-                if(entities[{x,y}].at(0)->get_priority() >= 
-                    tiles[{x,y}].at(0)->get_priority())
+                NO_SPRITE_PRESENT:
+
+                display.push_back(new Character('%', "White", 0, 0));
+                continue;
+            }
+
+            SpriteComponent* highest_sprite_component = nullptr;
+
+            for(Entity* e : entity_positions[{x, y}])
+            {
+                if(e->hasComponent<SpriteComponent>())
                 {
-                    display.push_back(new Character
-                        (entities[{x,y}].at(0)->get_character(), 
-                        entities[{x,y}].at(0)->get_color(), 0, 0));
-                    continue;
+                    SpriteComponent* sprite_component = 
+                        e->getComponent<SpriteComponent>();
+
+                    // If there is no highest sprite component 
+                    if(highest_sprite_component == nullptr)
+                    {
+                        highest_sprite_component = sprite_component;
+                        continue;
+                    }
+
+                    if(sprite_component->priority > 
+                        highest_sprite_component->priority)
+                    {
+                        highest_sprite_component = sprite_component;
+                    }
                 }
             }
 
-            display.push_back(new Character
-                        (tiles[{x,y}].at(0)->get_character(), 
-                        tiles[{x,y}].at(0)->get_color(), 0, 0));   
+            if(highest_sprite_component == nullptr)
+            {
+                goto NO_SPRITE_PRESENT;
+            }
+
+            display.push_back(
+                    new Character(highest_sprite_component->symbol,
+                    highest_sprite_component->color, 0, 0));
         }
-    
+
         display.push_back(new Character('\n', "White", 0, 0));
     }
+
+    return display;
 }
 
-void Tilemap::add(Tile* t, int x, int y)
+void Tilemap::update()
 {
-
-    tile_manager->add_tile(t, x, y);
+    entity_handler->update();
 }
 
-void Tilemap::add(Entity* e, int x, int y)
+void Tilemap::add_entity(Entity* e, int x, int y) 
+{ 
+
+    if(!e->hasComponent<TransformComponent>())
+    {
+        e->addComponent<TransformComponent>(x, y);
+    }
+
+    e->getComponent<TransformComponent>()->set_position(x, y);
+
+    entity_handler->add_entity(e, x, y);
+}
+
+void Tilemap::remove_entity(Entity* e)
 {
-    entity_manager->add_entity(e, x, y);
-}
+    if(!e->hasComponent<TransformComponent>())
+    {
+        debugger->log("[FAIL] Tilemap.remove_entity -> Entity does not have"
+            "required Transform Component");
+        debugger->log("[OUT] Exiting...");
+        exit(0);
+    }
 
-void Tilemap::move_all_entities() {}
+    TransformComponent* transform_component =
+         e->getComponent<TransformComponent>();
+
+    if(!entity_handler->remove_entity(e, transform_component->x_pos, 
+        transform_component->y_pos))
+    {
+        debugger->log("[FAIL] Tilemap.remove_entity -> Could not remove" 
+            "entity");
+        debugger->log("[OUT] Exiting...");
+        exit(0);
+    }
+}
 

@@ -3,10 +3,10 @@
 #include <string>
 
 #include "BaseWindow.h"
-#include "Tilemap.h"
 #include "InputHandler.h"
 #include "TextRenderer.h"
 #include "Debugger.h"
+#include "Tilemap.h"
 
 class TilemapWindow : public BaseWindow
 {
@@ -26,5 +26,6 @@ public:
         InputHandler* input_handler);
     ~TilemapWindow();
 
-    void display() override;;
+    void display() override;
+    void update() override;
 };
