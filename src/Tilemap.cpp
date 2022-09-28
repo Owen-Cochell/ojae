@@ -3,6 +3,7 @@
 #include "Tilemap.h"
 #include "SpriteComponent.h"
 #include "TransformComponent.h"
+#include "EntityCopier.h"
 
 Tilemap::Tilemap() 
 {
@@ -83,10 +84,11 @@ std::vector<Character*> Tilemap::get_display()
 
             for(Entity* e : entity_positions[{x, y}])
             {
+
                 if(e->hasComponent<SpriteComponent>())
                 {
                     SpriteComponent* sprite_component = 
-                        e->getComponent<SpriteComponent>();
+                        e->get_component<SpriteComponent>();
 
                     // If there is no highest sprite component 
                     if(highest_sprite_component == nullptr)
@@ -102,7 +104,6 @@ std::vector<Character*> Tilemap::get_display()
                     }
                 }
             }
-
             if(highest_sprite_component == nullptr)
             {
                 goto NO_SPRITE_PRESENT;
@@ -126,14 +127,12 @@ void Tilemap::update()
 
 void Tilemap::add_entity(Entity* e, int x, int y) 
 { 
-
     if(!e->hasComponent<TransformComponent>())
     {
-        e->addComponent<TransformComponent>(x, y);
+        e->add_component<TransformComponent>(x, y);
     }
 
-    e->getComponent<TransformComponent>()->set_position(x, y);
-
+    e->get_component<TransformComponent>()->set_position(x, y);;
     entity_handler->add_entity(e, x, y);
 }
 
@@ -148,7 +147,7 @@ void Tilemap::remove_entity(Entity* e)
     }
 
     TransformComponent* transform_component =
-         e->getComponent<TransformComponent>();
+         e->get_component<TransformComponent>();
 
     if(!entity_handler->remove_entity(e, transform_component->x_pos, 
         transform_component->y_pos))
@@ -160,3 +159,26 @@ void Tilemap::remove_entity(Entity* e)
     }
 }
 
+void Tilemap::fill_tilemap(Entity* e)
+{
+
+    int x = 0;
+    int y = 0;
+
+    // Add the first entity to the first position
+    add_entity(e, x, y);
+    x++;
+
+    while(y < height)
+    {
+        while(x < width)
+        {
+            Entity* new_e = EntityCopier::copy_entity(e);
+            add_entity(new_e, x, y);
+            x++;
+        }
+
+        x = 0;
+        y++;
+    }
+}

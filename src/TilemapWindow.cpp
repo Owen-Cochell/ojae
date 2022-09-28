@@ -23,7 +23,6 @@ TilemapWindow::~TilemapWindow() {}
 
 void TilemapWindow::display()
 {
-
     draw_border();
 
     text_renderer->clear();
@@ -35,7 +34,6 @@ void TilemapWindow::display()
 
     for(Character* c : tilemap->get_display())
     {
-
         
         if(c->symbol == '\n')
         {

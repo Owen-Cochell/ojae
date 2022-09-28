@@ -16,6 +16,12 @@ struct InputComponent : public Component
     InputComponent(InputHandler* _input_handler)
     {
         input_handler = _input_handler;
+        name = "InputComponent";
+    }
+
+    InputComponent(const InputComponent& c) : Component(c)
+    {
+        input_handler = c.input_handler;
     }
 
     ~InputComponent() {}
@@ -32,7 +38,7 @@ struct InputComponent : public Component
         // Assume that this entity has a transform component, as 
         // all entities should
         TransformComponent* t = 
-            entity->getComponent<TransformComponent>();
+            entity->get_component<TransformComponent>();
 
         // Get the Component's current position
         int x_pos = t->x_pos;

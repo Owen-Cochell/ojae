@@ -169,19 +169,17 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     // player = new Player(input_handler, text_funnel, "Player", 'P');
 
     tilemap = new Tilemap(debugger, 10, 10);
+    
+    Entity* dirt = new Entity("Dirt");
+    dirt->add_component<TransformComponent>();
+    dirt->add_component<SpriteComponent>('~', "DBrown", 1);
+    tilemap->fill_tilemap(dirt);
 
     Entity* dwarf = new Entity("Dwarf");
-    dwarf->addComponent<TransformComponent>();
-    dwarf->addComponent<SpriteComponent>('D', "Blue", 10);
-    dwarf->addComponent<InputComponent>(input_handler);
+    dwarf->add_component<TransformComponent>();
+    dwarf->add_component<SpriteComponent>('D', "Blue", 10);
+    dwarf->add_component<InputComponent>(input_handler);
     tilemap->add_entity(dwarf, 3, 3);
-
-    // tilemap->fill_tilemap(new Tile("Floor", "White", '.', true, 0));
-    // tilemap->add(new Chest(text_funnel), 8, 8);
-    // tilemap->add(new Tile("Apple", "Red", 'a', true, 2), 2, 2);
-    // tilemap->add(new Tile("Goblin", "Green", 'g', true, 2), 7, 2);
-    // tilemap->add(new Tile("Gold", "Yellow", 'G', true, 2), 2, 7);
-    // tilemap->add(player, 3, 3);
 
     //TilemapWindow
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
@@ -193,11 +191,13 @@ void Demo::init(const char* title, int x, int y, int width, int height,
         height, input_handler, -1);
     full_window->load_font(font_paths["ojae"].c_str());
 
+
     debugger->log("[OUT] Game Initialized");
 }
 
 void Demo::start()
 {
+
     startup_screen();
     running = true;
     execution_loop();

@@ -30,4 +30,5 @@ public:
     void update();
     void add_entity(Entity* e, int x, int y);
     void remove_entity(Entity* e);
+    void fill_tilemap(Entity* e);
 };

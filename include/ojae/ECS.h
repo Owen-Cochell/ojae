@@ -13,19 +13,19 @@
 #include "Character.h"
 
 struct Component;
-class Entity;
+struct Entity;
 
 using ComponentID = std::size_t;
 
-inline ComponentID getComponentTypeID()
+inline ComponentID get_componentTypeID()
 {
     static ComponentID lastID = 0;
     return lastID++;
 }
 
-template<typename T> inline ComponentID getComponentTypeID() noexcept
+template<typename T> inline ComponentID get_componentTypeID() noexcept
 {
-    static ComponentID typeID = getComponentTypeID();
+    static ComponentID typeID = get_componentTypeID();
     return typeID;
 }
 
@@ -37,52 +37,70 @@ using ComponentArray = std::array<Component*, maxComponents>;
 struct Component
 {
 
-Component() {}
-virtual ~Component() {}
+    std::string name;
 
-Entity* entity;
+    Component() {}
 
-// virtual void init() {}
-virtual void update() {}
-// virtual void draw() {}
+    Component(const Component& c)
+    {
+        name = c.name;
+    }
+
+    virtual ~Component() {}
+
+    Entity* entity;
+
+    virtual void update() {}
 
 };
 
 class EntityHandler;
 
-class Entity
+struct Entity
 {
-
-private:
 
     std::string name; 
     std::vector<std::string> tags;
 
-    // bool active = true;
     std::vector<Component*> components;
 
     ComponentArray componentArray;
     ComponentBitSet componentBitSet;
 
-public:
-
     EntityHandler* entity_handler;
 
-    Entity() {}
+    Entity() 
+    {
+        for(int i = 0; i < componentArray.size(); i++)
+        {
+            componentArray[i] = nullptr;
+        }
+    }
     
     Entity(std::string _name)
     {
         name = _name;
+        for(int i = 0; i < componentArray.size(); i++)
+        {
+            componentArray[i] = nullptr;
+        }
     }
 
-    ~Entity() {}
-
-    std::vector<std::string>& get_tags() { return tags; }
+    ~Entity() 
+    {
+        for(Component* c : components)
+        {
+            delete c;
+        }
+    }
 
     void update()
     {
-        for(auto& c : components) c->update();
-        // for(auto& c : components) c->draw();
+
+        for(Component* c : components) 
+        {
+            c->update();
+        }
     }
 
     void add_tag(std::string tag)
@@ -106,26 +124,26 @@ public:
 
     template <typename T> bool hasComponent() const
     {
-        return componentBitSet[getComponentTypeID<T>()];
+        return componentBitSet[get_componentTypeID<T>()];
     }
 
     template <typename T, typename... TArgs>
-    T& addComponent(TArgs&&... mArgs)
+    T& add_component(TArgs&&... mArgs)
     {
         T* c(new T(std::forward<TArgs>(mArgs)...));
         c->entity = this;
         components.emplace_back(c);
 
-        componentArray[getComponentTypeID<T>()] = c;
-        componentBitSet[getComponentTypeID<T>()] = true;
+        componentArray[get_componentTypeID<T>()] = c;
+        componentBitSet[get_componentTypeID<T>()] = true;
 
         // c->init();
         return *c;
     }
 
-    template <typename T> T* getComponent() const 
+    template <typename T> T* get_component() const 
     {
-        return static_cast<T*>(componentArray[getComponentTypeID<T>()]);
+        return static_cast<T*>(componentArray[get_componentTypeID<T>()]);
     }
 };
 
@@ -148,9 +166,11 @@ public:
 
     void update()
     {
+
         for(std::map<std::pair<int, int>, std::vector<Entity*>>::iterator it =
             entity_positions.begin(); it != entity_positions.end(); it++ ) 
         {
+            
             for(Entity* e : it->second) e->update();
         }
     }
@@ -162,7 +182,6 @@ public:
 
     void add_entity(Entity* e, int x, int y)
     {
-        // entities.push_back(e);
         e->entity_handler = this;
         entity_positions[{x, y}].push_back(e);
     }

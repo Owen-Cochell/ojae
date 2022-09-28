@@ -10,14 +10,22 @@ struct TransformComponent : public Component
 
     TransformComponent() 
     {
+        name = "TransformComponent";
         x_pos = 0;
         y_pos = 0;
     }
 
     TransformComponent(int x, int y)
     {
+        name = "TransformComponent";
         x_pos = x;
         y_pos = y;
+    }
+
+    TransformComponent(const TransformComponent& c) : Component(c)
+    {
+        x_pos = c.x_pos;
+        y_pos = c.y_pos;
     }
 
     ~TransformComponent() {}
