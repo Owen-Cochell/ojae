@@ -1,0 +1,9 @@
+Entity priority rendering for Sprite Components
+
+0: Most Ground Tiles
+
+5: Entities with movement logic (NPC)
+
+10: Player
+
+11: Non Traversable objects

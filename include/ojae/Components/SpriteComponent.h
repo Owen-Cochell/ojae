@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "ECS.h"
+#include "../ECS.h"
 
 struct SpriteComponent : public Component
 {
@@ -20,15 +20,18 @@ struct SpriteComponent : public Component
         priority = _priority;
     }
 
-    SpriteComponent(const SpriteComponent& c) : Component(c)
+    Component* clone() override
     {
-
-        symbol = c.symbol;
-        color = c.color;
-        priority = c.priority;
+        return new SpriteComponent(symbol, color, priority);
     }
 
-    ~SpriteComponent() {}
+    // SpriteComponent(const SpriteComponent& c) : Component(c)
+    // {
 
-    void update() override {}
+    //     symbol = c.symbol;
+    //     color = c.color;
+    //     priority = c.priority;
+    // }
+
+    ~SpriteComponent() {}
 };

@@ -9,7 +9,8 @@
 #include "TilemapWindow.h"
 #include "TextFunnel.h"
 #include "Tilemap.h"
-#include "Components.h"
+#include "Components/Components.h"
+#include "Scripts/Scripts.h"
 
 static std::fstream file_stream;
 
@@ -175,11 +176,38 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     dirt->add_component<SpriteComponent>('~', "DBrown", 1);
     tilemap->fill_tilemap(dirt);
 
+    Entity* player = new Entity("Player");
+    player->add_tag("PLAYER");
+    player->add_component<TransformComponent>();
+    player->add_component<SpriteComponent>('P', "Blue", 10);
+    player->add_component<ColliderComponent>();
+    player->add_script(new PlayerInput(input_handler));
+    tilemap->add_entity(player, 3, 3);
+
+    Entity* goblin = new Entity("Goblin");
+    goblin->add_component<TransformComponent>();
+    goblin->add_component<SpriteComponent>('g', "Green", 9);
+    goblin->add_component<ColliderComponent>();
+    goblin->add_script(new RandomMovement(15, 3));
+    tilemap->add_entity(goblin, 1, 1);
+    tilemap->add_copy_entity(goblin, 2, 2);
+    
     Entity* dwarf = new Entity("Dwarf");
     dwarf->add_component<TransformComponent>();
-    dwarf->add_component<SpriteComponent>('D', "Blue", 10);
-    dwarf->add_component<InputComponent>(input_handler);
-    tilemap->add_entity(dwarf, 3, 3);
+    dwarf->add_component<SpriteComponent>('d', "Blue", 9);
+    dwarf->add_component<ColliderComponent>();
+    dwarf->add_script(new RandomMovement(15, 3));
+    tilemap->add_entity(dwarf, 2, 7);
+
+    Entity* stone_wall = new Entity("Stone Wall");
+    stone_wall->add_component<SpriteComponent>('W', "LGray", 5);
+    stone_wall->add_component<ColliderComponent>();
+    tilemap->add_entity(stone_wall, 1, 5);
+
+    for(int x = 2; x < 6; x++)
+    {
+        tilemap->add_copy_entity(stone_wall, x, 5);
+    }
 
     //TilemapWindow
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
@@ -190,7 +218,6 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     full_window = new TextWindow(texture_handler, debugger, 0, width, 0, 
         height, input_handler, -1);
     full_window->load_font(font_paths["ojae"].c_str());
-
 
     debugger->log("[OUT] Game Initialized");
 }

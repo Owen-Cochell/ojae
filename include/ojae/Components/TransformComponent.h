@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ECS.h"
+#include "../ECS.h"
 
 struct TransformComponent : public Component
 {
@@ -22,15 +22,18 @@ struct TransformComponent : public Component
         y_pos = y;
     }
 
-    TransformComponent(const TransformComponent& c) : Component(c)
+    Component* clone() override
     {
-        x_pos = c.x_pos;
-        y_pos = c.y_pos;
+        return new TransformComponent(x_pos, y_pos);
     }
 
-    ~TransformComponent() {}
+    // TransformComponent(const TransformComponent& c) : Component(c)
+    // {
+    //     x_pos = c.x_pos;
+    //     y_pos = c.y_pos;
+    // }
 
-    void update() override {}
+    ~TransformComponent() {}
 
     void set_position(int x, int y)
     {

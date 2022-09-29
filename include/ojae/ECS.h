@@ -1,6 +1,7 @@
 #pragma once
 
-// https://www.youtube.com/watch?v=XsvI8Sng6dk&t=1042s
+// https://www.youtube.com/watch?v=XsvI8Sng6dk&t=1042s Not a complete copy,
+// but used this for reference.
 
 #include <vector>
 #include <memory>
@@ -17,15 +18,15 @@ struct Entity;
 
 using ComponentID = std::size_t;
 
-inline ComponentID get_componentTypeID()
+inline ComponentID get_component_type_id()
 {
     static ComponentID lastID = 0;
     return lastID++;
 }
 
-template<typename T> inline ComponentID get_componentTypeID() noexcept
+template<typename T> inline ComponentID get_component_type_id() noexcept
 {
-    static ComponentID typeID = get_componentTypeID();
+    static ComponentID typeID = get_component_type_id();
     return typeID;
 }
 
@@ -36,7 +37,7 @@ using ComponentArray = std::array<Component*, maxComponents>;
 
 struct Component
 {
-
+    Entity* entity;
     std::string name;
 
     Component() {}
@@ -46,12 +47,44 @@ struct Component
         name = c.name;
     }
 
+    virtual Component* clone() {}
+
     virtual ~Component() {}
 
+};
+
+/**
+ * @brief Modular class for atatching behavior to entities
+ */
+struct Script
+{
+    std::string name;
     Entity* entity;
 
-    virtual void update() {}
+    Script() 
+    {
+        start();
+    }
 
+    Script(const Script& s)
+    {
+        name = s.name;
+    }
+
+    virtual Script* clone() {}
+
+    virtual ~Script() {}
+
+    /**
+     * @brief Called when the object is created 
+     */
+    virtual void start() {}
+
+    /**
+     * @brief Called once per frame
+     * 
+     */
+    virtual void update() {}
 };
 
 class EntityHandler;
@@ -63,6 +96,7 @@ struct Entity
     std::vector<std::string> tags;
 
     std::vector<Component*> components;
+    std::map<std::string, Script*> scripts;
 
     ComponentArray componentArray;
     ComponentBitSet componentBitSet;
@@ -92,15 +126,40 @@ struct Entity
         {
             delete c;
         }
+
+        for(std::map<std::string, Script*>::iterator it = scripts.begin(); 
+            it != scripts.end(); it++)
+        {
+            delete it->second;
+        }
+
+        scripts.clear();
     }
 
     void update()
     {
-
-        for(Component* c : components) 
+        for(std::map<std::string, Script*>::iterator it = scripts.begin(); 
+            it != scripts.end(); it++)
         {
-            c->update();
+            it->second->update();
         }
+    }
+
+    void add_script(Script* s)
+    {
+        scripts[s->name] = s;
+        s->entity = this;
+    }
+
+    bool remove_script(Script* s)
+    {
+        if(scripts.count(s->name) == 0)
+        {
+            return false;
+        }
+
+        scripts.erase(s->name);
+        return true;
     }
 
     void add_tag(std::string tag)
@@ -122,9 +181,9 @@ struct Entity
         return false;
     }
 
-    template <typename T> bool hasComponent() const
+    template <typename T> bool has_component() const
     {
-        return componentBitSet[get_componentTypeID<T>()];
+        return componentBitSet[get_component_type_id<T>()];
     }
 
     template <typename T, typename... TArgs>
@@ -134,16 +193,26 @@ struct Entity
         c->entity = this;
         components.emplace_back(c);
 
-        componentArray[get_componentTypeID<T>()] = c;
-        componentBitSet[get_componentTypeID<T>()] = true;
+        componentArray[get_component_type_id<T>()] = c;
+        componentBitSet[get_component_type_id<T>()] = true;
 
         // c->init();
         return *c;
     }
 
+    Script* get_script(std::string script_name)
+    {
+        if(scripts.count(script_name) == 0)
+        {
+            return nullptr;
+        }
+
+        return scripts[script_name];
+    }
+
     template <typename T> T* get_component() const 
     {
-        return static_cast<T*>(componentArray[get_componentTypeID<T>()]);
+        return static_cast<T*>(componentArray[get_component_type_id<T>()]);
     }
 };
 

@@ -1,22 +1,7 @@
 #pragma once 
 
-#include "ECS.h"
+#include "../ECS.h"
 
-static bool bound_check(std::vector<Entity*> entities)
-{
-    // Iterate through the entities 
-    for(Entity* targ_e : entities)
-    {
-        // Iterate through the tags of each entity
-        for(std::string t : targ_e->tags)
-        {
-            // If this entity contains the non traversable tag, this position
-            // is not able to be traversed
-            if(t == "NON_TRAVERSABLE") { return false; }
-        }
-    }
-    return true;
-}
 
 struct ColliderComponent: public Component
 {
@@ -24,14 +9,26 @@ struct ColliderComponent: public Component
         // if any entity contains a tag that is present in this vector, it 
         // will be allowed to traverse over the entity with this component
 
-    ColliderComponent() {}
+    ColliderComponent() 
+    {
+        name = "ColliderComponent";
+    }
 
     ColliderComponent(std::vector<std::string> _exceptions) 
     {
+        name = "ColliderComponent";
         exceptions = _exceptions;
     }
+
+    Component* clone() override
+    {
+        return new ColliderComponent(exceptions);
+    }
     
-    ColliderComponent(const ColliderComponent& c) : Component(c) {}
+    // ColliderComponent(const ColliderComponent& c) : Component(c) 
+    // {
+    //     exceptions = c.exceptions;
+    // }
 
     ~ColliderComponent() {}
 

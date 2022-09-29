@@ -1,30 +1,27 @@
 #pragma once
 
-#include <iostream>
+#include "../ECS.h"
+#include "../InputHandler.h"
+#include "../Components/TransformComponent.h"
+#include "../CollisionHandler.h"
 
-#include "ECS.h"
-#include "InputHandler.h"
-#include "TransformComponent.h"
-#include "ColliderComponent.h"
-
-struct InputComponent : public Component
+struct PlayerInput : Script
 {
+
     InputHandler* input_handler;
 
-    InputComponent() {}
-
-    InputComponent(InputHandler* _input_handler)
+    PlayerInput(InputHandler* _input_handler)
     {
+        name = "PlayerInput";
         input_handler = _input_handler;
-        name = "InputComponent";
     }
 
-    InputComponent(const InputComponent& c) : Component(c)
+    Script* clone() override
     {
-        input_handler = c.input_handler;
+        return new PlayerInput(input_handler);
     }
 
-    ~InputComponent() {}
+    void start() override {}
 
     /**
      * @brief Modifies the Entity this Component is attatched to's position
@@ -44,12 +41,10 @@ struct InputComponent : public Component
         int x_pos = t->x_pos;
         int y_pos = t->y_pos;
 
-        // If the bound check for the entities at this position does not 
+        // If the traversable check for the entities at this position does not 
         // return true
-        if(!bound_check(
-            entity->entity_handler->get_entity_positions()
-            [{x_pos + x_delta, y_pos + y_delta}]
-        ))
+        if(!CollisionHandler::is_traversable(entity, x_pos + x_delta, 
+            y_pos + y_delta))
         {
             return;
         }
@@ -105,4 +100,5 @@ struct InputComponent : public Component
             }
         }
     }
+
 };

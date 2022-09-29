@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "Tilemap.h"
-#include "SpriteComponent.h"
-#include "TransformComponent.h"
+#include "Components/SpriteComponent.h"
+#include "Components/TransformComponent.h"
 #include "EntityCopier.h"
 
 Tilemap::Tilemap() 
@@ -17,12 +17,12 @@ Tilemap::Tilemap(Debugger* _debugger, int _width, int _height)
 {
     entity_handler = new EntityHandler;
     debugger = _debugger;
-    width = _width;
+    width = _width; 
     height = _height;
 
     // Tilemap is too small, no entity can be present without exceeding the 
     // tilemap's bounds
-    if(width < 1 || height < 1)
+    if(width < 3 || height < 3)
     {
         debugger->log("[FAIL] Tilemap.Constructor() -> Tilemap too small");
         debugger->log("[OUT] Exiting...");
@@ -32,18 +32,20 @@ Tilemap::Tilemap(Debugger* _debugger, int _width, int _height)
     // Add non traversable entities along the edges of the tilemap so no
     // entity can move out of bounds
     Entity* edge_map_collider = new Entity("EDGE MAP COLLIDER");
+    edge_map_collider->add_component<ColliderComponent>();
+    // edge_map_collider->add_component<SpriteComponent>('C', "Red", 11);
     edge_map_collider->add_tag("NON_TRAVERSABLE");
 
     for(int x = 0; x < width; x++)
     {
-        add_entity(edge_map_collider, x, -1);
-        add_entity(edge_map_collider, x, height);
+        add_entity(edge_map_collider, x, 0);
+        add_entity(edge_map_collider, x, height - 1);
     }
 
     for(int y = 0; y < height; y++)
     {
-        add_entity(edge_map_collider, -1, y);
-        add_entity(edge_map_collider, width, y);
+        add_entity(edge_map_collider, 0, y);
+        add_entity(edge_map_collider, width - 1, y);
     }
 }
 
@@ -85,7 +87,7 @@ std::vector<Character*> Tilemap::get_display()
             for(Entity* e : entity_positions[{x, y}])
             {
 
-                if(e->hasComponent<SpriteComponent>())
+                if(e->has_component<SpriteComponent>())
                 {
                     SpriteComponent* sprite_component = 
                         e->get_component<SpriteComponent>();
@@ -127,7 +129,7 @@ void Tilemap::update()
 
 void Tilemap::add_entity(Entity* e, int x, int y) 
 { 
-    if(!e->hasComponent<TransformComponent>())
+    if(!e->has_component<TransformComponent>())
     {
         e->add_component<TransformComponent>(x, y);
     }
@@ -136,9 +138,15 @@ void Tilemap::add_entity(Entity* e, int x, int y)
     entity_handler->add_entity(e, x, y);
 }
 
+void Tilemap::add_copy_entity(Entity* e, int x, int y)
+{
+    Entity* new_e = EntityCopier::copy_entity(*e);
+    add_entity(new_e, x, y);
+}
+
 void Tilemap::remove_entity(Entity* e)
 {
-    if(!e->hasComponent<TransformComponent>())
+    if(!e->has_component<TransformComponent>())
     {
         debugger->log("[FAIL] Tilemap.remove_entity -> Entity does not have"
             "required Transform Component");
@@ -173,8 +181,7 @@ void Tilemap::fill_tilemap(Entity* e)
     {
         while(x < width)
         {
-            Entity* new_e = EntityCopier::copy_entity(e);
-            add_entity(new_e, x, y);
+            add_copy_entity(e, x, y);
             x++;
         }
 

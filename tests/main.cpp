@@ -8,6 +8,7 @@
 
 #include "Demo.h"
 #include "FileHandler.h"
+#include "Random.h"
 
 static std::fstream file_stream;
 
@@ -28,6 +29,8 @@ static std::fstream file_stream;
 
 int main(int argc, char* argv[])
 {
+    Random::seed_random();
+
     // Clear the output log
     file_stream.open("OutputLog.txt", std::ios::out);
     file_stream.close();
