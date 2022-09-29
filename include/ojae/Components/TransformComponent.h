@@ -8,6 +8,7 @@ struct TransformComponent : public Component
     int x_pos;
     int y_pos;
 
+
     TransformComponent() 
     {
         name = "TransformComponent";
@@ -26,12 +27,6 @@ struct TransformComponent : public Component
     {
         return new TransformComponent(x_pos, y_pos);
     }
-
-    // TransformComponent(const TransformComponent& c) : Component(c)
-    // {
-    //     x_pos = c.x_pos;
-    //     y_pos = c.y_pos;
-    // }
 
     ~TransformComponent() {}
 

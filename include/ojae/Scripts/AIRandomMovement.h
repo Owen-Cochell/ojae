@@ -3,59 +3,34 @@
 #include "../ECS.h"
 #include "../Random.h"
 #include "../Components/TransformComponent.h"
+#include "../Components/AIMovementComponent.h"
 #include "../CollisionHandler.h"
 
-struct RandomMovement : public Script
+struct AIRandomMovement : public Script
 {
-
-    int frame_delay = 0; // Number of frames between each move call
-
-    /**
-     * @brief Current number of frames this entity is waiting until its next 
-     * move call
-     */
-    int current_frame_delay = 0;
-
     /**
      * @brief (n / 10) Chance that this entity will move on its move call
      */
     int move_chance = 0;
 
-    RandomMovement(int _frame_delay, int _move_chance) 
+
+    AIRandomMovement(int _move_chance) 
     {
-        frame_delay = _frame_delay;
-        current_frame_delay = _frame_delay;
-
-        if(_move_chance > 10) _move_chance = 10;
-
         move_chance = _move_chance;
-
-        name = "RandomMoveComponent";
-    }
-
-    RandomMovement(const RandomMovement& s) : Script(s)
-    {
-        frame_delay = s.frame_delay;
-        current_frame_delay = s.current_frame_delay;
-        move_chance = s.move_chance;
+        name = "AIRandomMove";
     }
 
     Script* clone() override
     {
-        RandomMovement* new_s = new RandomMovement(frame_delay, move_chance);
-        new_s->current_frame_delay = current_frame_delay;
-        return new_s;
+        return new AIRandomMovement(move_chance);
     }
 
     void update() override
     {
+        AIMovementComponent* move_c = 
+            entity->get_component<AIMovementComponent>();
 
-        // If this entity is still waiting to move
-        if(current_frame_delay > 0)
-        {       
-            current_frame_delay--;
-            return;
-        }
+        if(!move_c->can_move()) return;
 
         // Check if this entity is randomly moving this turn
         int ran_num = Random::get_random_num(1, 10);
@@ -64,7 +39,7 @@ struct RandomMovement : public Script
         // its next move call
         if(ran_num > move_chance)
         {
-            current_frame_delay = frame_delay;
+            move_c->current_frame_delay = move_c->frame_delay;
             return;
         }
 
@@ -96,12 +71,10 @@ struct RandomMovement : public Script
         std::pair<int, int> targ = 
             Random::get_random_vector_element(available_moves);
 
-        entity->entity_handler->remove_entity(entity, c->x_pos, c->y_pos);
-        entity->entity_handler->add_entity(entity, targ.first, targ.second);
-
-        c->set_position(targ.first, targ.second);
+        entity->get_component<AIMovementComponent>()->move(targ.first, targ.second);
         
-        current_frame_delay = frame_delay;
+
+        move_c->reset_frames();
     }
 
 };

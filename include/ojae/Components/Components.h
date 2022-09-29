@@ -3,3 +3,4 @@
 #include "SpriteComponent.h"
 #include "TransformComponent.h"
 #include "ColliderComponent.h"
+#include "AIMovementComponent.h"

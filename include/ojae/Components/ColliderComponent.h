@@ -24,11 +24,6 @@ struct ColliderComponent: public Component
     {
         return new ColliderComponent(exceptions);
     }
-    
-    // ColliderComponent(const ColliderComponent& c) : Component(c) 
-    // {
-    //     exceptions = c.exceptions;
-    // }
 
     ~ColliderComponent() {}
 

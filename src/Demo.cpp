@@ -31,6 +31,8 @@ SDL_Rect src, dest;
 
 Tilemap* tilemap;
 
+Entity* player;
+
 // Constructors/Deconstructors
 
 Demo::Demo() 
@@ -155,7 +157,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     }
 
     texture_handler = new TextureHandler(renderer, debugger);
-    get_colors("data/colors.json");
+    get_colors("data/colors2.json");
 
     debugger->log("[OUT] Creating Windows and Objects");
 
@@ -176,29 +178,28 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     dirt->add_component<SpriteComponent>('~', "DBrown", 1);
     tilemap->fill_tilemap(dirt);
 
-    Entity* player = new Entity("Player");
+    player = new Entity("Player");
     player->add_tag("PLAYER");
     player->add_component<TransformComponent>();
     player->add_component<SpriteComponent>('P', "Blue", 10);
     player->add_component<ColliderComponent>();
     player->add_script(new PlayerInput(input_handler));
-    tilemap->add_entity(player, 3, 3);
+    tilemap->add_entity(player, 8, 8);
 
     Entity* goblin = new Entity("Goblin");
     goblin->add_component<TransformComponent>();
     goblin->add_component<SpriteComponent>('g', "Green", 9);
     goblin->add_component<ColliderComponent>();
-    goblin->add_script(new RandomMovement(15, 3));
+    goblin->add_component<AIMovementComponent>(60);
+    // goblin->add_script(new AIRandomMovement(10));
+    goblin->add_script(new TrackEntity(player));
     tilemap->add_entity(goblin, 1, 1);
-    tilemap->add_copy_entity(goblin, 2, 2);
     
-    Entity* dwarf = new Entity("Dwarf");
-    dwarf->add_component<TransformComponent>();
-    dwarf->add_component<SpriteComponent>('d', "Blue", 9);
-    dwarf->add_component<ColliderComponent>();
-    dwarf->add_script(new RandomMovement(15, 3));
-    tilemap->add_entity(dwarf, 2, 7);
-
+    for(int x = 2; x < 8; x++)
+    {
+        tilemap->add_copy_entity(goblin, x, 1);
+    }
+    
     Entity* stone_wall = new Entity("Stone Wall");
     stone_wall->add_component<SpriteComponent>('W', "LGray", 5);
     stone_wall->add_component<ColliderComponent>();
@@ -307,9 +308,17 @@ void Demo::update()
     input_handler->update();
     tilemap_window->update();
 
+    text_window->clear();
+
+    TransformComponent* t = player->get_component<TransformComponent>();
+
+    text_window->add(std::to_string(t->x_pos), "White", false);
+    text_window->add(", ", "White", false);
+    text_window->add(std::to_string(t->y_pos), "White");
+
     for(std::string element : text_funnel->get_contents())
     {
-        text_window->add(element, "Green");
+        text_window->add(element, "Blue");
     }
 
     text_funnel->clear();
@@ -346,8 +355,6 @@ void Demo::handle_events()
         }
     }
 }
-
-void Demo::handle_keys() {}
 
 void Demo::draw_all()
 {
