@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Debug.h"
 #include "ECS.h"
 #include "Components/Components.h"
 #include "Scripts/Scripts.h"
@@ -39,7 +40,9 @@ struct EntityCopier
 
             if(new_component == nullptr)
             {
-                std::cout << "Non Valid Component\n";
+                Debug::log("[FAIL] EntityCopier.copy_entity -> Attempted to copy a "
+                    "component of type nullptr");
+                Debug::log("[OUT] Exiting...");
                 exit(0);
             }
 

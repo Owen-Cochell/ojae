@@ -11,6 +11,7 @@
 #include "Tilemap.h"
 #include "Components/Components.h"
 #include "Scripts/Scripts.h"
+#include "Heap.h"
 
 static std::fstream file_stream;
 
@@ -32,6 +33,16 @@ SDL_Rect src, dest;
 Tilemap* tilemap;
 
 Entity* player;
+
+std::string determine_color(int num, int max)
+{
+    float ratio = num / max;
+
+    if(ratio <= .3) { return "Green"; }
+    else if(ratio > .3 && ratio <= .5) { return "Yellow"; }
+    else if(ratio > .5 && ratio <= .8) { return "Orange"; }
+    return "Red";
+}
 
 // Constructors/Deconstructors
 
@@ -171,7 +182,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     // player = new Player(input_handler, text_funnel, "Player", 'P');
 
-    tilemap = new Tilemap(debugger, 10, 10);
+    tilemap = new Tilemap(debugger, 15, 15);
     
     Entity* dirt = new Entity("Dirt");
     dirt->add_component<TransformComponent>();
@@ -184,31 +195,92 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     player->add_component<SpriteComponent>('P', "Blue", 10);
     player->add_component<ColliderComponent>();
     player->add_script(new PlayerInput(input_handler));
-    tilemap->add_entity(player, 8, 8);
+    tilemap->add_entity(player, 13, 13);
 
     Entity* goblin = new Entity("Goblin");
     goblin->add_component<TransformComponent>();
     goblin->add_component<SpriteComponent>('g', "Green", 9);
     goblin->add_component<ColliderComponent>();
-    goblin->add_component<AIMovementComponent>(60);
-    // goblin->add_script(new AIRandomMovement(10));
-    goblin->add_script(new TrackEntity(player));
+    goblin->add_component<AIMovementComponent>(20);
+    goblin->add_script(new AIRandomMovement(3));
+    // goblin->add_script(new TrackEntity(player));
     tilemap->add_entity(goblin, 1, 1);
-    
-    for(int x = 2; x < 8; x++)
-    {
-        tilemap->add_copy_entity(goblin, x, 1);
-    }
-    
-    Entity* stone_wall = new Entity("Stone Wall");
-    stone_wall->add_component<SpriteComponent>('W', "LGray", 5);
-    stone_wall->add_component<ColliderComponent>();
-    tilemap->add_entity(stone_wall, 1, 5);
 
-    for(int x = 2; x < 6; x++)
+    Entity* troll = new Entity("Troll");
+    troll->add_component<TransformComponent>();
+    troll->add_component<SpriteComponent>('T', "Green", 9);
+    troll->add_component<ColliderComponent>();
+    troll->add_component<AIMovementComponent>(60);
+    troll->add_script(new TrackEntity(player));
+    tilemap->add_entity(troll, 10, 10);
+
+    for(int y = 1; y < 4; y++)
     {
-        tilemap->add_copy_entity(stone_wall, x, 5);
+        for(int x = 1; x < 4; x++)
+        {
+            if(CollisionHandler::is_traversable(goblin, x, y))
+            {
+                tilemap->add_copy_entity(goblin, x, y);
+            }
+        }
     }
+
+    // Entity* wizard = new Entity("Wizard");
+    // wizard->add_component<TransformComponent>();
+    // wizard->add_component<SpriteComponent>('w', "Purple", 9);
+    // wizard->add_component<ColliderComponent>();
+    // wizard->add_component<AIMovementComponent>(30);
+    // wizard->add_script(new TrackEntity(player));
+    // tilemap->add_entity(wizard, 2, 1);
+
+    // Entity* warrior = new Entity("Warrior");
+    // warrior->add_component<TransformComponent>();
+    // warrior->add_component<SpriteComponent>('w', "LGray", 9);
+    // warrior->add_component<ColliderComponent>();
+    // warrior->add_component<AIMovementComponent>(30);
+    // warrior->add_script(new TrackEntity(player));
+    // tilemap->add_entity(warrior, 3, 1);
+
+    // Entity* Troll = new Entity("Troll");
+    // Troll->add_component<TransformComponent>();
+    // Troll->add_component<SpriteComponent>('T', "Green", 9);
+    // Troll->add_component<ColliderComponent>();
+    // Troll->add_component<AIMovementComponent>(60);
+    // Troll->add_script(new TrackEntity(player));
+    // tilemap->add_entity(Troll, 4, 1);
+    // tilemap->add_copy_entity(Troll, 7, 7);
+    // tilemap->add_copy_entity(Troll, 12, 4);
+    // tilemap->add_copy_entity(Troll, 4, 4);
+
+    // Entity* Elf = new Entity("Elf");
+    // Elf->add_component<TransformComponent>();
+    // Elf->add_component<SpriteComponent>('e', "Yellow", 9);
+    // Elf->add_component<ColliderComponent>();
+    // Elf->add_component<AIMovementComponent>(25);
+    // Elf->add_script(new TrackEntity(player));
+    // tilemap->add_entity(Elf, 5, 1);
+
+    // Entity* Dwarf = new Entity("Dwarf");
+    // Dwarf->add_component<TransformComponent>();
+    // Dwarf->add_component<SpriteComponent>('D', "Blue", 9);
+    // Dwarf->add_component<ColliderComponent>();
+    // Dwarf->add_component<AIMovementComponent>(30);
+    // Dwarf->add_script(new TrackEntity(player));
+    // tilemap->add_entity(Dwarf, 6, 1);
+    
+    // Entity* stone_wall = new Entity("Stone Wall");
+    // stone_wall->add_component<SpriteComponent>('W', "LGray", 5);
+    // stone_wall->add_component<ColliderComponent>();
+    // tilemap->add_entity(stone_wall, 7, 8);
+    // tilemap->add_copy_entity(stone_wall, 7, 7);
+    // tilemap->add_copy_entity(stone_wall, 8, 7);
+    
+    // tilemap->add_entity(stone_wall, 1, 5);
+
+    // for(int x = 2; x < 6; x++)
+    // {
+    //     tilemap->add_copy_entity(stone_wall, x, 5);
+    // }
 
     //TilemapWindow
     tilemap_window = new TilemapWindow(texture_handler, debugger, tilemap,
@@ -286,10 +358,18 @@ void Demo::execution_loop()
     while(running)
     {
         frame_start = SDL_GetTicks64();
+        Uint64 start_time = SDL_GetTicks64();
 
         update();
+        update_time = SDL_GetTicks64() - start_time;
+        start_time = SDL_GetTicks64();
+
         handle_events();
+        handle_events_time = SDL_GetTicks64() - start_time;
+        start_time = SDL_GetTicks64();
+
         draw_all();
+        draw_time = SDL_GetTicks64() - start_time;
 
         frame_time = SDL_GetTicks64() - frame_start;
 
@@ -310,12 +390,13 @@ void Demo::update()
 
     text_window->clear();
 
-    TransformComponent* t = player->get_component<TransformComponent>();
-
-    text_window->add(std::to_string(t->x_pos), "White", false);
-    text_window->add(", ", "White", false);
-    text_window->add(std::to_string(t->y_pos), "White");
-
+    text_window->add("Update: ", "White", false);
+    text_window->add(std::to_string(update_time), determine_color(update_time, 100));
+    text_window->add("Handle Events: ", "White", false);
+    text_window->add(std::to_string(handle_events_time), determine_color(handle_events_time, 100));
+    text_window->add("Draw: ", "White", false);
+    text_window->add(std::to_string(draw_time), determine_color(draw_time, 100));
+    
     for(std::string element : text_funnel->get_contents())
     {
         text_window->add(element, "Blue");

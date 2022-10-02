@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "Tilemap.h"
 #include "Components/SpriteComponent.h"
 #include "Components/TransformComponent.h"
@@ -33,7 +31,7 @@ Tilemap::Tilemap(Debugger* _debugger, int _width, int _height)
     // entity can move out of bounds
     Entity* edge_map_collider = new Entity("EDGE MAP COLLIDER");
     edge_map_collider->add_component<ColliderComponent>();
-    // edge_map_collider->add_component<SpriteComponent>('C', "Red", 11);
+    edge_map_collider->add_component<SpriteComponent>('C', "Red", 11);
     edge_map_collider->add_tag("NON_TRAVERSABLE");
 
     for(int x = 0; x < width; x++)

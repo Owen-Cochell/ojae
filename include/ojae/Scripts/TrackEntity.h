@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_set>
 #include <map>
+#include <SDL2/SDL.h>
 
 #include "../ECS.h"
 #include "../Components/TransformComponent.h"
@@ -33,8 +34,14 @@ private:
 
     int start_x;
     int start_y;
-    int targ_x; 
+    int targ_x;
     int targ_y;
+
+    Uint64 update_start;
+
+    bool path_blocked = false;
+
+    std::pair<int,int> closest_position;
 
     std::map<std::pair<int,int>,std::pair<int,int>> parent_pos;
 
@@ -93,14 +100,8 @@ private:
 
     void retrace_path()
     {
-        
+    
         std::pair<int,int> targ_pos {targ_x, targ_y};
-
-        if(parent_pos.count(targ_pos) == 0)
-        {
-            std::cout << "Parent position of target position doesn't exist\n";
-            exit(0);
-        }
 
         while(parent_pos.at(targ_pos) != std::pair<int,int>{start_x, start_y})
         {
@@ -111,8 +112,9 @@ private:
             entity->get_component<AIMovementComponent>();
 
         c->move(targ_pos.first, targ_pos.second);
+        // std::cout << entity->name << " moving to target\n";
+        // std::cout << "Took " << (SDL_GetTicks64() - update_start) << " miliseconds\n\n";
         c->reset_frames();
-        Debug::log("Found path");
     }
 
 public:
@@ -129,12 +131,8 @@ public:
         return new TrackEntity(targ_entity);
     }
 
-    void update() override
+    void set_positions()
     {
-
-        // If this entity is not allowed to move yet, don't calculate a path
-        if(!entity->get_component<AIMovementComponent>()->can_move()) return;
-
         // Tracked Entity's Transform Component
         TransformComponent* targ_t = 
             targ_entity->get_component<TransformComponent>();
@@ -148,14 +146,48 @@ public:
         targ_x = targ_t->x_pos;
         targ_y = targ_t->y_pos;
 
-        // If this entity is already next to the player, there is no sense in 
-        // moving
-        if(get_distance(start_x, start_y, targ_x, targ_y) <= 14)
+        closest_position = std::pair<int,int>{start_x, start_y};
+    }
+
+    void update() override
+    {
+
+        AIMovementComponent* c = entity->get_component<AIMovementComponent>();
+
+        // If this entity is not allowed to move yet, don't calculate a path
+        if(!c->can_move()) return;
+
+        // std::cout << entity->name << " can move\n";
+
+        if(!path_blocked)
         {
-            return;
+            set_positions();
+
+            // If this entity is already next to the player, there is no sense in 
+            // moving
+            if(get_distance(start_x, start_y, targ_x, targ_y) <= 14)
+            {
+                // std::cout << entity->name << " closest to target\n";
+                // std::cout << "Took " << (SDL_GetTicks64() - update_start) << " miliseconds\n\n";
+                c->reset_frames();
+                return;
+            }
         }
 
-        Debug::log("Begin of Track Update");
+        else
+        {
+            path_blocked = false;
+
+            // The entity is the closest they can get to the player while 
+            // being blocked
+            if(start_x == targ_x && start_y == targ_y)
+            {
+                // std::cout << entity->name << " closest to target while being blocked\n";
+                // std::cout << "Took " << (SDL_GetTicks64() - update_start) << " miliseconds\n\n";
+                c->reset_frames();
+                return;
+            }
+        }
 
         parent_pos.clear();
 
@@ -218,6 +250,12 @@ public:
             for(std::pair<int,int> neighbor_pos : 
                 get_surrounding_positions(current_pos.first, current_pos.second))
             {
+                if(get_distance(neighbor_pos, std::pair<int,int>{targ_x, targ_y}) < 
+                    get_distance(closest_position, std::pair<int,int>{targ_x, targ_y}))
+                {
+                    closest_position = neighbor_pos;
+                }
+
                 if(closed_pos.count(neighbor_pos) != 0) continue;
 
                 int new_cost_to_neighbor = get_g_cost(current_pos) + 
@@ -242,9 +280,11 @@ public:
             }
         } 
 
-        
+        path_blocked = true;
 
-        // No path to target, try again on the next move
-        entity->get_component<AIMovementComponent>()->reset_frames();
+        targ_x = closest_position.first;
+        targ_y = closest_position.second;
+
+        update();
     }  
 };

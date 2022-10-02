@@ -61,6 +61,13 @@ struct PlayerInput : Script
             entity, x_pos + x_delta, y_pos + y_delta);
     }
 
+    void set_position(int x, int y)
+    {
+        TransformComponent* c =
+            entity->get_component<TransformComponent>();
+        modify_position(-(c->x_pos - x), -(c->y_pos - y));
+    }
+
     /**
      * @brief Iterates through the keys in the input handler and performs logic
      * upon this Component's entity
@@ -95,6 +102,12 @@ struct PlayerInput : Script
                 case SDLK_LEFT:
 
                     modify_position(-1, 0);
+                    input_handler->set_delay(k->id);
+                    break;
+
+                case 't':
+
+                    set_position(1, 1);
                     input_handler->set_delay(k->id);
                     break;
             }

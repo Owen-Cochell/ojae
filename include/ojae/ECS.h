@@ -11,7 +11,7 @@
 #include <map>
 #include <string>
 
-#include "Character.h"
+#include "Debug.h"
 
 struct Component;
 struct Entity;
@@ -189,6 +189,17 @@ struct Entity
     template <typename T, typename... TArgs>
     T& add_component(TArgs&&... mArgs)
     {
+        if(componentArray[get_component_type_id<T>()] != nullptr)
+        {
+            Debug::log("[FAIL] Entity.add_component -> attempted to attatch"
+                " a component to ", false, true);
+            Debug::log(name, false, false);
+            Debug::log(" when it contains a type of this component already",
+                true, false);
+            Debug::log("[OUT] Exiting...");
+            exit(0);
+        }
+
         T* c(new T(std::forward<TArgs>(mArgs)...));
         c->entity = this;
         components.emplace_back(c);

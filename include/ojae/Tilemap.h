@@ -5,6 +5,7 @@
 
 #include "ECS.h"
 #include "Debugger.h"
+#include "Character.h"
 
 class Tilemap
 {

@@ -36,6 +36,10 @@ private:
     Uint32 frame_start; // Resembles the time stamp of the beginning of each frame
     int frame_time; // Measures the amount of time each frame took to execute
 
+    int update_time;
+    int handle_events_time;
+    int draw_time;
+
     int screen_width; // Width of the screen
     int screen_height; // Height of the screen
     int standard_input_delay; // Standard delay for generic key input

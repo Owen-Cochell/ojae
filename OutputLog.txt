@@ -1,152 +1,29 @@
 0 ms: [OUT] Getting font: monocraft
-3 ms: [OUT] Getting font: ojae
-5 ms: [OUT] Initializing SDL
-392 ms: [OUT] Loading Color: Black
-392 ms: [OUT] Loading Color: Blue
-393 ms: [OUT] Loading Color: DBrown
-394 ms: [OUT] Loading Color: DGray
-395 ms: [OUT] Loading Color: Green
-395 ms: [OUT] Loading Color: LBrown
-396 ms: [OUT] Loading Color: LGray
-397 ms: [OUT] Loading Color: Orange
-398 ms: [OUT] Loading Color: Purple
-398 ms: [OUT] Loading Color: Red
-399 ms: [OUT] Loading Color: White
-399 ms: [OUT] Loading Color: Yellow
-400 ms: [OUT] Creating Windows and Objects
-400 ms: [OUT] Creating texture from path: assets/Sprites/border.png
-408 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
-411 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
-412 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
-416 ms: [OUT] Creating texture from path: assets/Sprites/border.png
-424 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
-426 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
-427 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
-428 ms: [OUT] Creating texture from path: assets/Sprites/border.png
-431 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
-432 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
-433 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
-437 ms: [OUT] Game Initialized
-1815 ms: Begin of Track Update
-1821 ms: Found path
-1821 ms: Begin of Track Update
-1826 ms: Found path
-1826 ms: Begin of Track Update
-1829 ms: Found path
-1830 ms: Begin of Track Update
-1834 ms: Found path
-1835 ms: Begin of Track Update
-1838 ms: Found path
-1839 ms: Begin of Track Update
-1842 ms: Found path
-1842 ms: Begin of Track Update
-1846 ms: Found path
-3386 ms: Begin of Track Update
-3389 ms: Found path
-3390 ms: Begin of Track Update
-3393 ms: Found path
-3393 ms: Begin of Track Update
-3397 ms: Found path
-3399 ms: Begin of Track Update
-3402 ms: Found path
-3402 ms: Begin of Track Update
-3405 ms: Found path
-3405 ms: Begin of Track Update
-3408 ms: Found path
-3408 ms: Begin of Track Update
-3418 ms: Found path
-4400 ms: Begin of Track Update
-4403 ms: Found path
-4403 ms: Begin of Track Update
-4406 ms: Found path
-4406 ms: Begin of Track Update
-4408 ms: Found path
-4409 ms: Begin of Track Update
-4411 ms: Found path
-4411 ms: Begin of Track Update
-4415 ms: Found path
-4416 ms: Begin of Track Update
-4432 ms: Begin of Track Update
-5410 ms: Begin of Track Update
-5421 ms: Begin of Track Update
-5424 ms: Found path
-5424 ms: Begin of Track Update
-5426 ms: Found path
-5426 ms: Begin of Track Update
-5428 ms: Found path
-5429 ms: Begin of Track Update
-5445 ms: Begin of Track Update
-5485 ms: Begin of Track Update
-6451 ms: Begin of Track Update
-6452 ms: Found path
-6453 ms: Begin of Track Update
-6454 ms: Found path
-6454 ms: Begin of Track Update
-6457 ms: Found path
-6468 ms: Begin of Track Update
-6471 ms: Found path
-6471 ms: Begin of Track Update
-6474 ms: Found path
-6485 ms: Begin of Track Update
-6490 ms: Found path
-6502 ms: Begin of Track Update
-6508 ms: Found path
-7448 ms: Begin of Track Update
-7449 ms: Found path
-7450 ms: Begin of Track Update
-7451 ms: Found path
-7463 ms: Begin of Track Update
-7469 ms: Found path
-7470 ms: Begin of Track Update
-7473 ms: Found path
-7480 ms: Begin of Track Update
-7488 ms: Found path
-7498 ms: Begin of Track Update
-7521 ms: Begin of Track Update
-8467 ms: Begin of Track Update
-8469 ms: Found path
-8470 ms: Begin of Track Update
-8472 ms: Found path
-8484 ms: Begin of Track Update
-8491 ms: Found path
-8516 ms: Begin of Track Update
-8536 ms: Begin of Track Update
-9458 ms: Begin of Track Update
-9462 ms: Found path
-9473 ms: Begin of Track Update
-9474 ms: Found path
-9490 ms: Begin of Track Update
-9533 ms: Begin of Track Update
-9577 ms: Begin of Track Update
-10516 ms: Begin of Track Update
-10555 ms: Begin of Track Update
-10599 ms: Begin of Track Update
-10624 ms: Begin of Track Update
-11561 ms: Begin of Track Update
-11608 ms: Begin of Track Update
-11651 ms: Begin of Track Update
-11674 ms: Begin of Track Update
-12603 ms: Begin of Track Update
-12643 ms: Begin of Track Update
-12684 ms: Begin of Track Update
-12709 ms: Begin of Track Update
-13644 ms: Begin of Track Update
-13686 ms: Begin of Track Update
-13725 ms: Begin of Track Update
-13751 ms: Begin of Track Update
-14687 ms: Begin of Track Update
-14734 ms: Begin of Track Update
-14774 ms: Begin of Track Update
-14795 ms: Begin of Track Update
-15728 ms: Begin of Track Update
-15771 ms: Begin of Track Update
-15819 ms: Begin of Track Update
-15842 ms: Begin of Track Update
-16776 ms: Begin of Track Update
-16817 ms: Begin of Track Update
-16858 ms: Begin of Track Update
-16884 ms: Begin of Track Update
-17829 ms: Begin of Track Update
-17871 ms: Begin of Track Update
-17910 ms: Begin of Track Update
-17934 ms: Begin of Track Update
+1 ms: [OUT] Getting font: ojae
+2 ms: [OUT] Initializing SDL
+325 ms: [OUT] Loading Color: Black
+326 ms: [OUT] Loading Color: Blue
+326 ms: [OUT] Loading Color: DBrown
+327 ms: [OUT] Loading Color: DGray
+327 ms: [OUT] Loading Color: Green
+328 ms: [OUT] Loading Color: LBrown
+330 ms: [OUT] Loading Color: LGray
+333 ms: [OUT] Loading Color: Orange
+335 ms: [OUT] Loading Color: Purple
+336 ms: [OUT] Loading Color: Red
+337 ms: [OUT] Loading Color: White
+338 ms: [OUT] Loading Color: Yellow
+339 ms: [OUT] Creating Windows and Objects
+339 ms: [OUT] Creating texture from path: assets/Sprites/border.png
+341 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
+342 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
+343 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
+350 ms: [OUT] Creating texture from path: assets/Sprites/border.png
+353 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
+354 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
+354 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
+355 ms: [OUT] Creating texture from path: assets/Sprites/border.png
+356 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
+357 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
+357 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
+359 ms: [OUT] Game Initialized
