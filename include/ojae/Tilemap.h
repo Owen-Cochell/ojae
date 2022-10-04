@@ -30,7 +30,7 @@ public:
 
     void update();
     void add_entity(Entity* e, int x, int y);
-    void add_copy_entity(Entity* e, int x, int y);
+    void add_copy_entity(const Entity& e, int x, int y);
     void remove_entity(Entity* e);
     void fill_tilemap(Entity* e);
 };

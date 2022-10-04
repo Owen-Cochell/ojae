@@ -1,30 +1,30 @@
 0 ms: [OUT] Getting font: monocraft
-2 ms: [OUT] Getting font: ojae
+1 ms: [OUT] Getting font: ojae
 3 ms: [OUT] Initializing SDL
-377 ms: [OUT] Loading Color: Black
-378 ms: [OUT] Loading Color: Blue
-379 ms: [OUT] Loading Color: Brown
-380 ms: [OUT] Loading Color: DGray
-381 ms: [OUT] Loading Color: Green
-381 ms: [OUT] Loading Color: LGray
-382 ms: [OUT] Loading Color: Orange
-383 ms: [OUT] Loading Color: Purple
-384 ms: [OUT] Loading Color: Red
-385 ms: [OUT] Loading Color: Tan
-387 ms: [OUT] Loading Color: White
-389 ms: [OUT] Loading Color: Yellow
-391 ms: [OUT] Creating Windows and Objects
-393 ms: [OUT] Creating texture from path: assets/Sprites/border.png
-395 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
-398 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
-399 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
-1831 ms: [OUT] Creating texture from path: assets/Sprites/border.png
-1832 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
-1833 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
-1834 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
-1835 ms: [OUT] Creating texture from path: assets/Sprites/border.png
-1836 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
-1837 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
-1837 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
-1838 ms: [OUT] Game Initialized
-2156 ms: [OUT] Creating texture from path: assets/Sprites/border.png
+403 ms: [OUT] Loading Color: Black
+405 ms: [OUT] Loading Color: Blue
+405 ms: [OUT] Loading Color: Brown
+406 ms: [OUT] Loading Color: DGray
+407 ms: [OUT] Loading Color: Green
+407 ms: [OUT] Loading Color: LGray
+408 ms: [OUT] Loading Color: Orange
+409 ms: [OUT] Loading Color: Purple
+410 ms: [OUT] Loading Color: Red
+410 ms: [OUT] Loading Color: Tan
+411 ms: [OUT] Loading Color: White
+412 ms: [OUT] Loading Color: Yellow
+412 ms: [OUT] Creating Windows and Objects
+413 ms: [OUT] Creating texture from path: assets/Sprites/border.png
+414 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
+415 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
+416 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
+423 ms: [OUT] Creating texture from path: assets/Sprites/border.png
+424 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
+425 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
+427 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
+428 ms: [OUT] Creating texture from path: assets/Sprites/border.png
+429 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
+430 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
+432 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
+433 ms: [OUT] Game Initialized
+732 ms: [OUT] Creating texture from path: assets/Sprites/border.png

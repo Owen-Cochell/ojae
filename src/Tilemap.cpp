@@ -1,9 +1,8 @@
 #include "Tilemap.h"
 #include "Components/SpriteComponent.h"
 #include "Components/TransformComponent.h"
-#include "EntityCopier.h"
+#include "Components/ColliderComponent.h"
 
-#include <iostream>
 
 Tilemap::Tilemap() 
 {
@@ -15,7 +14,7 @@ Tilemap::Tilemap()
 
 Tilemap::Tilemap(Debugger* _debugger, int _width, int _height)
 {
-    entity_handler = new EntityHandler;
+    entity_handler = new EntityHandler(_width, _height);
     debugger = _debugger;
     width = _width; 
     height = _height;
@@ -141,9 +140,9 @@ void Tilemap::add_entity(Entity* e, int x, int y)
     entity_handler->add_entity(e, x, y);
 }
 
-void Tilemap::add_copy_entity(Entity* e, int x, int y)
+void Tilemap::add_copy_entity(const Entity& e, int x, int y)
 {
-    Entity* new_e = EntityCopier::copy_entity(*e);
+    Entity* new_e = new Entity(e);
     add_entity(new_e, x, y);
 }
 
@@ -184,7 +183,7 @@ void Tilemap::fill_tilemap(Entity* e)
     {
         while(x < width)
         {
-            add_copy_entity(e, x, y);
+            add_copy_entity(*e, x, y);
             x++;
         }
 

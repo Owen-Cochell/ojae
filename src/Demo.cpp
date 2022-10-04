@@ -243,7 +243,7 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     // player = new Player(input_handler, text_funnel, "Player", 'P');
 
-    tilemap = new Tilemap(debugger, 500, 500);
+    tilemap = new Tilemap(debugger, 15, 15);
     
     Entity* dirt = new Entity("Dirt");
     dirt->add_component<TransformComponent>();
@@ -256,7 +256,16 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     player->add_component<SpriteComponent>('P', "Blue", 10);
     player->add_component<ColliderComponent>();
     player->add_script(new PlayerInput(input_handler));
-    tilemap->add_entity(player, -1, -1);
+    tilemap->add_entity(player, 10, 10);
+
+    Entity* goblin = new Entity("Goblin");
+    goblin->add_component<TransformComponent>();
+    goblin->add_component<SpriteComponent>('g', "Green", 9);
+    goblin->add_component<ColliderComponent>();
+    goblin->add_component<AIMovementComponent>(20);
+    goblin->add_script(new TrackEntity(player));
+    tilemap->add_entity(goblin, 1, 1);
+    tilemap->add_copy_entity(*goblin, 2, 1);
 
     // Entity* goblin = new Entity("Goblin");
     // goblin->add_component<TransformComponent>();

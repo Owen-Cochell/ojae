@@ -98,7 +98,7 @@ struct Entity
     std::vector<std::string> tags;
 
     std::vector<Component*> components;
-    std::map<std::string, Script*> scripts;
+    std::vector<Script*> scripts;
 
     ComponentArray componentArray;
     ComponentBitSet componentBitSet;
@@ -122,46 +122,86 @@ struct Entity
         }
     }
 
+    Entity(const Entity& e)
+    {
+        // Name
+        name = e.name;
+
+        // Tags
+        for(std::string t : e.tags)
+        {
+            add_tag(t);
+        }
+
+        // ComponentBitSet
+        for(int i = 0; i < e.componentBitSet.size(); i++)
+        {
+            componentBitSet[i] = e.componentBitSet[i];
+        }
+
+        // Components
+        for(Component* c: e.components)
+        {
+            Component* new_c = c->clone();
+            
+            new_c->entity = this;
+            components.push_back(new_c);
+
+            // ComponentArray 
+            for(int i = 0; i < e.componentArray.size(); i++)
+            {
+                if(e.componentArray[i] == nullptr) 
+                {
+                    continue; 
+                }
+
+                if(new_c->name == 
+                    e.componentArray[i]->name)
+                {
+                    componentArray[i] = new_c;
+                }
+            }
+        }
+
+        //Scripts
+        for(Script* s: e.scripts)
+        {
+            add_script(s->clone());
+        }
+    }
+
     ~Entity() 
     {
-        for(Component* c : components)
-        {
-            delete c;
-        }
-
-        for(std::map<std::string, Script*>::iterator it = scripts.begin(); 
-            it != scripts.end(); it++)
-        {
-            delete it->second;
-        }
-
-        scripts.clear();
+        for(Component* c : components) delete c;
+        for(Script* s: scripts) delete s;
     }
 
     void update()
     {
-        for(std::map<std::string, Script*>::iterator it = scripts.begin(); 
-            it != scripts.end(); it++)
+        for(int i = 0; i < scripts.size(); i++)
         {
-            it->second->update();
+            scripts.at(i)->update();
         }
     }
 
     void add_script(Script* s)
     {
-        scripts[s->name] = s;
+        scripts.push_back(s);
         s->entity = this;
     }
 
     bool remove_script(Script* s)
     {
-        if(scripts.count(s->name) == 0)
+        for(int i = 0; i < scripts.size(); i++)
         {
-            return false;
+            if(scripts.at(i) == s)
+            {
+                scripts.erase(scripts.begin() + i);
+                return true;
+            }
         }
 
-        scripts.erase(s->name);
-        return true;
+        return false;
     }
 
     void add_tag(std::string tag)
@@ -215,12 +255,15 @@ struct Entity
 
     Script* get_script(std::string script_name)
     {
-        if(scripts.count(script_name) == 0)
+        for(Script* s : scripts)
         {
-            return nullptr;
+            if(script_name == s->name)
+            {
+                return s;
+            }
         }
 
-        return scripts[script_name];
+        return nullptr;
     }
 
     template <typename T> T* get_component() const 
@@ -237,7 +280,17 @@ private:
     // std::vector<Entity*> entities;
     std::map<std::pair<int, int>, std::vector<Entity*>> entity_positions;
 
+    int width;
+    int height;
+
 public:
+
+
+    EntityHandler(int _width, int _height)
+    {
+        width = _width;
+        height = _height;
+    }
 
     ~EntityHandler() 
     {
@@ -250,6 +303,7 @@ public:
 
     void update()
     {
+        
         // Iterate through entities and update them. Faster to use a map 
         // iterator rather than through tilemap size
         for(std::map<std::pair<int, int>, std::vector<Entity*>>::iterator it =
