@@ -60,6 +60,8 @@ private:
      */
     void get_colors(const char* path);
 
+
+
 public:
 
     static SDL_Renderer* renderer;
@@ -90,6 +92,8 @@ public:
      * @brief Starts the engine. Init must be called before this point
      */
     void start();
+
+    void display_colors();
 
     void startup_screen();
 

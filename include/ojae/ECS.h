@@ -10,6 +10,8 @@
 #include <array>
 #include <map>
 #include <string>
+#include <SDL2/SDL.h>
+#include <iostream>
 
 #include "Debug.h"
 
@@ -235,22 +237,24 @@ private:
     // std::vector<Entity*> entities;
     std::map<std::pair<int, int>, std::vector<Entity*>> entity_positions;
 
-    int width;
-    int height;
-
 public:
 
-    EntityHandler() {}
-
-    ~EntityHandler() {}
-
-    void update()
+    ~EntityHandler() 
     {
-
         for(std::map<std::pair<int, int>, std::vector<Entity*>>::iterator it =
             entity_positions.begin(); it != entity_positions.end(); it++ ) 
         {
-            
+            for(Entity* e : it->second) delete e;
+        }
+    }
+
+    void update()
+    {
+        // Iterate through entities and update them. Faster to use a map 
+        // iterator rather than through tilemap size
+        for(std::map<std::pair<int, int>, std::vector<Entity*>>::iterator it =
+            entity_positions.begin(); it != entity_positions.end(); it++ ) 
+        {
             for(Entity* e : it->second) e->update();
         }
     }
@@ -258,6 +262,17 @@ public:
     std::map<std::pair<int, int>, std::vector<Entity*>> get_entity_positions()
     {
         return entity_positions;
+    }
+
+    std::vector<Entity*> get_entities_at_position(int x, int y) 
+    { 
+        if(entity_positions.count({x, y}) == 0)
+        {
+            std::vector<Entity*> temp;
+            return temp;
+        }
+
+        return entity_positions[{x, y}]; 
     }
 
     void add_entity(Entity* e, int x, int y)

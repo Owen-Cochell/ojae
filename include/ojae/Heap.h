@@ -138,8 +138,13 @@ public:
 
     update_item(T& item)
     {
-
-        sort_up();
+        for(int i = 0; i < current_item_count; i++)
+        {
+            if(item == *items.at(i)->targ_item)
+            {
+                sort_up(*items.at(i)->targ_item);
+            }
+        }
     }
 
     bool contains(T& item)

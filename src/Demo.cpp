@@ -12,6 +12,7 @@
 #include "Components/Components.h"
 #include "Scripts/Scripts.h"
 #include "Heap.h"
+#include "Jloader.h"
 
 static std::fstream file_stream;
 
@@ -144,6 +145,63 @@ void Demo::get_colors(const char* path)
 
 // Public Members
 
+void Demo::display_colors()
+{
+    std::vector<std::string> colors = texture_handler->get_colors();
+    SDL_Texture* temp_text = texture_handler->load_texture("assets/Sprites/border.png");
+    SDL_Rect src, dest;
+
+    src.x = 0;
+    src.y = 0;
+    src.w = 1;
+    src.h = 1;
+
+    full_window->clear();
+
+    // Loop until the user presses Escape
+
+    while(true)
+    {
+        frame_start = SDL_GetTicks64();
+
+        SDL_RenderClear(renderer);
+
+        for(int i = 0; i < colors.size(); i++)
+        {
+
+            dest.x = i * int(screen_width / colors.size());
+            dest.y = 0;
+            dest.w = int(screen_width / colors.size());
+            dest.h = screen_height;
+
+            texture_handler->draw(temp_text, src, dest, colors.at(i));
+        }
+        SDL_RenderPresent(renderer);
+
+        while(SDL_PollEvent(&event))
+        {
+            if(event.type == SDL_QUIT)
+            {
+                SDL_Quit();
+                exit(0);
+            }
+
+            else if(event.type == SDL_KEYDOWN &&
+                event.key.keysym.sym  == SDLK_ESCAPE)
+            {
+                return;
+            }
+        }
+
+        frame_time = SDL_GetTicks64() - frame_start;
+
+        if(FRAME_DELAY > frame_time)
+        {
+            SDL_Delay(FRAME_DELAY - frame_time);
+        }
+    }
+}
+
 void Demo::init(const char* title, int x, int y, int width, int height,
     bool fullscreen, int r, int g, int b)
 {
@@ -168,7 +226,10 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     }
 
     texture_handler = new TextureHandler(renderer, debugger);
-    get_colors("data/colors2.json");
+
+    nlohmann::json jloader = Jloader::get("data/init.json");
+
+    get_colors(static_cast<std::string>(jloader["color_path"]).c_str());
 
     debugger->log("[OUT] Creating Windows and Objects");
 
@@ -182,11 +243,11 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     // player = new Player(input_handler, text_funnel, "Player", 'P');
 
-    tilemap = new Tilemap(debugger, 15, 15);
+    tilemap = new Tilemap(debugger, 500, 500);
     
     Entity* dirt = new Entity("Dirt");
     dirt->add_component<TransformComponent>();
-    dirt->add_component<SpriteComponent>('~', "DBrown", 1);
+    dirt->add_component<SpriteComponent>('~', "Brown", 1);
     tilemap->fill_tilemap(dirt);
 
     player = new Entity("Player");
@@ -195,35 +256,34 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     player->add_component<SpriteComponent>('P', "Blue", 10);
     player->add_component<ColliderComponent>();
     player->add_script(new PlayerInput(input_handler));
-    tilemap->add_entity(player, 13, 13);
+    tilemap->add_entity(player, -1, -1);
 
-    Entity* goblin = new Entity("Goblin");
-    goblin->add_component<TransformComponent>();
-    goblin->add_component<SpriteComponent>('g', "Green", 9);
-    goblin->add_component<ColliderComponent>();
-    goblin->add_component<AIMovementComponent>(20);
-    goblin->add_script(new AIRandomMovement(3));
+    // Entity* goblin = new Entity("Goblin");
+    // goblin->add_component<TransformComponent>();
+    // goblin->add_component<SpriteComponent>('g', "Green", 9);
+    // goblin->add_component<ColliderComponent>();
+    // goblin->add_component<AIMovementComponent>(20);
     // goblin->add_script(new TrackEntity(player));
-    tilemap->add_entity(goblin, 1, 1);
+    // tilemap->add_entity(goblin, 1, 1);
 
-    Entity* troll = new Entity("Troll");
-    troll->add_component<TransformComponent>();
-    troll->add_component<SpriteComponent>('T', "Green", 9);
-    troll->add_component<ColliderComponent>();
-    troll->add_component<AIMovementComponent>(60);
-    troll->add_script(new TrackEntity(player));
-    tilemap->add_entity(troll, 10, 10);
+    // Entity* troll = new Entity("Troll");
+    // troll->add_component<TransformComponent>();
+    // troll->add_component<SpriteComponent>('T', "Green", 9);
+    // troll->add_component<ColliderComponent>();
+    // troll->add_component<AIMovementComponent>(60);
+    // troll->add_script(new TrackEntity(player));
+    // tilemap->add_entity(troll, 10, 10);
 
-    for(int y = 1; y < 4; y++)
-    {
-        for(int x = 1; x < 4; x++)
-        {
-            if(CollisionHandler::is_traversable(goblin, x, y))
-            {
-                tilemap->add_copy_entity(goblin, x, y);
-            }
-        }
-    }
+    // for(int y = 1; y < 4; y++)
+    // {
+    //     for(int x = 1; x < 4; x++)
+    //     {
+    //         if(CollisionHandler::is_traversable(goblin, x, y))
+    //         {
+    //             tilemap->add_copy_entity(goblin, x, y);
+    //         }
+    //     }
+    // }
 
     // Entity* wizard = new Entity("Wizard");
     // wizard->add_component<TransformComponent>();
@@ -297,8 +357,8 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
 void Demo::start()
 {
-
     startup_screen();
+    display_colors();
     running = true;
     execution_loop();
 }
@@ -308,15 +368,6 @@ void Demo::startup_screen()
     full_window->add("OJAE (Owen-Joel ASCII ENGINE)", "White");
     full_window->add("Version: ", "White", false);
     full_window->add("0.2 (Beta)", "White");
-
-    std::map<std::string, Color*> active_colors = texture_handler->get_colors(); 
-
-    for(std::map<std::string, Color*>::iterator it = active_colors.begin();
-        it != active_colors.end(); it++)
-    {
-        full_window->add(it->first, it->first);
-    }
-
     full_window->add("Press Escape to Continue...", "White");
 
     // Loop until the user presses Escape
@@ -384,10 +435,11 @@ void Demo::execution_loop()
 
 void Demo::update()
 {
+
     text_window->update();
     input_handler->update();
-    tilemap_window->update();
 
+    tilemap_window->update();
     text_window->clear();
 
     text_window->add("Update: ", "White", false);
@@ -396,7 +448,7 @@ void Demo::update()
     text_window->add(std::to_string(handle_events_time), determine_color(handle_events_time, 100));
     text_window->add("Draw: ", "White", false);
     text_window->add(std::to_string(draw_time), determine_color(draw_time, 100));
-    
+
     for(std::string element : text_funnel->get_contents())
     {
         text_window->add(element, "Blue");

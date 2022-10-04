@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
     nlohmann::json j_loader;
 
-    file_stream.open("data/screen_properties.json");
+    file_stream.open("data/init.json");
 
     if(file_stream.is_open())
     {

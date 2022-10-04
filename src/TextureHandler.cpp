@@ -58,7 +58,17 @@ void TextureHandler::add_color(Color* color)
     colors.emplace(color->get_name(), color);
 }
 
-std::map<std::string, Color*> TextureHandler::get_colors(){ return colors; }
+std::vector<std::string> TextureHandler::get_colors()
+{ 
+    std::vector<std::string> color_names;
+
+    for(std::pair<std::string, Color*> element : colors)
+    {
+        color_names.push_back(element.first);
+    } 
+
+    return color_names;
+}
 
 void TextureHandler::draw(SDL_Texture* texture, SDL_Rect& src, SDL_Rect& dest,
     std::string color)

@@ -13,7 +13,6 @@
 #include "../CollisionHandler.h"
 #include "../Debug.h"
 
-
 // https://www.techiedelight.com/use-pair-key-std-unordered_set-cpp/
 struct pair_hash
 {

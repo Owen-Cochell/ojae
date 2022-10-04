@@ -2,11 +2,12 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <Color.h>
 #include <map>
 #include <string>
+#include <vector>
 
 #include "Debugger.h"
+#include "Color.h"
 
 class TextureHandler
 {
@@ -34,7 +35,7 @@ public:
      * @return SDL_Texture* */
     SDL_Texture* load_texture(const char* path);
 
-    std::map<std::string, Color*> get_colors();
+    std::vector<std::string> get_colors();
 
     /**
      * @brief Adds a color to the map of registered colors

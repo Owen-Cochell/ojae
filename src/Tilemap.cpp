@@ -3,6 +3,8 @@
 #include "Components/TransformComponent.h"
 #include "EntityCopier.h"
 
+#include <iostream>
+
 Tilemap::Tilemap() 
 {
     debugger = nullptr;
@@ -63,15 +65,18 @@ std::vector<Character*> Tilemap::get_display()
 
     display.clear();
 
-    std::map<std::pair<int, int>, std::vector<Entity*>> entity_positions = 
-        entity_handler->get_entity_positions();
+    // std::map<std::pair<int, int>, std::vector<Entity*>> entity_positions = 
+    //     entity_handler->get_entity_positions();
 
-    for(int y = 0; y < height; y++)
+    for(int y = 0; y <  15; y++)
     {
-        for(int x = 0; x < width; x++)
+        for(int x = 0; x < 15; x++)
         {
 
-            if(entity_positions.count({x, y}) == 0)
+            std::vector<Entity*> targ_positions = 
+                entity_handler->get_entities_at_position(x, y);
+
+            if(targ_positions.size() == 0)
             {
 
                 NO_SPRITE_PRESENT:
@@ -82,7 +87,7 @@ std::vector<Character*> Tilemap::get_display()
 
             SpriteComponent* highest_sprite_component = nullptr;
 
-            for(Entity* e : entity_positions[{x, y}])
+            for(Entity* e : targ_positions)
             {
 
                 if(e->has_component<SpriteComponent>())
