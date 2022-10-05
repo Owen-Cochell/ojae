@@ -142,7 +142,6 @@ void Demo::get_colors(const char* path)
     }
 }
 
-
 // Public Members
 
 void Demo::display_colors()
@@ -241,14 +240,17 @@ void Demo::init(const char* title, int x, int y, int width, int height,
 
     text_window->add("green", "Green");
 
-    // player = new Player(input_handler, text_funnel, "Player", 'P');
-
     tilemap = new Tilemap(debugger, 15, 15);
     
     Entity* dirt = new Entity("Dirt");
     dirt->add_component<TransformComponent>();
     dirt->add_component<SpriteComponent>('~', "Brown", 1);
     tilemap->fill_tilemap(dirt);
+
+    Entity* grass = new Entity("Grass");
+    grass->add_component<TransformComponent>();
+    grass->add_component<SpriteComponent>('~', "Green", 2);
+    tilemap->fill_tilemap(grass);
 
     player = new Entity("Player");
     player->add_tag("PLAYER");
@@ -258,15 +260,6 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     player->add_script(new PlayerInput(input_handler));
     tilemap->add_entity(player, 10, 10);
 
-    Entity* goblin = new Entity("Goblin");
-    goblin->add_component<TransformComponent>();
-    goblin->add_component<SpriteComponent>('g', "Green", 9);
-    goblin->add_component<ColliderComponent>();
-    goblin->add_component<AIMovementComponent>(20);
-    goblin->add_script(new TrackEntity(player));
-    tilemap->add_entity(goblin, 1, 1);
-    tilemap->add_copy_entity(*goblin, 2, 1);
-
     // Entity* goblin = new Entity("Goblin");
     // goblin->add_component<TransformComponent>();
     // goblin->add_component<SpriteComponent>('g', "Green", 9);
@@ -274,75 +267,54 @@ void Demo::init(const char* title, int x, int y, int width, int height,
     // goblin->add_component<AIMovementComponent>(20);
     // goblin->add_script(new TrackEntity(player));
     // tilemap->add_entity(goblin, 1, 1);
+    // tilemap->add_copy_entity(*goblin, 2, 1);
 
-    // Entity* troll = new Entity("Troll");
-    // troll->add_component<TransformComponent>();
-    // troll->add_component<SpriteComponent>('T', "Green", 9);
-    // troll->add_component<ColliderComponent>();
-    // troll->add_component<AIMovementComponent>(60);
-    // troll->add_script(new TrackEntity(player));
-    // tilemap->add_entity(troll, 10, 10);
+    Entity* troll = new Entity("Troll");
+    troll->add_component<TransformComponent>();
+    troll->add_component<SpriteComponent>('T', "Green", 9);
+    troll->add_component<ColliderComponent>();
+    troll->add_component<AIMovementComponent>(60);
+    troll->add_script(new TrackEntity(player));
+    tilemap->add_entity(troll, 13, 10);
 
-    // for(int y = 1; y < 4; y++)
-    // {
-    //     for(int x = 1; x < 4; x++)
-    //     {
-    //         if(CollisionHandler::is_traversable(goblin, x, y))
-    //         {
-    //             tilemap->add_copy_entity(goblin, x, y);
-    //         }
-    //     }
-    // }
+    Entity* wizard = new Entity("Wizard");
+    wizard->add_component<TransformComponent>();
+    wizard->add_component<SpriteComponent>('w', "Purple", 9);
+    wizard->add_component<ColliderComponent>();
+    wizard->add_component<AIMovementComponent>(30);
+    wizard->add_script(new AIRandomMovement(3));
+    tilemap->add_entity(wizard, 2, 1);
 
-    // Entity* wizard = new Entity("Wizard");
-    // wizard->add_component<TransformComponent>();
-    // wizard->add_component<SpriteComponent>('w', "Purple", 9);
-    // wizard->add_component<ColliderComponent>();
-    // wizard->add_component<AIMovementComponent>(30);
-    // wizard->add_script(new TrackEntity(player));
-    // tilemap->add_entity(wizard, 2, 1);
+    Entity* warrior = new Entity("Warrior");
+    warrior->add_component<TransformComponent>();
+    warrior->add_component<SpriteComponent>('w', "LGray", 9);
+    warrior->add_component<ColliderComponent>();
+    warrior->add_component<AIMovementComponent>(30);
+    warrior->add_script(new AIRandomMovement(3));
+    tilemap->add_entity(warrior, 3, 1);
 
-    // Entity* warrior = new Entity("Warrior");
-    // warrior->add_component<TransformComponent>();
-    // warrior->add_component<SpriteComponent>('w', "LGray", 9);
-    // warrior->add_component<ColliderComponent>();
-    // warrior->add_component<AIMovementComponent>(30);
-    // warrior->add_script(new TrackEntity(player));
-    // tilemap->add_entity(warrior, 3, 1);
+    Entity* Elf = new Entity("Elf");
+    Elf->add_component<TransformComponent>();
+    Elf->add_component<SpriteComponent>('e', "Yellow", 9);
+    Elf->add_component<ColliderComponent>();
+    Elf->add_component<AIMovementComponent>(25);
+    Elf->add_script(new AIRandomMovement(3));
+    tilemap->add_entity(Elf, 5, 1);
 
-    // Entity* Troll = new Entity("Troll");
-    // Troll->add_component<TransformComponent>();
-    // Troll->add_component<SpriteComponent>('T', "Green", 9);
-    // Troll->add_component<ColliderComponent>();
-    // Troll->add_component<AIMovementComponent>(60);
-    // Troll->add_script(new TrackEntity(player));
-    // tilemap->add_entity(Troll, 4, 1);
-    // tilemap->add_copy_entity(Troll, 7, 7);
-    // tilemap->add_copy_entity(Troll, 12, 4);
-    // tilemap->add_copy_entity(Troll, 4, 4);
-
-    // Entity* Elf = new Entity("Elf");
-    // Elf->add_component<TransformComponent>();
-    // Elf->add_component<SpriteComponent>('e', "Yellow", 9);
-    // Elf->add_component<ColliderComponent>();
-    // Elf->add_component<AIMovementComponent>(25);
-    // Elf->add_script(new TrackEntity(player));
-    // tilemap->add_entity(Elf, 5, 1);
-
-    // Entity* Dwarf = new Entity("Dwarf");
-    // Dwarf->add_component<TransformComponent>();
-    // Dwarf->add_component<SpriteComponent>('D', "Blue", 9);
-    // Dwarf->add_component<ColliderComponent>();
-    // Dwarf->add_component<AIMovementComponent>(30);
-    // Dwarf->add_script(new TrackEntity(player));
-    // tilemap->add_entity(Dwarf, 6, 1);
+    Entity* Dwarf = new Entity("Dwarf");
+    Dwarf->add_component<TransformComponent>();
+    Dwarf->add_component<SpriteComponent>('D', "Blue", 9);
+    Dwarf->add_component<ColliderComponent>();
+    Dwarf->add_component<AIMovementComponent>(30);
+    Dwarf->add_script(new AIRandomMovement(3));
+    tilemap->add_entity(Dwarf, 6, 1);
     
-    // Entity* stone_wall = new Entity("Stone Wall");
-    // stone_wall->add_component<SpriteComponent>('W', "LGray", 5);
-    // stone_wall->add_component<ColliderComponent>();
-    // tilemap->add_entity(stone_wall, 7, 8);
-    // tilemap->add_copy_entity(stone_wall, 7, 7);
-    // tilemap->add_copy_entity(stone_wall, 8, 7);
+    Entity* stone_wall = new Entity("Stone Wall");
+    stone_wall->add_component<SpriteComponent>('W', "LGray", 5);
+    stone_wall->add_component<ColliderComponent>();
+    tilemap->add_entity(stone_wall, 7, 8);
+    tilemap->add_copy_entity(*stone_wall, 7, 7);
+    tilemap->add_copy_entity(*stone_wall, 8, 7);
     
     // tilemap->add_entity(stone_wall, 1, 5);
 
