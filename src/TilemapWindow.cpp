@@ -11,9 +11,9 @@ TilemapWindow::TilemapWindow() : BaseWindow()
 }
 
 TilemapWindow::TilemapWindow(TextureHandler* _texture_handler,
-    Debugger* _debugger, Tilemap* tilemap, int start_x, int end_x, 
-    int start_y, int end_y, InputHandler* input_handler) : 
-    BaseWindow(_texture_handler, _debugger, start_x, end_x, start_y, end_y, true)
+    Tilemap* tilemap, int start_x, int end_x, 
+    int start_y, int end_y) : 
+    BaseWindow(_texture_handler, start_x, end_x, start_y, end_y, true)
 {
     this->tilemap = tilemap;
     this->input_handler = input_handler;

@@ -15,15 +15,13 @@ private:
     EntityHandler* entity_handler;
     std::vector<Character*> display;
 
-    Debugger* debugger;
-
     int width; 
     int height;
 
 public:
 
     Tilemap();
-    Tilemap(Debugger* _debugger, int _width, int _height);
+    Tilemap(int _width, int _height);
     ~Tilemap();
 
     std::vector<Character*> get_display();

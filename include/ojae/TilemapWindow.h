@@ -21,9 +21,8 @@ private:
 public:
 
     TilemapWindow();
-    TilemapWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
-        Tilemap* tilemap, int start_x, int end_x, int start_y, int end_y, 
-        InputHandler* input_handler);
+    TilemapWindow(TextureHandler* _texture_handler,
+        Tilemap* tilemap, int start_x, int end_x, int start_y, int end_y);
     ~TilemapWindow();
 
     void display() override;

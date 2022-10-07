@@ -31,7 +31,6 @@ protected:
     SDL_Texture* font_texture; // Texture for the active font
     
     TextureHandler* texture_handler; // Instance of the TextureHandler
-    Debugger* debugger; // Instance of the Debugger
 
     const char* path; // Path to the font png
 
@@ -48,8 +47,8 @@ protected:
 public:
 
     BaseWindow();
-    BaseWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
-        int start_x, int end_x, int start_y, int end_y, bool taking_input);
+    BaseWindow(TextureHandler* _texture_handler, int start_x, int end_x, 
+        int start_y, int end_y, bool taking_input);
     ~BaseWindow();
 
     std::string get_font_path();

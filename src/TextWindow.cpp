@@ -10,14 +10,13 @@ TextWindow::TextWindow() : BaseWindow()
     input_handler = nullptr;
 }
 
-TextWindow::TextWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
+TextWindow::TextWindow(TextureHandler* _texture_handler, 
     int start_x, int end_x, int start_y, int end_y, 
-    InputHandler* input_handler, int life_time) : 
-    BaseWindow(_texture_handler, _debugger, start_x, end_x, start_y, end_y, false)
+    int life_time) : 
+    BaseWindow(_texture_handler, start_x, end_x, start_y, end_y, false)
 {
 
     this->life_time = life_time;
-    this->input_handler = input_handler;
 }
 
 TextWindow::~TextWindow()

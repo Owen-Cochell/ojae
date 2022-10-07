@@ -9,23 +9,21 @@ BaseWindow::BaseWindow()
     taking_input = false;
     texture_handler = nullptr;
     text_renderer = nullptr;
-    debugger = nullptr;
     border = texture_handler->load_texture("assets/Sprites/border.png");
     border_selected = texture_handler->load_texture("assets/Sprites/border_selected.png");
 }
 
-BaseWindow::BaseWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
-    int start_x, int end_x, int start_y, int end_y, bool taking_input)
+BaseWindow::BaseWindow(TextureHandler* _texture_handler, int start_x, 
+    int end_x, int start_y, int end_y, bool taking_input)
 {
 
     resize_window(start_x, end_x, start_y, end_y);
     this->taking_input = taking_input;
     texture_handler = _texture_handler;
-    debugger = _debugger;
 
     border = texture_handler->load_texture("assets/Sprites/border.png");
     border_selected = texture_handler->load_texture("assets/Sprites/border_selected.png");
-    text_renderer = new TextRenderer(_texture_handler, _debugger,
+    text_renderer = new TextRenderer(_texture_handler,
         this->start_x, this->end_x, this->start_y, this->end_y);
 }
 

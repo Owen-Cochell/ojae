@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include "TextureHandler.h"
-#include "Demo.h"
+#include "Debug.h"
 
 // Constructors/Deconstructors
 
@@ -11,11 +11,9 @@ TextureHandler::TextureHandler()
     renderer = nullptr;
 }
 
-TextureHandler::TextureHandler(SDL_Renderer* _renderer, 
-    Debugger* _debugger)
+TextureHandler::TextureHandler(SDL_Renderer* _renderer)
 {
     renderer = _renderer;
-    debugger = _debugger;
 }
 
 TextureHandler::~TextureHandler() {}
@@ -27,7 +25,7 @@ SDL_Texture* TextureHandler::load_texture(const char* path)
 
     try
     {
-        if(!debugger->file_exists(path))
+        if(!Debug::file_exists(path))
         {
             throw path;
         }
@@ -35,15 +33,11 @@ SDL_Texture* TextureHandler::load_texture(const char* path)
 
     catch(const char* path)
     {
-        debugger->log("[FAIL] TextureHandler.load_texture -> Could not open"
-            " file: ", true, false);
-        debugger->log(path, false, false);
-
+        Debug::log("[FAIL] TextureHandler.load_texture -> Could not open"
+            " file: ", false, true);
+        Debug::log(path, false, false);
         exit(0);
     }
-
-    debugger->log("[OUT] Creating texture from path: ", true, false);
-    debugger->log(path, false);
 
     SDL_Surface* temp_surface = IMG_Load(path);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, temp_surface);
@@ -81,10 +75,9 @@ void TextureHandler::draw(SDL_Texture* texture, SDL_Rect& src, SDL_Rect& dest,
         // If the color doesn't exist in the registered colors map
         if(colors.count(color) == 0)
         {
-            debugger->log("[FAIL] TextureHandler.draw() -> Color not "
-                "registered: ", true, false);
-            debugger->log(color, false, true);
-            debugger->log("[OUT] Exiting...");
+            Debug::log("[FAIL] TextureHandler.draw() -> Color not "
+                "registered: ", false, true);
+            Debug::log(color, false, false);
             exit(0);
         }
 

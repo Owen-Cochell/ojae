@@ -8,7 +8,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 # Define our target and set properties:
 
 add_library(ojae
-    src/Demo.cpp
     src/FileHandler.cpp
     src/InputHandler.cpp
     src/Debugger.cpp
@@ -16,6 +15,8 @@ add_library(ojae
     src/Tilemap.cpp
     src/TextRenderer.cpp
     src/BaseWindow.cpp
+    src/OJDemo.cpp
+    src/OJAsciiEngine.cpp
     src/TextFunnel.cpp
     src/Tilemap.cpp
     src/TilemapWindow.cpp

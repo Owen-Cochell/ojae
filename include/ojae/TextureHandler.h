@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 
-#include "Debugger.h"
 #include "Color.h"
 
 class TextureHandler
@@ -15,7 +14,6 @@ class TextureHandler
 private:
 
     SDL_Renderer* renderer; // Instance of the renderer
-    Debugger* debugger; // Instance of the Debugger
 
     /**
      * @brief  Map of Color names to registered colors
@@ -25,7 +23,7 @@ private:
 public:
 
     TextureHandler();
-    TextureHandler(SDL_Renderer* renderer, Debugger* _debugger);
+    TextureHandler(SDL_Renderer* renderer);
     ~TextureHandler();
 
     /**

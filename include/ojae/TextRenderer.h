@@ -26,7 +26,6 @@ private:
     std::fstream file_stream; // Instance of the fstream
 
     TextureHandler* texture_handler; // Instance of the TextureHandler
-    Debugger* debugger; // Instance of the Debugger
 
     std::string path; // Path to the font png
 
@@ -43,7 +42,7 @@ private:
 public:
 
     TextRenderer();
-    TextRenderer(TextureHandler* _texture_handler, Debugger* _debugger,
+    TextRenderer(TextureHandler* _texture_handler,
         int start_x, int end_x, int start_y, int end_y);
     ~TextRenderer();
 

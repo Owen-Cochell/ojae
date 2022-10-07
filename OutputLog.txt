@@ -1,30 +1,15 @@
-0 ms: [OUT] Getting font: monocraft
-1 ms: [OUT] Getting font: ojae
-2 ms: [OUT] Initializing SDL
-233 ms: [OUT] Loading Color: Black
-234 ms: [OUT] Loading Color: Blue
-234 ms: [OUT] Loading Color: Brown
-235 ms: [OUT] Loading Color: DGray
-236 ms: [OUT] Loading Color: Green
-238 ms: [OUT] Loading Color: LGray
-240 ms: [OUT] Loading Color: Orange
-241 ms: [OUT] Loading Color: Purple
-242 ms: [OUT] Loading Color: Red
-242 ms: [OUT] Loading Color: Tan
-244 ms: [OUT] Loading Color: White
-246 ms: [OUT] Loading Color: Yellow
-247 ms: [OUT] Creating Windows and Objects
-248 ms: [OUT] Creating texture from path: assets/Sprites/border.png
-249 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
-251 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
-254 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
-261 ms: [OUT] Creating texture from path: assets/Sprites/border.png
-262 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
-263 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
-264 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
-265 ms: [OUT] Creating texture from path: assets/Sprites/border.png
-266 ms: [OUT] Creating texture from path: assets/Sprites/border_selected.png
-266 ms: [OUT] Loading font from path: assets/Fonts/Ojae/ojae_font.json
-267 ms: [OUT] Creating texture from path: assets/Fonts/Ojae/ojae_font.png
-270 ms: [OUT] Game Initialized
-664 ms: [OUT] Creating texture from path: assets/Sprites/border.png
+553 ms: [OUT] Getting font: monocraft
+556 ms: [OUT] Getting font: ojae
+559 ms: [OUT] Loading Color: Black
+560 ms: [OUT] Loading Color: Blue
+562 ms: [OUT] Loading Color: Brown
+563 ms: [OUT] Loading Color: DGray
+564 ms: [OUT] Loading Color: Green
+565 ms: [OUT] Loading Color: LGray
+567 ms: [OUT] Loading Color: Orange
+569 ms: [OUT] Loading Color: Purple
+571 ms: [OUT] Loading Color: Red
+574 ms: [OUT] Loading Color: Tan
+575 ms: [OUT] Loading Color: White
+576 ms: [OUT] Loading Color: Yellow
+592 ms: [OUT] Demo Initialized

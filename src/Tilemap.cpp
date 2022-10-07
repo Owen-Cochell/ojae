@@ -6,16 +6,14 @@
 
 Tilemap::Tilemap() 
 {
-    debugger = nullptr;
     entity_handler = nullptr;
     width = 0;
     height = 0;
 }
 
-Tilemap::Tilemap(Debugger* _debugger, int _width, int _height)
+Tilemap::Tilemap(int _width, int _height)
 {
     entity_handler = new EntityHandler(_width, _height);
-    debugger = _debugger;
     width = _width; 
     height = _height;
 
@@ -23,8 +21,7 @@ Tilemap::Tilemap(Debugger* _debugger, int _width, int _height)
     // tilemap's bounds
     if(width < 3 || height < 3)
     {
-        debugger->log("[FAIL] Tilemap.Constructor() -> Tilemap too small");
-        debugger->log("[OUT] Exiting...");
+        Debug::log("[FAIL] Tilemap.Constructor() -> Tilemap too small");
         exit(0);
     }
 
@@ -150,9 +147,8 @@ void Tilemap::remove_entity(Entity* e)
 {
     if(!e->has_component<TransformComponent>())
     {
-        debugger->log("[FAIL] Tilemap.remove_entity -> Entity does not have"
+        Debug::log("[FAIL] Tilemap.remove_entity -> Entity does not have"
             "required Transform Component");
-        debugger->log("[OUT] Exiting...");
         exit(0);
     }
 
@@ -162,9 +158,8 @@ void Tilemap::remove_entity(Entity* e)
     if(!entity_handler->remove_entity(e, transform_component->x_pos, 
         transform_component->y_pos))
     {
-        debugger->log("[FAIL] Tilemap.remove_entity -> Could not remove" 
+        Debug::log("[FAIL] Tilemap.remove_entity -> Could not remove" 
             "entity");
-        debugger->log("[OUT] Exiting...");
         exit(0);
     }
 }

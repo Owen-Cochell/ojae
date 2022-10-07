@@ -30,9 +30,9 @@ private:
 public:
 
     TextWindow();
-    TextWindow(TextureHandler* _texture_handler, Debugger* _debugger, 
+    TextWindow(TextureHandler* _texture_handler, 
         int start_x, int end_x, int start_y, int end_y, 
-        InputHandler* input_handler, int life_time);
+        int life_time);
     ~TextWindow();
 
     void update() override;

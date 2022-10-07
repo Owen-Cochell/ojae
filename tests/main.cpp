@@ -6,11 +6,11 @@
 #include <fstream>
 //#include <wtypes.h>
 
-#include "Demo.h"
+#include "OJDemo.h"
 #include "FileHandler.h"
 #include "Random.h"
-
-static std::fstream file_stream;
+#include "Debug.h"
+#include "Jloader.h"
 
 // // Get the horizontal and vertical screen sizes in pixel
 // void GetDesktopResolution(int& horizontal, int& vertical)
@@ -32,19 +32,9 @@ int main(int argc, char* argv[])
     Random::seed_random();
 
     // Clear the output log
-    file_stream.open("OutputLog.txt", std::ios::out);
-    file_stream.close();
+    Debug::clear();
 
-    nlohmann::json j_loader;
-
-    file_stream.open("data/init.json");
-
-    if(file_stream.is_open())
-    {
-        file_stream >> j_loader;
-        file_stream.close();
-    }
-    file_stream.clear();
+    nlohmann::json j_loader = Jloader::get("data/init.json");
 
     // int native_height = 0;
     // int native_width = 0;
@@ -57,11 +47,8 @@ int main(int argc, char* argv[])
     int g = j_loader["g_value"];
     int b = j_loader["b_value"];
     
-    Demo demo;
-
-    demo.init("Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-        width / 2, height / 2, false, r, g, b);
-        
+    OJDemo demo = OJDemo("Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+        width / 2, height / 2);  
     demo.start();
 
     return 0;

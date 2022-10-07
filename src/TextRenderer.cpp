@@ -3,13 +3,13 @@
 #include <iostream>
 
 #include "TextRenderer.h"
+#include "Debug.h"
 
 TextRenderer::TextRenderer() 
 {
     font_width = 0;
     font_height = 0;
     texture_handler = nullptr;
-    debugger = nullptr;
     texture = nullptr;
     start_x = 0;
     end_x = 0;
@@ -18,10 +18,9 @@ TextRenderer::TextRenderer()
 }
 
 TextRenderer::TextRenderer(TextureHandler* _texture_handler, 
-    Debugger* _debugger, int start_x, int end_x, int start_y, int end_y) 
+    int start_x, int end_x, int start_y, int end_y) 
 {
     texture_handler = _texture_handler;
-    debugger = _debugger;
 
     texture = nullptr;
 
@@ -41,14 +40,11 @@ std::string TextRenderer::get_font_path() { return std::string(path); }
 
 void TextRenderer::load_font(std::string json_path)
 {
-    debugger->log("[OUT] Loading font from path: ", true, false);
-    debugger->log(json_path, false, true);
-
-    if(!debugger->file_exists(json_path.c_str()))
+    if(!Debug::file_exists(json_path.c_str()))
     {
-        debugger->log("[FAIL] TextRenderer.load_font -> Could not open file: ",
-            true, false);
-        debugger->log(json_path, false, true);
+        Debug::log("[FAIL] TextRenderer.load_font -> Could not open file: ",
+            false, true);
+        Debug::log(json_path, false, false);
         exit(0);
     }
 
@@ -65,11 +61,11 @@ void TextRenderer::load_font(std::string json_path)
     // Path to the png font file
     std::string targ_path = j_loader.at("path");
 
-    if(!debugger->file_exists(targ_path.c_str()))
+    if(!Debug::file_exists(targ_path.c_str()))
     {
-        debugger->log("[FAIL] TextRenderer.load_font -> Could not open file: ",
-            true, false);
-        debugger->log(targ_path, false, true);
+        Debug::log("[FAIL] TextRenderer.load_font -> Could not open file: ",
+            false, true);
+        Debug::log(targ_path, false, false);
         exit(0);
     }
 
