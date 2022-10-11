@@ -19,6 +19,7 @@ Tilemap::Tilemap(int _width, int _height)
 
     // Tilemap is too small, no entity can be present without exceeding the 
     // tilemap's bounds
+
     if(width < 3 || height < 3)
     {
         Debug::log("[FAIL] Tilemap.Constructor() -> Tilemap too small");
@@ -27,9 +28,10 @@ Tilemap::Tilemap(int _width, int _height)
 
     // Add non traversable entities along the edges of the tilemap so no
     // entity can move out of bounds
+
     Entity* edge_map_collider = new Entity("EDGE MAP COLLIDER");
     edge_map_collider->add_component<ColliderComponent>();
-    edge_map_collider->add_component<SpriteComponent>('C', "Red", 11);
+    // edge_map_collider->add_component<SpriteComponent>('C', "Red", 11);
     edge_map_collider->add_tag("NON_TRAVERSABLE");
 
     for(int x = 0; x < width; x++)
@@ -120,6 +122,17 @@ std::vector<Character*> Tilemap::get_display()
 
     return display;
 }
+
+int Tilemap::get_width() { return width; }
+
+int Tilemap::get_height() { return height; }
+
+std::vector<Entity*> Tilemap::get_entities_at_pos(int x, int y)
+{
+    return entity_handler->get_entities_at_position(x, y);
+}
+
+EntityHandler* Tilemap::get_entity_handler() { return entity_handler; }
 
 void Tilemap::update()
 {

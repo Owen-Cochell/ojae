@@ -91,7 +91,6 @@ void TextWindow::display()
 void TextWindow::add(std::string new_content, std::string color, bool new_line)
 {
     
-
     if(new_line) { new_content += '\n'; }
 
     contents.push_back(new Text(new_content, color, life_time));

@@ -6,6 +6,7 @@
 #include <string>
 
 #include "TextureHandler.h"
+#include "BaseWindow.h"
 
 class OJAsciiEngine
 {
@@ -16,7 +17,7 @@ protected:
 
     SDL_Renderer* renderer; // Instance of the renderer
     SDL_Event event; // Instance of the SDL Event
-    
+
     bool running; // If the engine is simulating
 
     const int TARG_FPS = 60; // Target frames per second
@@ -70,6 +71,7 @@ public:
 
     void start_OJAE();
     void execution_loop();
+
     virtual void update();
     virtual void handle_events();
     void clear_screen();

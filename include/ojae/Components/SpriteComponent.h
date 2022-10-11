@@ -9,8 +9,6 @@ struct SpriteComponent : public Component
     char symbol;
     std::string color;
     int priority;
-
-    SpriteComponent() {}
     
     SpriteComponent(char _symbol, std::string _color, int _priority) 
     {
@@ -24,14 +22,4 @@ struct SpriteComponent : public Component
     {
         return new SpriteComponent(symbol, color, priority);
     }
-
-    // SpriteComponent(const SpriteComponent& c) : Component(c)
-    // {
-
-    //     symbol = c.symbol;
-    //     color = c.color;
-    //     priority = c.priority;
-    // }
-
-    ~SpriteComponent() {}
 };

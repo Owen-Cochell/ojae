@@ -3,6 +3,7 @@
 #include "ECS.h"
 #include "Components/ColliderComponent.h"
 #include "Debug.h"
+#include "CommonDefs.h"
 
 struct CollisionHandler
 {
@@ -11,7 +12,7 @@ struct CollisionHandler
     {
         // Entities at the position the passed entity is attempting to move to
         std::vector<Entity*> entities = 
-            e->entity_handler->get_entity_positions()[{x, y}];
+            e->entity_handler->get_entities_at_position(x, y);
 
         // Iterate through the entities at the target position
         for(Entity* e : entities)

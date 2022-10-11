@@ -26,6 +26,11 @@ public:
 
     std::vector<Character*> get_display();
 
+    int get_width();
+    int get_height();
+
+    std::vector<Entity*> get_entities_at_pos(int x, int y);
+    EntityHandler* get_entity_handler();
     void update();
     void add_entity(Entity* e, int x, int y);
     void add_copy_entity(const Entity& e, int x, int y);

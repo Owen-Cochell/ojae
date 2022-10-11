@@ -4,3 +4,4 @@
 #include "TransformComponent.h"
 #include "ColliderComponent.h"
 #include "AIMovementComponent.h"
+#include "DialogueComponent.h"

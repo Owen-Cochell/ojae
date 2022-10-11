@@ -68,8 +68,8 @@ struct AIRandomMovement : public Script
         }
 
         // Get a random pair from our available moves
-        std::pair<int, int> targ = 
-            Random::get_random_vector_element(available_moves);
+        int index = Random::get_random_num(0, available_moves.size() - 1);
+        std::pair<int, int> targ = available_moves.at(index);
 
         entity->get_component<AIMovementComponent>()->move(targ.first, targ.second);
         

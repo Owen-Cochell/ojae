@@ -223,6 +223,8 @@ struct Entity
         return false;
     }
 
+    void set_entity_handler(EntityHandler* e_handler) { entity_handler = e_handler; }
+
     template <typename T> bool has_component() const
     {
         return componentBitSet[get_component_type_id<T>()];

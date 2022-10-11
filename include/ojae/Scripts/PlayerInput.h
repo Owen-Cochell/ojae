@@ -4,8 +4,9 @@
 #include "../InputHandler.h"
 #include "../Components/TransformComponent.h"
 #include "../CollisionHandler.h"
+#include "../CommonDefs.h"
 
-struct PlayerInput : Script
+struct PlayerInput : public Script
 {
 
     InputHandler* input_handler;
@@ -52,7 +53,7 @@ struct PlayerInput : Script
         // Update the TransformComponent's Position
         t->y_pos = y_pos + y_delta;
         t->x_pos = x_pos + x_delta;
-        
+
         // Update the Entity's EntityHandler's position of where 
         // the Entity this Component is attatched to lies
         entity->entity_handler->remove_entity(
@@ -75,6 +76,11 @@ struct PlayerInput : Script
     void update() override 
     {
 
+        Uint64 init;
+        int modify_time;
+        int handler_time;
+        
+
         for(Key* k : input_handler->get_active_keys())
         {
 
@@ -83,8 +89,11 @@ struct PlayerInput : Script
                 // Up Arrow
                 case SDLK_UP:
 
+                    init = SDL_GetTicks64();
                     modify_position(0, -1);
+                    init = SDL_GetTicks64();
                     input_handler->set_delay(k->id);
+                    handler_time = SDL_GetTicks64() - init;
                     break;
 
                 case SDLK_RIGHT:
