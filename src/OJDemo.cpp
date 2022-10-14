@@ -61,7 +61,7 @@ OJDemo::OJDemo(const char* title, int x, int y, int width, int height) :
     goblin->add_component<AIMovementComponent>(20);
     goblin->add_script(new TrackEntity(player));
     // goblin->add_script(new DeclareMove());
-    tilemap->add_entity(goblin, 5, 5);
+    // tilemap->add_entity(goblin, 5, 5);
 
     Entity* troll = new Entity("Troll");
     troll->add_component<TransformComponent>();
@@ -70,7 +70,7 @@ OJDemo::OJDemo(const char* title, int x, int y, int width, int height) :
     troll->add_component<AIMovementComponent>(60);
     troll->add_component<DialogueComponent>(text_funnel);
     troll->add_script(new TrackEntity(player));
-    troll->add_script(new DeclareMove());
+    // troll->add_script(new DeclareMove());
     tilemap->add_entity(troll, 6, 6);
     tilemap->add_copy_entity(*troll, 7, 7);
 
@@ -116,7 +116,7 @@ OJDemo::OJDemo(const char* title, int x, int y, int width, int height) :
     tilemap->add_entity(oak_log, available_pos.at(index).first, available_pos.at(index).second);
     available_pos.erase(available_pos.begin() + index);
 
-    for(int i = 0; i < tilemap->get_width() - 1; i++)
+    for(int i = 0; i < tilemap->get_width(); i++)
     {
         index = Random::get_random_num(0, available_pos.size() - 1);
         tilemap->add_copy_entity(*oak_log, available_pos.at(index).first, available_pos.at(index).second);
@@ -255,7 +255,6 @@ void OJDemo::draw()
     tilemap_window->display();
     frame_window->display();
     text_window->display();
-
     render();
 
     draw_time = SDL_GetTicks64() - frame_start;

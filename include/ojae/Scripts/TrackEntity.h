@@ -26,6 +26,11 @@ struct pair_hash
     }
 };
 
+struct Node
+{ 
+
+};
+
 struct TrackEntity : public Script
 {
 
