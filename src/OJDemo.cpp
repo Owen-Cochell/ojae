@@ -34,7 +34,7 @@ OJDemo::OJDemo(const char* title, int x, int y, int width, int height) :
     frame_window->load_font(fonts["ojae"].c_str());
 
     tilemap = new Tilemap(15, 15);
-    
+
     Entity* dirt = new Entity("Dirt");
     dirt->add_component<TransformComponent>();
     dirt->add_component<SpriteComponent>('~', "Brown", 1);
@@ -55,24 +55,23 @@ OJDemo::OJDemo(const char* title, int x, int y, int width, int height) :
 
     Entity* goblin = new Entity("Goblin");
     goblin->add_component<TransformComponent>();
-    goblin->add_component<SpriteComponent>('g', "Green", 9);
+    goblin->add_component<SpriteComponent>('g', "LGreen", 9);
     goblin->add_component<ColliderComponent>();
     goblin->add_component<DialogueComponent>(text_funnel);
     goblin->add_component<AIMovementComponent>(20);
     goblin->add_script(new TrackEntity(player));
-    // goblin->add_script(new DeclareMove());
-    // tilemap->add_entity(goblin, 5, 5);
+    goblin->add_script(new DeclareMove());
+    tilemap->add_entity(goblin, 5, 5);
 
     Entity* troll = new Entity("Troll");
     troll->add_component<TransformComponent>();
-    troll->add_component<SpriteComponent>('T', "Green", 9);
+    troll->add_component<SpriteComponent>('T', "LGreen", 9);
     troll->add_component<ColliderComponent>();
     troll->add_component<AIMovementComponent>(60);
     troll->add_component<DialogueComponent>(text_funnel);
     troll->add_script(new TrackEntity(player));
     // troll->add_script(new DeclareMove());
     tilemap->add_entity(troll, 6, 6);
-    tilemap->add_copy_entity(*troll, 7, 7);
 
     Entity* oak_log = new Entity("Oak Tree");
     oak_log->add_component<TransformComponent>();
@@ -85,7 +84,7 @@ OJDemo::OJDemo(const char* title, int x, int y, int width, int height) :
     stone->add_component<SpriteComponent>('S', "LGray", 5);
     stone->add_component<ColliderComponent>();
     tilemap->add_entity(stone, 0, 0);
-    
+
     for(int x = 1; x < tilemap->get_width(); x++)
     {
         tilemap->add_copy_entity(*stone, x, 0);
@@ -112,15 +111,18 @@ OJDemo::OJDemo(const char* title, int x, int y, int width, int height) :
         }
     }
 
-    int index = Random::get_random_num(0, available_pos.size() - 1);
-    tilemap->add_entity(oak_log, available_pos.at(index).first, available_pos.at(index).second);
-    available_pos.erase(available_pos.begin() + index);
-
-    for(int i = 0; i < tilemap->get_width(); i++)
+    if(available_pos.size() > 0)
     {
-        index = Random::get_random_num(0, available_pos.size() - 1);
-        tilemap->add_copy_entity(*oak_log, available_pos.at(index).first, available_pos.at(index).second);
+        int index = Random::get_random_num(0, available_pos.size() - 1);
+        tilemap->add_entity(oak_log, available_pos.at(index).first, available_pos.at(index).second);
         available_pos.erase(available_pos.begin() + index);
+
+        for(int i = 0; i < tilemap->get_width(); i++)
+        {
+            index = Random::get_random_num(0, available_pos.size() - 1);
+            tilemap->add_copy_entity(*oak_log, available_pos.at(index).first, available_pos.at(index).second);
+            available_pos.erase(available_pos.begin() + index);
+        }
     }
 
     tilemap_window = new TilemapWindow(texture_handler, tilemap, 0, width, 

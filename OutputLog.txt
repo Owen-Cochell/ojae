@@ -1,15 +1,16 @@
-231 ms: [OUT] Getting font: monocraft
-232 ms: [OUT] Getting font: ojae
-233 ms: [OUT] Loading Color: Black
-234 ms: [OUT] Loading Color: Blue
-234 ms: [OUT] Loading Color: Brown
-235 ms: [OUT] Loading Color: DGray
-236 ms: [OUT] Loading Color: Green
-237 ms: [OUT] Loading Color: LGray
-239 ms: [OUT] Loading Color: Orange
-240 ms: [OUT] Loading Color: Purple
-241 ms: [OUT] Loading Color: Red
-243 ms: [OUT] Loading Color: Tan
-245 ms: [OUT] Loading Color: White
-246 ms: [OUT] Loading Color: Yellow
-260 ms: [OUT] Demo Initialized
+213 ms: [OUT] Getting font: monocraft
+213 ms: [OUT] Getting font: ojae
+214 ms: [OUT] Loading Color: Black
+215 ms: [OUT] Loading Color: Blue
+215 ms: [OUT] Loading Color: Brown
+216 ms: [OUT] Loading Color: DGray
+216 ms: [OUT] Loading Color: Green
+221 ms: [OUT] Loading Color: LGray
+222 ms: [OUT] Loading Color: LGreen
+223 ms: [OUT] Loading Color: Orange
+224 ms: [OUT] Loading Color: Purple
+227 ms: [OUT] Loading Color: Red
+229 ms: [OUT] Loading Color: Tan
+230 ms: [OUT] Loading Color: White
+230 ms: [OUT] Loading Color: Yellow
+242 ms: [OUT] Demo Initialized

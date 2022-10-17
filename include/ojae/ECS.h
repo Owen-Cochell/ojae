@@ -93,7 +93,6 @@ class EntityHandler;
 
 struct Entity
 {
-
     std::string name; 
     std::vector<std::string> tags;
 

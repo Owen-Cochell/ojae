@@ -47,6 +47,8 @@ target_link_libraries(ojae
 
 # Set compile options:
 
+SET(CMAKE_CXX_FLAGS  "-O3")
+
 target_compile_options(ojae PRIVATE -Wall -Wextra)
 target_compile_features(ojae PRIVATE cxx_std_17)
 
