@@ -6,7 +6,7 @@
 #include "OJAsciiEngine.h"
 #include "InputHandler.h"
 
-class OJDemo : public OJAsciiEngine
+class OJDemo : public ojae::OJAsciiEngine
 {
 
 private:

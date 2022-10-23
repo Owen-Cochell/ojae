@@ -4,10 +4,10 @@
 #include "Jloader.h"
 
 #include <iostream>
-
+        
 // Constructors/Deconstructors
 
-OJAsciiEngine::OJAsciiEngine(const char* title, int x, int y, int width,
+ojae::OJAsciiEngine::OJAsciiEngine(const char* title, int x, int y, int width,
     int height)
 {
     running = false;
@@ -37,14 +37,15 @@ OJAsciiEngine::OJAsciiEngine(const char* title, int x, int y, int width,
     get_colors(static_cast<std::string>(j_loader["color_path"]).c_str());
 }
 
-OJAsciiEngine::~OJAsciiEngine() 
+ojae::OJAsciiEngine::~OJAsciiEngine() 
 {
     delete texture_handler;
 }
 
+
 // Private Members
 
-void OJAsciiEngine::get_fonts(const char* path)
+void ojae::OJAsciiEngine::get_fonts(const char* path)
 {
     // If the file does not exist
     if(!Debug::file_exists(path))
@@ -75,7 +76,7 @@ void OJAsciiEngine::get_fonts(const char* path)
     }
 }
 
-void OJAsciiEngine::get_colors(const char* path)
+void ojae::OJAsciiEngine::get_colors(const char* path)
 {
     // If the file does not exist
     if(!Debug::file_exists(path))
@@ -104,13 +105,13 @@ void OJAsciiEngine::get_colors(const char* path)
 
 // Public Members
 
-void OJAsciiEngine::start_OJAE() 
+void ojae::OJAsciiEngine::start_OJAE() 
 {
     running = true;
     execution_loop();
 }
 
-void OJAsciiEngine::execution_loop()
+void ojae::OJAsciiEngine::execution_loop()
 {
     while(running)
     {
@@ -131,23 +132,23 @@ void OJAsciiEngine::execution_loop()
     quit();
 }
 
-void OJAsciiEngine::update() {}
+void ojae::OJAsciiEngine::update() {}
 
-void OJAsciiEngine::handle_events() {}
+void ojae::OJAsciiEngine::handle_events() {}
 
-void OJAsciiEngine::clear_screen()
+void ojae::OJAsciiEngine::clear_screen()
 {
     SDL_RenderClear(renderer);
 }
 
-void OJAsciiEngine::draw() {}
+void ojae::OJAsciiEngine::draw() {}
 
-void OJAsciiEngine::render()
+void ojae::OJAsciiEngine::render()
 {
     SDL_RenderPresent(renderer);
 }
 
-void OJAsciiEngine::quit() 
+void ojae::OJAsciiEngine::quit() 
 {
     SDL_Quit();
 }

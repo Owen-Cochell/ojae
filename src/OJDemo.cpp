@@ -20,7 +20,7 @@ Tilemap* tilemap;
 TextFunnel* text_funnel;
 
 OJDemo::OJDemo(const char* title, int x, int y, int width, int height) :
-    OJAsciiEngine(title, x, y, width, height) 
+    ojae::OJAsciiEngine(title, x, y, width, height) 
 {
     input_handler = new InputHandler();
     text_funnel = new TextFunnel();
@@ -60,7 +60,7 @@ OJDemo::OJDemo(const char* title, int x, int y, int width, int height) :
     goblin->add_component<DialogueComponent>(text_funnel);
     goblin->add_component<AIMovementComponent>(20);
     goblin->add_script(new TrackEntity(player));
-    goblin->add_script(new DeclareMove());
+    // goblin->add_script(new DeclareMove());
     tilemap->add_entity(goblin, 5, 5);
 
     Entity* troll = new Entity("Troll");
